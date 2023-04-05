@@ -10,7 +10,6 @@
 </head>
 <body>
 
-
 @if (Auth::check())
     <script>
         window.Laravel = {!!json_encode([
