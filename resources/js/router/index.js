@@ -3,13 +3,15 @@ import {createWebHistory, createRouter} from "vue-router";
 import Home from '../components/Home.vue';
 import Register from '../components/Register.vue';
 import Login from '../components/Login.vue';
-import Dashboard from '../components/Dashboard.vue';
 
 export const routes = [
     {
         name: 'home',
         path: '/',
-        component: Home
+        component: Home,
+        meta:{
+            requiresAuth: true
+        }
     },
     {
         name: 'register',
@@ -22,16 +24,24 @@ export const routes = [
         component: Login
     },
     {
-        name: 'dashboard',
-        path: '/dashboard',
-        component: Dashboard
-    },
+        path: '/:pathMatch(.*)*',
+        redirect: '/'
+    }
 ];
-
 
 const router = createRouter({
     history:createWebHistory(),
     routes: routes,
+});
+
+router.beforeEach((to, from, next) => {
+
+    console.log(window.Laravel.isLoggedin);
+    if (to.matched.some(record => record.meta.requiresAuth) && (window.Laravel.isLoggedin === false)) {
+        next('/login')
+    } else {
+        next()
+    }
 });
 
 export default router;

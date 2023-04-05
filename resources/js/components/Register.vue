@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row jutify-content-center">
             <div class="col-md-8">
-                {{name}}
+                {{alias}}
                 <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     <strong>{{error}}</strong>
@@ -16,10 +16,10 @@
 
 
                             <div class="form-group row">
-                                <label for="name" class="col-sm-4 col-form-label text-md-right">Name</label>
+                                <label for="alias" class="col-sm-4 col-form-label text-md-right">Alias</label>
                                 <div class="col-md-8">
-                                    <input id="name" type="text" class="form-control" v-model="name" required
-                                           autofocus autocomplete="off"  placeholder="Enter your name">
+                                    <input id="alias" type="text" class="form-control" v-model="alias" required
+                                           autofocus autocomplete="off"  placeholder="Enter your alias">
                                 </div>
                             </div>
 
@@ -73,6 +73,9 @@
             </div>
         </div>
     </div>
+    <div>
+        <router-link to="/login">Login</router-link>
+    </div>
 </template>
 
 
@@ -81,7 +84,7 @@ export default {
     name: "Register"
     ,data() {
         return {
-            name:"",
+            alias:"",
             email:"",
             password:"",
             error: null
@@ -93,7 +96,7 @@ export default {
             if(this.password.length > 0) {
                 this.$axios.get('/sanctum/csrf-cookie').then(response => {
                     this.$axios.post('api/register', {
-                        name: this.name,
+                        alias: this.alias,
                         email: this.email,
                         password: this.password
                     })
@@ -110,6 +113,12 @@ export default {
                 })
             }
         }
+    },
+    beforeRouteEnter(to, from, next){
+        if(window.Laravel.isLoggedin){
+            return next('/');
+        }
+        next();
     }
 
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class users extends Controller
 {
@@ -44,6 +45,26 @@ class users extends Controller
 
             $success = true;
             $message = "Usuario registrado correctamente";
+        }catch(\Illuminate\Database\QueryException $ex){
+            $success = false;
+            $message = $ex->getMessage();
+        }
+
+        $response=[
+            'success' => $success,
+            'message' => $message,
+        ];
+
+        return response()->json($response);
+    }
+
+    public function logout(){
+
+        try{
+            Session::flush();
+
+            $success = true;
+            $message = "Logout correcto";
         }catch(\Illuminate\Database\QueryException $ex){
             $success = false;
             $message = $ex->getMessage();
