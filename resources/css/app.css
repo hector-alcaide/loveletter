@@ -1,0 +1,42 @@
+/**background principal**/
+.background{
+    max-width: 1920px;
+    /*min-height: 1007px;*/
+    /*max-height: 1080px;*/
+    height: 100vh;
+}
+
+/**backgrounds**/
+.bg-image1{
+    background-image: url("../images/fondo_carta.png");
+}
+
+/*Login and register*/
+.auth-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth-background {
+    width: 860px;
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-form {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-right: 300px;
+    margin-bottom: 100px;
+}
+
+#login-div{
+    background-image: url("../images/login_page.png");
+}
