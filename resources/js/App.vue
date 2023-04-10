@@ -58,5 +58,33 @@ export default {
 
         }
     },
+    mounted() {
+        console.log('e');
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.MIX_PUSHER_APP_KEY,
+            cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+            encrypted: true,
+            auth: {
+                headers: {
+                    Authorization: 'Bearer ' + this.$store.getters.getToken
+                },
+            },
+        });
+
+        // to connect the public channel
+        window.Echo.channel('public').listen('Hello',(e)=>{
+            console.log('go public');
+            //code for displaying the serve data
+            console.log(e); // the data from the server
+        });
+
+        // to connect the privatechannel
+        window.Echo.private('test-channel.1').listen('PrivateTest',(e)=>{
+            console.log('go private');
+            //code for displaying the serve data
+            console.log(e); // the data from the server
+        });
+    },
 }
 </script>

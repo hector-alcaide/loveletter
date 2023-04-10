@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Events\Hello;
+use App\Events\PrivateTest;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/broadcast',function(){
+
+    broadcast(new Hello());
+    return "Evento ejecutado!";
+});
+
+Route::get('/broadcastPrivate',function(){
+    $user = App\Models\User::find(1);
+    broadcast(new PrivateTest($user));
+    return "Event has been sent!";
+});
 
 Route::get('{any}', function () {
     return view('app');
