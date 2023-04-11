@@ -63,6 +63,8 @@
 .auth-formdiv input:focus{
     background: none;
     box-shadow: none;
+    /*border-radius: 0px;*/
+    /*border-bottom: 2px solid black;*/
 }
 
 #login-div{
@@ -80,7 +82,7 @@ button{
     background-color: #AD4955;
     font-family: Argos George;
     border-radius: 15px;
-    border-color: #e3c99e;
+    border: 2px solid #e3c99e;
     color: white;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
 }
@@ -103,7 +105,8 @@ button:hover, button:focus{
 
 /* FORMS */
 .button_form{
-    width: 130px;
+    width: 125px;
+    height: 43px;
     font-size: 1.3rem;
     border-radius: 10px;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;

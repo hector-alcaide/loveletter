@@ -55,10 +55,13 @@
                         </div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12">
-                            <button type="submit" class="button_form d-block mx-auto" @click="doLogin">
+                        <div class="col-md-8">
+                            <button type="submit" class="button_form mx-auto" @click="doLogin">
                                 Iniciar sesión
                             </button>
+                        </div>
+                        <div class="col-md-4">
+                            <router-link to="/register" >Registrar se</router-link>
                         </div>
                     </div>
                 </form>
