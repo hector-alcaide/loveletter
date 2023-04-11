@@ -14,7 +14,7 @@ class users extends Controller
     public function login(Request $request){
 
         $credentials=[
-            'email' => $request->email,
+            'alias' => $request->alias,
             'password' => $request->password
         ];
 

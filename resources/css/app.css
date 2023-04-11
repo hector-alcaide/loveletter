@@ -1,3 +1,8 @@
+@font-face {
+    font-family: argos-regular;
+    src: url(../fonts/ArgosGeorge.ttf);
+}
+
 /**background principal**/
 .background{
     max-width: 1920px;
@@ -28,13 +33,36 @@
     align-items: center;
 }
 
-.auth-form {
-    margin-top: auto;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    margin-right: 300px;
-    margin-bottom: 100px;
+/*.auth-form {*/
+/*    margin-top: auto;*/
+/*    display: flex;*/
+/*    justify-content: flex-end;*/
+/*    align-items: flex-end;*/
+/*    margin-right: 300px;*/
+/*    margin-bottom: 100px;*/
+/*}*/
+
+.auth-formdiv{
+    /*background-color: blue;*/
+    /*opacity: 50%;*/
+    width: 365px;
+    height: 200px;
+    position: relative;
+    top: 199px;
+    left: -123px;
+}
+
+.auth-formdiv input{
+    height: 50px;
+    background: none;
+    border: none;
+    font-family: argos-regular;
+    font-size: 1.5rem;
+}
+
+.auth-formdiv input:focus{
+    background: none;
+    box-shadow: none;
 }
 
 #login-div{
@@ -51,7 +79,7 @@
 button{
     background-color: #AD4955;
     font-family: Argos George;
-    border-radius: 20px;
+    border-radius: 15px;
     border-color: #e3c99e;
     color: white;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
@@ -72,4 +100,11 @@ button:hover, button:focus{
 .guardia{
     width: 400px;
 }
-/*https://www.youtube.com/watch?v=rNOGLLPXzwc*/
+
+/* FORMS */
+.button_form{
+    width: 130px;
+    font-size: 1.3rem;
+    border-radius: 10px;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;
+}
