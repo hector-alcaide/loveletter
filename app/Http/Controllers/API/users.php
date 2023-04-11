@@ -20,10 +20,10 @@ class users extends Controller
 
         if(Auth::attempt($credentials)){
             $success = true;
-            $message = 'Logeado correctamente';
+            $message = 'Logueado correctamente';
         }else{
             $success = false;
-            $message = 'Error';
+            $message = 'Usuario o contraseña no válidos';
         }
 
         $response=[

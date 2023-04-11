@@ -40,3 +40,36 @@
 #login-div{
     background-image: url("../images/login_page.png");
 }
+
+.fondo{
+    background-image: url(../images/fondo_1.jpg);
+}
+
+.logo{
+    width: 130px;
+}
+button{
+    background-color: #AD4955;
+    font-family: Argos George;
+    border-radius: 20px;
+    border-color: #e3c99e;
+    color: white;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
+}
+button:hover, button:focus{
+    box-shadow: inset 0 0 10px 8px #301a1a;
+    cursor: pointer;
+}
+.button_jugar{
+    width: 250px;
+    font-size: 3rem;
+    margin-bottom: 5rem;
+}
+.button_menu{
+    width: 200px;
+    font-size: 2.5rem;
+}
+.guardia{
+    width: 400px;
+}
+/*https://www.youtube.com/watch?v=rNOGLLPXzwc*/
