@@ -1,38 +1,28 @@
 <template>
     <div class="auth-div">
         <div class="auth-background" id="login-div">
-<!--            <div class="row justify-content-center">-->
-<!--                <div class="col-md-8">-->
-<!--                    <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-
-
-<!--                        <strong>{{error}}</strong>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="auth-form">
-                <form>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <input id="email" type="email" class="form-control" v-model="email" required autofocus autocomplete="off" placeholder="Email">
+            <div class="auth-formdiv">
+                <form class="auth-form">
+                    <div class="row ps-5 pe-4 pt-2 mb-3">
+                        <div class="col-md-12 ps-5 pe-3">
+                            <input id="alias" type="alias" class="form-control" v-model="alias" required autofocus autocomplete="off" placeholder="Alias">
                         </div>
                     </div>
-
-                    <div class="form-group row mt-3">
-                        <div class="col-md-12">
+                    <div class="row ps-5 pe-4 pt-2 mb-3">
+                        <div class="col-md-12 pt-1 ps-5 pe-3">
                             <input id="password" type="password" class="form-control" v-model="password" required autocomplete="off" placeholder="Contraseña">
                         </div>
                     </div>
-
-                    <div class="form-group row mt-3">
+                    <div class="row mt-3 pe-4">
                         <div class="col-md-8">
-                            <button type="submit" class="btn btn-success" @click="doLogin">
+                            <button type="submit" class="button_form mx-auto" @click="doLogin">
                                 Iniciar sesión
                             </button>
                         </div>
-                        <div class="col-md-4">
-                            <router-link to="/register" >Register</router-link>
+                        <div class="col-md-4 ps-1">
+                            <button type="button" class="button_form button_secondary" @click="$router.push('/register')">
+                                Registrarse
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -46,7 +36,7 @@
 export default {
     data() {
         return {
-            email: "",
+            alias: "",
             password: "",
             error: null
         }
@@ -57,7 +47,7 @@ export default {
             if(this.password.length > 0) {
                 this.$axios.get('/sanctum/csrf-cookie').then(response => {
                     this.$axios.post('api/login', {
-                        email: this.email,
+                        alias: this.alias,
                         password: this.password
                     })
                         .then(response => {

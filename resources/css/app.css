@@ -1,3 +1,18 @@
+@font-face {
+    font-family: argos-regular;
+    src: url(../fonts/ArgosGeorge.ttf);
+}
+
+@font-face {
+    font-family: blackchancery;
+    src: url(../fonts/BLKCHCRY.ttf);
+}
+
+@font-face {
+    font-family: vinque;
+    src: url(../fonts/vinque.otf);
+}
+
 /**background principal**/
 .background{
     max-width: 1920px;
@@ -28,13 +43,29 @@
     align-items: center;
 }
 
-.auth-form {
-    margin-top: auto;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    margin-right: 300px;
-    margin-bottom: 100px;
+.auth-formdiv{
+    /*background-color: blue;*/
+    /*opacity: 50%;*/
+    width: 365px;
+    height: 200px;
+    position: relative;
+    top: 199px;
+    left: -123px;
+}
+
+.auth-formdiv input{
+    height: 50px;
+    background: none;
+    border: none;
+    font-family: vinque;
+    font-size: 1.5rem;
+}
+
+.auth-formdiv input:focus{
+    background: none;
+    box-shadow: none;
+    border-radius: 0px;
+    border-bottom: 2px solid black;
 }
 
 #login-div{
@@ -48,11 +79,13 @@
 .logo{
     width: 130px;
 }
+
+/* buttons */
 button{
     background-color: #AD4955;
-    font-family: Argos George;
-    border-radius: 20px;
-    border-color: #e3c99e;
+    font-family: vinque;
+    border-radius: 15px;
+    border: 2px solid #e3c99e;
     color: white;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
 }
@@ -62,14 +95,31 @@ button:hover, button:focus{
 }
 .button_jugar{
     width: 250px;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
     margin-bottom: 5rem;
 }
 .button_menu{
     width: 200px;
-    font-size: 2.5rem;
+    font-size: 2rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
+.button_secondary{
+    background-color: #5e2235;
+}
+
+/* FORMS */
+.button_form{
+    width: 125px;
+    height: 43px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;
+}
+
+/*HOME*/
 .guardia{
     width: 400px;
 }
-/*https://www.youtube.com/watch?v=rNOGLLPXzwc*/
