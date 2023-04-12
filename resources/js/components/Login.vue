@@ -20,8 +20,8 @@
                             </button>
                         </div>
                         <div class="col-md-4 ps-1">
-                            <button type="button" class="button_form btn_form_secondary button_secondary" @click="$router.push('/register')">
-                                Registrar se
+                            <button type="button" class="button_form button_secondary" @click="$router.push('/register')">
+                                Registrarse
                             </button>
                         </div>
                     </div>

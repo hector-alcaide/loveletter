@@ -3,6 +3,16 @@
     src: url(../fonts/ArgosGeorge.ttf);
 }
 
+@font-face {
+    font-family: blackchancery;
+    src: url(../fonts/BLKCHCRY.ttf);
+}
+
+@font-face {
+    font-family: vinque;
+    src: url(../fonts/vinque.otf);
+}
+
 /**background principal**/
 .background{
     max-width: 1920px;
@@ -56,16 +66,15 @@
     height: 50px;
     background: none;
     border: none;
-    font-family: argos-regular;
+    font-family: vinque;
     font-size: 1.5rem;
 }
 
 .auth-formdiv input:focus{
     background: none;
     box-shadow: none;
-    /*border-radius: 0px;*/
-    /*border-bottom: 2px solid black;*/
-    /*background-color: rgba(0,0,0,0.09);*/
+    border-radius: 0px;
+    border-bottom: 2px solid black;
 }
 
 #login-div{
@@ -83,7 +92,7 @@
 /* buttons */
 button{
     background-color: #AD4955;
-    font-family: Argos George;
+    font-family: vinque;
     border-radius: 15px;
     border: 2px solid #e3c99e;
     color: white;
@@ -95,33 +104,31 @@ button:hover, button:focus{
 }
 .button_jugar{
     width: 250px;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
     margin-bottom: 5rem;
 }
 .button_menu{
     width: 200px;
-    font-size: 2.5rem;
+    font-size: 2rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .button_secondary{
-    /*background-color: #5a2234;*/
     background-color: #5e2235;
-}
-
-.guardia{
-    width: 400px;
 }
 
 /* FORMS */
 .button_form{
     width: 125px;
     height: 43px;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     border-radius: 10px;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;
 }
 
-/*.btn_form_secondary{*/
-/*    width: 110px;*/
-/*    height: 37px;*/
-/*    font-size: 1.15rem;*/
-/*}*/
+/*HOME*/
+.guardia{
+    width: 400px;
+}
