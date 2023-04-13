@@ -1,18 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Events\Hello;
+use App\Events\PrivateTest;
+use App\Events\GameChannel;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
+Route::get('/broadcastPrivate',function(){
+    $user = App\Models\User::find(5);
+    broadcast(new PrivateTest($user));
+    return "Event has been sent!";
+});
 
 Route::get('{any}', function () {
     return view('app');
 })->where('any', '.*');
+
