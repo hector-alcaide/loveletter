@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\games;
+use App\Http\Controllers\API\users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [\App\Http\Controllers\API\users::class, 'login']);
-Route::post('register', [\App\Http\Controllers\API\users::class, 'register']);
-Route::post('logout', [\App\Http\Controllers\API\users::class, 'logout'])->middleware(['auth:sanctum']);
+Route::post('login', [users::class, 'login']);
+Route::post('register', [users::class, 'register']);
+Route::post('logout', [users::class, 'logout'])->middleware(['auth:sanctum']);
 
+Route::post('newgame', [games::class, 'newgame']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
