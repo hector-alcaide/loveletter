@@ -2,23 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Card extends Model
+class Card
 {
-    use HasFactory;
-
     public $idCarta;
     public $nivel;
-    public $titulo;
+    public $carta;
 //    public $descripcion;
     public $imagen;
 
-    public function __construct($idCarta, $nivel, $titulo, $imagen) {
+    public function __construct($idCarta, $nivel, $carta, $imagen) {
         $this->idCarta = $idCarta;
         $this->nivel = $nivel;
-        $this->titulo = $titulo;
+        $this->carta = $carta;
 //        $this->descripcion = $descripcion;
         $this->imagen = $imagen;
     }
