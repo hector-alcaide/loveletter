@@ -9,7 +9,11 @@ use Illuminate\Http\Request;
 
 class games extends Controller
 {
-    public function nuevaPartida(){
+    public function nuevaPartida(Request $request){
+
+    }
+
+    public function empezarPartida(){
 
 //        $primera_ronda = $this->nuevaRonda();
 
@@ -22,7 +26,7 @@ class games extends Controller
             '2' => [
                 'mano' => [
                     'carta1' => 3,
-                    'carta1' => 5,
+                    'carta2' => 5,
                 ],
                 'activoJugador' => 1
             ],
@@ -59,15 +63,6 @@ class games extends Controller
         $primera_carta = reset($test2_mazo);
         $clave_primera_carta = key($test2_mazo);
 
-        reset($test2_mazo);
-        $test1 = [key($test2_mazo) => reset($test2_mazo)];
-        unset($test2_mazo[key($test2_mazo)]);
-
-        $test2 = [key($test2_mazo) => reset($test2_mazo)];
-        unset($test2_mazo[key($test2_mazo)]);
-
-        $test3 = [key($test2_mazo) => reset($test2_mazo)];
-        unset($test2_mazo[key($test2_mazo)]);
 //        $posicion = array_search('7', array_keys($jugadores));
 
 //        if($posicion == $partida['jugadorTurno']){
