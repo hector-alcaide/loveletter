@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\CreateGame;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -13,12 +14,19 @@ class games extends Controller
     public function nuevaPartida(Request $request){
 
         $new_game = Game::create([
-            'idJugador1' => 1,
-            'tipo' => 'publica',
-            'numeroVictoriasMaximas' => 3,
+            'idJugador1' =>  auth()->id(),
+            'tipo' => $request->tipo,
+            'numeroVictoriasMaximas' => $request->numeroVictoriasMaximas,
         ]);
 
-        $result = Amistad::where(function ($query){});
+        $partida = [
+            'idPartida' => $new_game->idPartida,
+        ];
+
+        session(['partida' => $partida]);
+
+        broadcast(new CreateGame($new_game->idPartida));
+
         return $new_game;
     }
 

@@ -3,7 +3,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import Home from '../components/Home.vue';
 import Register from '../components/Register.vue';
 import Login from '../components/Login.vue';
-import Game from '../components/Game.vue';
+import CreateGame from '../components/CreateGame.vue';
 
 export const routes = [
     {
@@ -25,12 +25,20 @@ export const routes = [
         component: Login
     },
     {
-        name: 'game',
-        path: '/play',
-        component: Game,
+        name: 'games',
+        path: '/games',
+        redirect: '/games/create',
+        component: CreateGame,
         meta:{
             requiresAuth: true
-        }
+        },
+        children: [
+            {
+                name: 'create',
+                path: 'create',
+                component: CreateGame,
+            },
+        ]
     },
     {
         path: '/:pathMatch(.*)*',
