@@ -4,13 +4,22 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Card;
-use App\Models\Deck;
+use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class games extends Controller
 {
     public function nuevaPartida(Request $request){
 
+        $new_game = Game::create([
+            'idJugador1' => 1,
+            'tipo' => 'publica',
+            'numeroVictoriasMaximas' => 3,
+        ]);
+
+        $result = Amistad::where(function ($query){});
+        return $new_game;
     }
 
     public function empezarPartida(){

@@ -1,7 +1,10 @@
 <template>
     <form>
-        <button type="submit" @click="newGame">Generar mazo</button>
+        <button type="submit" @click="newGame">Crear partida</button>
     </form>
+<!--    <form>-->
+<!--        <button type="submit" @click="newGame">Generar mazo</button>-->
+<!--    </form>-->
 </template>
 
 <script>
