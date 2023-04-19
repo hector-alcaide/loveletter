@@ -20,6 +20,7 @@ Route::post('login', [users::class, 'login']);
 Route::post('register', [users::class, 'register']);
 Route::post('logout', [users::class, 'logout'])->middleware(['auth:sanctum']);
 
+Route::post('getgameslist', [games::class, 'getGamesActive']);
 Route::post('newgame', [games::class, 'nuevaPartida']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();

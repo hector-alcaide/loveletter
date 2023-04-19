@@ -2,6 +2,15 @@
     <h2>Partidas </h2>
     <button class="button_jugar mx-auto mt-lg-5" @click="$router.push('/games/create')">Crear partida</button>
 
+    <div class="row">
+        <div class="col-3 mb-5" v-for="item in listGames">
+            <form @submit.prevent="joinGame(item.idPartida)">
+                <p>Partida numero {{item.idPartida}}</p>
+                <button type="submit" class="mx-auto">Unirse a partida</button>
+            </form>
+        </div>
+    </div>
+
     <!--    <form>-->
 <!--        <div class="row">-->
 <!--            <div class="col-md-3">-->
@@ -34,14 +43,12 @@ import Echo from "laravel-echo";
 export default {
     data() {
         return {
-            //CREAR PARTIDA
-            tipo: "publica",
-            numeroVictoriasMaximas: 3,
             //SALA PREVIA A PARTIDA COMENZADA
-            partida_id: 4,
+            listGames: [],
         }
     },
     mounted() {
+        this.getGamesList();
         let echo = new Echo({
             broadcaster: 'pusher',
             key: 'local',
@@ -52,9 +59,9 @@ export default {
             disableStats: true
         })
 
-        echo.channel('games.list').listen('CreateGame',(e)=>{
-            console.log('Nueva partida creada');
-            console.log(e);
+        echo.channel('games.list').listen('CreateGame',(data)=>{
+            this.listGames.push(data);
+            console.log(this.listGames)
         });
 
         // this.connectChannel_ListGames();
@@ -65,12 +72,17 @@ export default {
         // });
     },
     methods: {
-        // connectChannel_ListGames(){
-        //     this.$axios.post('channels/games.list', {
-        //
-        //     });
-        //     console.log('hola')
-        // }
+        getGamesList(){
+            this.$axios.post('api/getgameslist')
+                .then(response => {
+                    this.listGames = response.data;
+                    console.log(this.listGames);
+                }
+            );
+        },
+        joinGame(idPartida){
+            console.log('unido a partida' + idPartida)
+        }
     }
 }
 </script>

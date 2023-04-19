@@ -26,7 +26,7 @@ class CreateGame implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['Usuario entrado en el canal de la partida' . $this->idPartida];
+        return ['idPartida' => $this->idPartida];
     }
 
     /**
@@ -34,9 +34,11 @@ class CreateGame implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new Channel('game.'. $this->idPartida);
-        return new Channel('games.list');
+        return [
+            new Channel('game.'. $this->idPartida),
+            new Channel('games.list')
+        ];
     }
 }

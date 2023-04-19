@@ -11,10 +11,16 @@ use Illuminate\Http\Request;
 
 class games extends Controller
 {
+    public function getGamesActive(){
+        $result = Game::select('idPartida')->where('empezada', 0)->get();
+
+        return $result;
+    }
+
     public function nuevaPartida(Request $request){
 
         $new_game = Game::create([
-            'idJugador1' =>  auth()->id(),
+            'idJugador1' => auth()->id(),
             'tipo' => $request->tipo,
             'numeroVictoriasMaximas' => $request->numeroVictoriasMaximas,
         ]);
