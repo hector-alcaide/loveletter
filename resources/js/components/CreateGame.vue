@@ -1,4 +1,6 @@
 <template>
+    <button class="button_jugar mx-auto mt-lg-5" @click="$router.push('/games')">Lista partidas</button>
+
     <form>
         <div class="row">
             <div class="col-md-3">
@@ -48,16 +50,16 @@ export default {
             forceTLS: false,
             disableStats: true
         })
-        echo.channel('game.'+ this.partida_id).listen('CreateGame',(e)=>{
-            console.log('go GameAction');
-            //code for displaying the serve data
-            console.log(e); // the data from the server
-        });
+        // echo.channel('game.'+ this.partida_id).listen('CreateGame',(e)=>{
+        //     console.log('go GameAction');
+        //     //code for displaying the serve data
+        //     console.log(e); // the data from the server
+        // });
     },
     methods: {
         newGame(e){
             e.preventDefault();
-            this.$axios.post('api/newgame', {
+            this.$axios.post('/api/newgame', {
                 tipo: this.tipo,
                 numeroVictoriasMaximas: this.numeroVictoriasMaximas,
             }).then(response => {
