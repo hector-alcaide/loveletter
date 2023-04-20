@@ -27,7 +27,10 @@ export const routes = [
     {
         name: 'amigos',
         path: '/amigos',
-        component: Amigos
+        component: Amigos,
+        meta:{
+            requiresAuth: true
+        }
     },
     {
         path: '/:pathMatch(.*)*',
