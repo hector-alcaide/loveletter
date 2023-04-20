@@ -13,17 +13,30 @@
     src: url(../fonts/vinque.otf);
 }
 
+.text-1{
+    font-family: 'vinque';
+}
+.text-2{
+    font-family: 'blackchancery';
+}
+
 /**background principal**/
+body{
+    background-color: #6b2d35;
+}
+
 .background{
-    max-width: 1920px;
+    max-width: 1300px;
     /*min-height: 1007px;*/
     /*max-height: 1080px;*/
-    height: 100vh;
+    /*height: 100vh;*/
+    height: 971px;
 }
 
 /**backgrounds**/
 .bg-image1{
-    background-image: url("../images/fondo_carta.png");
+    background-image: url("../images/pergamino.png");
+    background-repeat: no-repeat;
 }
 
 /*Login and register*/
@@ -73,11 +86,11 @@
 }
 
 .fondo{
-    background-image: url(../images/fondo_1.jpg);
+    background-image: url(../images/pergamino.png);
 }
 
 .logo{
-    width: 130px;
+    width: 100px;
 }
 
 /* buttons */
@@ -94,15 +107,15 @@ button:hover, button:focus{
     cursor: pointer;
 }
 .button_jugar{
-    width: 250px;
-    font-size: 2.5rem;
+    width: 220px;
+    font-size: 2.3rem;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 5rem;
 }
 .button_menu{
-    width: 200px;
-    font-size: 2rem;
+    width: 170px;
+    font-size: 1.6rem;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -121,5 +134,51 @@ button:hover, button:focus{
 
 /*HOME*/
 .guardia{
-    width: 400px;
+    width: 300px;
+}
+
+/*AMIGOS*/
+.volver{
+    margin-left: 8rem;
+    width: 150px;
+    font-size: 1.5rem;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.tituloAmigos{
+    font-size: 2.5rem;
+}
+.amigosInput{
+    width: 200px;
+    height: 50px;
+    font-family: vinque;
+    font-size: 1.5rem;
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+.button_buscarAmigos{
+    width: 170px;
+    font-size: 1.7rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.button_addAmigo{
+    width: 210px;
+    font-size: 1.1rem;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+.amigosVolver{
+    width: 100%;
+    margin-bottom: 6rem;
+}
+.misAmigos{
+    width: 65%;
+    float: right;
+    margin-right: 50px;
+}
+.buscarAmigo{
+    margin-top: 6rem;
 }
