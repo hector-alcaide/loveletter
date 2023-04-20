@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class games extends Controller
 {
     public function getGamesActive(){
-        $result = Game::select('idPartida')->where('empezada', 0)->get();
+        $result = Game::select('idPartida', 'idJugador1')->where('empezada', 0)->get();
 
         return $result;
     }

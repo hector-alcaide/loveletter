@@ -26,7 +26,7 @@ class JoinGame implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['idAnfitrion' => $this->idUsuario];
+        return ['idJugador1' => $this->idUsuario];
     }
 
     /**
