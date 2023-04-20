@@ -3,6 +3,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import Home from '../components/Home.vue';
 import Register from '../components/Register.vue';
 import Login from '../components/Login.vue';
+import Amigos from '../components/Amigos.vue';
 
 export const routes = [
     {
@@ -22,6 +23,11 @@ export const routes = [
         name: 'login',
         path: '/login',
         component: Login
+    },
+    {
+        name: 'amigos',
+        path: '/amigos',
+        component: Amigos
     },
     {
         path: '/:pathMatch(.*)*',
