@@ -13,12 +13,24 @@
     src: url(../fonts/vinque.otf);
 }
 
+.text-1{
+    font-family: 'vinque';
+}
+.text-2{
+    font-family: 'blackchancery';
+}
+
 /**background principal**/
+body{
+    background-color: #6b2d35;
+}
+
 .background{
-    max-width: 1920px;
+    max-width: 1300px;
     /*min-height: 1007px;*/
     /*max-height: 1080px;*/
-    height: 100vh;
+    /*height: 100vh;*/
+    height: 971px;
 }
 
 /**backgrounds**/
