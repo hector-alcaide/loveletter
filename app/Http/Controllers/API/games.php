@@ -31,13 +31,13 @@ class games extends Controller
 
         session(['partida' => $partida]);
 
-        broadcast(new CreateGame($new_game->idPartida));
+        broadcast(new CreateGame($new_game->idPartida, $new_game->idJugador1));
 
         return $new_game;
     }
 
     public function unirsePartida(Request $request){
-        
+
     }
 
     public function empezarPartida(){

@@ -21,8 +21,9 @@ export default {
     },
     mounted() {
         this.idPartida = this.$route.params.idPartida;
-        this.idAnfitrion = this.$route.params.idJugador;
+        this.idAnfitrion = this.$route.params.idJugador1;
 
+        console.log(this.idAnfitrion)
         let echo = new Echo({
             broadcaster: 'pusher',
             key: 'local',
@@ -38,9 +39,6 @@ export default {
         });
     },
     methods: {
-        getAnfitrionPartida(){
-            return 1;
-        }
     }
 }
 </script>

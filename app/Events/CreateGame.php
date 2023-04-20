@@ -15,18 +15,23 @@ class CreateGame implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $idPartida;
+    public $idAnfitrion;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idPartida)
+    public function __construct($idPartida, $idAnfitrion)
     {
         $this->idPartida = $idPartida;
+        $this->idAnfitrion = $idAnfitrion;
     }
 
     public function broadcastWith()
     {
-        return ['idPartida' => $this->idPartida];
+        return [
+            'idPartida' => $this->idPartida,
+            'idAnfitrion' => $this->idAnfitrion
+        ];
     }
 
     /**
