@@ -5,7 +5,7 @@ import Register from '../components/Register.vue';
 import Login from '../components/Login.vue';
 import Games from '../components/Games.vue';
 import CreateGame from '../components/CreateGame.vue';
-import PlayGame from '../components/PlayGame.vue';
+import JoinGame from '../components/JoinGame.vue';
 
 export const routes = [
     {
@@ -43,9 +43,9 @@ export const routes = [
         },
     },
     {
-        name: 'playGame',
-        path: '/games/play/:idPartida',
-        component: PlayGame,
+        name: 'joinGame',
+        path: '/games/join/:idPartida/:idJugador1',
+        component: JoinGame,
         meta:{
             requiresAuth: true
         },

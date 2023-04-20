@@ -14,9 +14,15 @@ import Echo from "laravel-echo";
 export default {
     data() {
         return {
+            idPartida: '',
+            idAnfitrion: '',
+            usuarios: []
         }
     },
     mounted() {
+        this.idPartida = this.$route.params.idPartida;
+        this.idAnfitrion = this.$route.params.idJugador;
+
         let echo = new Echo({
             broadcaster: 'pusher',
             key: 'local',
@@ -26,9 +32,15 @@ export default {
             forceTLS: false,
             disableStats: true
         })
+        console.log(this.idAnfitrion)
+        echo.channel('join.game.'+this.idPartida).listen('JoinGame',(data)=>{
+            console.log(data)
+        });
     },
     methods: {
-
+        getAnfitrionPartida(){
+            return 1;
+        }
     }
 }
 </script>

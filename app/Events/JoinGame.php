@@ -10,23 +10,23 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CreateGame implements ShouldBroadcast
+class JoinGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $idPartida;
+    public $idUsuario;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idPartida)
+    public function __construct($idUsuario)
     {
-        $this->idPartida = $idPartida;
+        $this->idUsuario = $idUsuario;
     }
 
     public function broadcastWith()
     {
-        return ['idPartida' => $this->idPartida];
+        return ['idUsuario' => $this->idUsuario];
     }
 
     /**
@@ -37,7 +37,7 @@ class CreateGame implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('games.list')
+            new Channel('join.game.'.$this->idUsuario)
         ];
     }
 }

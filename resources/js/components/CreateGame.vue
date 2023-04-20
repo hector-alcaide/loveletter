@@ -63,7 +63,8 @@ export default {
                 tipo: this.tipo,
                 numeroVictoriasMaximas: this.numeroVictoriasMaximas,
             }).then(response => {
-                        console.log(response);
+                console.log(response)
+                this.$router.push('/games/join/'+response.data.idPartida);
             }).catch(function (error) {
                 console.error(error);
             });
