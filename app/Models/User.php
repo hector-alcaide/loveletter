@@ -47,4 +47,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function friendsFrom()
+    {
+        return $this->belongsToMany(User::class, 'amistad', 'idUsuario1', 'user_id')
+            ->withPivot('accepted')
+            ->withTimestamps();
+    }
 }
