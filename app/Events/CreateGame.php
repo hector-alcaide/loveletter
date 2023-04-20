@@ -37,7 +37,7 @@ class CreateGame implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('game.'. $this->idPartida),
+//            new Channel('game.'. $this->idPartida),
             new Channel('games.list')
         ];
     }
