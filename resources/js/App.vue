@@ -40,17 +40,6 @@ export default {
             this.isLoggedin =true;
         }
     },
-    mounted() {
-        let echo = new Echo({
-            broadcaster: 'pusher',
-            key: 'local',
-            cluster: 'mt1',
-            wsHost: '127.0.0.1',
-            wsPort: 6001,
-            forceTLS: false,
-            disableStats: true
-        });
-    },
     methods: {
         logout(e) {
             e.preventDefault()

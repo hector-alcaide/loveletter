@@ -4,6 +4,9 @@ import Home from '../components/Home.vue';
 import Register from '../components/Register.vue';
 import Login from '../components/Login.vue';
 import Amigos from '../components/Amigos.vue';
+import Games from '../components/Games.vue';
+import CreateGame from '../components/CreateGame.vue';
+import JoinGame from '../components/JoinGame.vue';
 
 export const routes = [
     {
@@ -31,6 +34,30 @@ export const routes = [
         meta:{
             requiresAuth: true
         }
+    },
+    {
+        name: 'games',
+        path: '/games',
+        component: Games,
+        meta:{
+            requiresAuth: true
+        }
+    },
+    {
+        name: 'createGame',
+        path: '/games/create',
+        component: CreateGame,
+        meta:{
+            requiresAuth: true
+        },
+    },
+    {
+        name: 'joinGame',
+        path: '/games/join/:idPartida/:idJugador1',
+        component: JoinGame,
+        meta:{
+            requiresAuth: true
+        },
     },
     {
         path: '/:pathMatch(.*)*',
