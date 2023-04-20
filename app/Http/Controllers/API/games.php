@@ -36,6 +36,10 @@ class games extends Controller
         return $new_game;
     }
 
+    public function unirsePartida(Request $request){
+        
+    }
+
     public function empezarPartida(){
 
 //        $primera_ronda = $this->nuevaRonda();
