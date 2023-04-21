@@ -39,7 +39,6 @@ body{
 }
 .marcador > div{
     width: 250px;
-    height: 50px;
     border: #e3c99e solid 2px;
     border-end-end-radius: 20px;
     border-end-start-radius: 20px;

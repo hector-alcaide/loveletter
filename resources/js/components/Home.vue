@@ -2,17 +2,6 @@
     <div class="text-center mt-lg-5">
         <img class="logo" src="../../images/logo.png">
     </div>
-    <div class="solicitudAmistad" v-if="solicitudAlias !== ''">
-        <div v-for="item in arraySolicitudes">
-            <label>El usuario {{item.alias}} te envía una solicitur de amistad</label>
-            <form @submit.prevent="aceptarInvitacion(item.id)">
-                <button class="button_aceptar d-inline" type="submit">Aceptar</button>
-            </form>
-            <form @submit.prevent="rechazarInvitacion(item.id)">
-                <button class="button_rechazar d-inline">Rechazar</button>
-            </form>
-        </div>
-    </div>
     <div class="text-center">
         <div class="d-inline-block me-lg-5">
             <img class="guardia" src="../../images/guardia1.png">
@@ -39,32 +28,10 @@ export default {
     name: "Home",
     data() {
         return {
-            arraySolicitudes: [],
-            solicitudAlias: "",
-            solicitudId: "",
-            solicitud: ""
+
         }
     },
     created() {
-    },
-    mounted(){
-        this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.post('api/solicitudAmistad', {
-            })
-                .then(response => {
-                    console.log(response)
-                    this.arraySolicitudes = response.data;
-
-                    response.data.forEach(res =>{
-                        this.solicitudAlias = res.alias;
-                        this.solicitudId = res.id;
-                    });
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        });
-
     },
     methods: {
         aceptarInvitacion(solicitudId){

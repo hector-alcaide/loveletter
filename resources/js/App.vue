@@ -18,10 +18,21 @@
 <!--    </div>-->
 
     <div class="container background bg-image1">
-        <div class="marcador">
+        <div class="marcador" v-if="isLoggedin">
             <div id="marcador_content" style="display: none">
-                <div class="text-center" v-if="isLoggedin">
+                <div class="text-center">
                     <a class="text-1 fs-3 my-lg-2 logout" @click="logout">Logout</a>
+                </div>
+                <div class="solicitudAmistad" v-if="solicitudAlias !== ''">
+                    <div class="text-center" v-for="item in arraySolicitudes">
+                        <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                        <form class="d-inline" @submit.prevent="aceptarInvitacion(item.id)">
+                            <button class="button_aceptar d-inline" type="submit">Aceptar</button>
+                        </form>
+                        <form class="d-inline mx-2" @submit.prevent="rechazarInvitacion(item.id)">
+                            <button class="button_rechazar d-inline">Rechazar</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <img @click="marcador" src="../images/marcador.png">
@@ -39,12 +50,35 @@ export default {
         this.cont = 0
         return {
             isLoggedin: false,
+            arraySolicitudes: [],
+            solicitudAlias: "",
+            solicitudId: "",
+            solicitud: ""
         }
     },
     created() {
         if(window.Laravel.isLoggedin){
             this.isLoggedin =true;
         }
+    },
+    mounted(){
+        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.post('api/solicitudAmistad', {
+            })
+                .then(response => {
+                    console.log(response)
+                    this.arraySolicitudes = response.data;
+
+                    response.data.forEach(res =>{
+                        this.solicitudAlias = res.alias;
+                        this.solicitudId = res.id;
+                    });
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        });
+
     },
     methods: {
         logout(e) {
