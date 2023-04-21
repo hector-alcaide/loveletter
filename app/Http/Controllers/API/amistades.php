@@ -62,18 +62,18 @@ class amistades extends Controller
         return $result;
     }
     public function tusAmigos(Request $request){
-
-        $sql = "SELECT
+        $id = Auth::id();
+        $sql = 'SELECT
                     CASE
-                    WHEN a.alias != 'hector' THEN a.alias
+                    WHEN idUsuario1 != '.$id.' THEN a.alias
                     ELSE b.alias
                     END AS amigo_id
                     FROM amistad
                     JOIN usuarios a ON (amistad.idUsuario1 = a.idUsuario)
                     JOIN usuarios b ON (amistad.idUsuario2 = b.idUsuario)
                     WHERE
-                    (idUsuario1 = 2 AND idUsuario2 != 2 OR idUsuario2 = 2 AND idUsuario1 != 2)
-                    AND estado = 'aceptado'";
+                    (idUsuario1 = '.$id.' AND idUsuario2 != '.$id.' OR idUsuario2 = '.$id.' AND idUsuario1 != '.$id.')
+                    AND estado = "aceptado"';
         $result = DB::select($sql);
 
         /*$sql = 'SELECT
@@ -84,7 +84,7 @@ class amistades extends Controller
             FROM amistad
             WHERE
             (idUsuario1 = 2 AND idUsuario2 != 2 OR idUsuario2 = 2 AND idUsuario1 != 2)
-            AND estado = "aceptado"';
+            AND estado = 'aceptado"';
         $result = DB::select($sql);
 
         $res = User::whereIn("idUsuario",$result)->get();*/

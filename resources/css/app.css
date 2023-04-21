@@ -32,6 +32,29 @@ body{
     /*height: 100vh;*/
     height: 971px;
 }
+.marcador{
+    position: fixed;
+    top: 0px;
+    left: 1080px;
+}
+.marcador > div{
+    width: 250px;
+    height: 50px;
+    border: #e3c99e solid 2px;
+    border-end-end-radius: 20px;
+    border-end-start-radius: 20px;
+    border-top: none;
+}
+.marcador > img{
+    width: 35px;
+    margin-left: 110px;
+    cursor: pointer;
+}
+.logout{
+    text-decoration: none;
+    color: #e3c99e;
+    cursor: pointer;
+}
 
 /**backgrounds**/
 .bg-image1{
@@ -91,6 +114,7 @@ body{
 
 .logo{
     width: 100px;
+    margin-top: 4rem;
 }
 
 /* buttons */
@@ -182,3 +206,12 @@ button:hover, button:focus{
 .buscarAmigo{
     margin-top: 6rem;
 }
+.button_cerrar{
+    background-color: #5e2235;
+    font-family: vinque;
+    border-radius: 15px;
+    border: 2px solid #e3c99e;
+    color: white;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
+}
+

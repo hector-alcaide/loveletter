@@ -3,7 +3,7 @@
         <img class="logo" src="../../images/logo.png">
     </div>
     <div class="amigosVolver">
-        <button class="d-block volver" @click="$router.push('/home')">Volver</button>
+        <button class="d-block volver button_cerrar" @click="$router.push('/home')">Volver</button>
     </div>
     <div class="mx-auto mt-lg-5" style="width: 80%">
         <div class="d-inline">

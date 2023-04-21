@@ -18,8 +18,13 @@
 <!--    </div>-->
 
     <div class="container background bg-image1">
-        <div class="navbar-nav" v-if="isLoggedin">
-            <a class="nav-item nav-link" style="cursor: pointer; background: aqua; width: 150px" @click="logout">Logout</a>
+        <div class="marcador">
+            <div id="marcador_content" style="display: none">
+                <div class="text-center" v-if="isLoggedin">
+                    <a class="text-1 fs-3 my-lg-2 logout" @click="logout">Logout</a>
+                </div>
+            </div>
+            <img @click="marcador" src="../images/marcador.png">
         </div>
 
         <router-view></router-view>
@@ -31,6 +36,7 @@ import Pusher from "pusher-js";
 export default {
     name: "App",
     data() {
+        this.cont = 0
         return {
             isLoggedin: false,
         }
@@ -56,8 +62,15 @@ export default {
                         console.error(error);
                     });
             })
-
-
+        },
+        marcador(){
+            if (this.cont == 0){
+                document.getElementById('marcador_content').style.display = 'block';
+                this.cont = 1
+            }else{
+                document.getElementById('marcador_content').style.display = 'none';
+                this.cont = 0
+            }
         }
     },
 }
