@@ -14,20 +14,20 @@ class JoinGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $idUsuario;
+    public $idPartida;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idUsuario)
+    public function __construct($idPartida)
     {
-        $this->idUsuario = $idUsuario;
+        $this->idPartida = $idPartida;
     }
 
-    public function broadcastWith()
-    {
-        return ['idJugador1' => $this->idUsuario];
-    }
+//    public function broadcastWith()
+//    {
+//        return ['idJugador1' => $this->idPartida];
+//    }
 
     /**
      * Get the channels the event should broadcast on.
@@ -37,7 +37,7 @@ class JoinGame implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('join.game.'.$this->idUsuario)
+            new Channel('join.game.'.$this->idPartida)
         ];
     }
 }

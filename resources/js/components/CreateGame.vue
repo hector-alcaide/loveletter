@@ -37,7 +37,7 @@ export default {
             tipo: "publica",
             numeroVictoriasMaximas: 3,
             //SALA PREVIA A PARTIDA COMENZADA
-            partida_id: 4,
+            partida_id: '',
         }
     },
     mounted() {

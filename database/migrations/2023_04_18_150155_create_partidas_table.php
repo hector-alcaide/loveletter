@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('partidas', function (Blueprint $table) {
             $table->id('idPartida');
-            $table->foreignId('idJugador1')->references('idUsuario')->on('usuarios');
+            $table->foreignId('idJugador1')->nullable()->references('idUsuario')->on('usuarios');
             $table->foreignId('idJugador2')->nullable()->references('idUsuario')->on('usuarios');
             $table->foreignId('idJugador3')->nullable()->references('idUsuario')->on('usuarios');
             $table->foreignId('idJugador4')->nullable()->references('idUsuario')->on('usuarios');
             $table->foreignId('idJugador5')->nullable()->references('idUsuario')->on('usuarios');
             $table->foreignId('idJugador6')->nullable()->references('idUsuario')->on('usuarios');
+            $table->foreignId('idAnfitrion')->references('idUsuario')->on('usuarios');
             $table->enum('tipo', ['publica', 'privada']);
             $table->boolean('empezada')->default('0');
             $table->foreignId('idGanador')->nullable()->references('idUsuario')->on('usuarios');

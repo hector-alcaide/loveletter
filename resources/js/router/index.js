@@ -44,7 +44,7 @@ export const routes = [
     },
     {
         name: 'joinGame',
-        path: '/games/join/:idPartida/:idJugador1',
+        path: '/games/join/:idPartida',
         component: JoinGame,
         meta:{
             requiresAuth: true

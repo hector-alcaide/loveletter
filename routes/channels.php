@@ -21,8 +21,8 @@ Broadcast::channel('games.list', function () {
     return true;
 });
 
-Broadcast::channel('join.game.{idUsuario}', function () {
-    return true;
+Broadcast::channel('join.game.{idPartida}', function ($user) {
+    return $user;
 });
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {

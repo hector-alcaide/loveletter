@@ -20,6 +20,7 @@ class Game extends Model
         'idJugador4',
         'idJugador5',
         'idJugador6',
+        'idAnfitrion',
         'tipo',
         'empezada',
         'idGanador',

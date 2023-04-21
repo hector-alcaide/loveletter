@@ -3,24 +3,20 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\CreateGame;
+use App\Events\JoinGame;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class games extends Controller
 {
-    public function getGamesActive(){
-        $result = Game::select('idPartida', 'idJugador1')->where('empezada', 0)->get();
-
-        return $result;
-    }
-
     public function nuevaPartida(Request $request){
 
         $new_game = Game::create([
-            'idJugador1' => auth()->id(),
+            'idAnfitrion' => auth()->id(),
             'tipo' => $request->tipo,
             'numeroVictoriasMaximas' => $request->numeroVictoriasMaximas,
         ]);
@@ -31,13 +27,28 @@ class games extends Controller
 
         session(['partida' => $partida]);
 
-        broadcast(new CreateGame($new_game->idPartida, $new_game->idJugador1));
+        broadcast(new CreateGame($new_game->idPartida));
 
         return $new_game;
     }
 
-    public function unirsePartida(Request $request){
+    public function getGamesActive(){
+        $result = Game::select('idPartida')->where('empezada', 0)->get();
 
+        return $result;
+    }
+
+    public function getGameData(Request $request){
+        $partida = Game::select('idPartida', 'idAnfitrion', 'numeroVictoriasMaximas', 'tipo', 'empezada')->find($request->idPartida);
+
+        return $partida;
+    }
+
+
+    public function unirsePartida(Request $request){
+        $result = broadcast(new JoinGame());
+
+        return $result;
     }
 
     public function empezarPartida(){
