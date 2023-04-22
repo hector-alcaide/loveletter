@@ -3,24 +3,20 @@
         <span><p>Cargando...</p></span>
     </div>
     <div v-if="this.partida">
-        <h2>Partida {{this.partida.idPartida}} </h2>
-        <p>Anfitrion: {{this.partida.idAnfitrion}}</p>
-        <h3>Jugadores</h3>
+        <h2>Jugar partida</h2>
+
+        <h3>Test Jugadores</h3>
         <div v-for="item in usuarios" :key="item.id">
             <p>{{ item.alias }}</p>
         </div>
     </div>
 
-<!--    <p>Partida numero {{ idPartida }}</p>-->
-<!--    <p>Anfitrion {{ idAnfitrion }}</p>-->
 
 
 
-    <button v-if="this.partida && this.partida.idAnfitrion == this.idUsuario" class="mx-auto" @click="prepareGame(this.idPartida)">Empezar partida</button>
 
-    <!--    <div v-for="item in items" :key="item.id">-->
-<!--        {{ item.name }}-->
-<!--    </div>-->
+
+
 
 </template>
 
@@ -50,7 +46,7 @@ export default {
         this.assignPartidaData();
     },
     mounted() {
-        this.echo.join('join.game.'+this.idPartida)
+        this.echo.join('play.game.'+this.idPartida)
             .here((users) => {
                 this.usuarios = users.sort((a,b) => new Date(a.conexion_canal) - new Date(b.conexion_canal));
                 console.log('usuarios conectados:')
@@ -58,43 +54,31 @@ export default {
             })
             .joining((user) => {
                 this.usuarios.push(user);
+                console.log('subido usuario, nuevo array:')
+                console.log(this.usuarios)
             })
             .leaving((user) => {
                 this.deleteUserConnected(user.idUsuario);
+                console.log('usuario eliminado, nuevo array:')
+                console.log(this.usuarios)
             })
-            .listen('PrepareGame',(data)=>{
-                console.log(data)
-                window.location.href = "/games/play/"+data.idPartida;
-            });
     },
     beforeUnmount(){
-        this.echo.leave('join.game.'+this.partida.idPartida);
+        this.echo.leave('play.game.'+this.idPartida);
     },
     methods: {
         assignPartidaData(){
             this.$axios.post('/api/getgamedata', {
                 idPartida: this.idPartida,
             }).then(response => {
-                //TODO: mostrar un mensaje al usuario en la lista de partidas conforme esa partida esta llena
-                if (response.data.empezada == 1){
-                    window.location.href = "/games";
-                }else{
-                    this.partida = response.data;
-                    console.log(this.partida)
-                    this.cargandoDatos = false;
-                }
+                this.partida = response.data;
+                console.log(this.partida)
+                this.cargandoDatos = false;
             });
         },
         deleteUserConnected(idUsuario){
             let array_pos = this.usuarios.map(item => item.idUsuario).indexOf(idUsuario);
             this.usuarios.splice(array_pos, 1);
-        },
-        prepareGame(idPartida){
-            this.$axios.post('/api/preparegame', {
-                idPartida: idPartida,
-            }).then(response => {
-                console.log(response)
-            });
         },
     }
 }

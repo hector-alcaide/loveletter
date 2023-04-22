@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('game.{idPartida}', function () {
-    return true;
+Broadcast::channel('play.game.{idPartida}', function ($user) {
+    $user->conexion_canal = now()->toIso8601String();
+    return $user;
 });
 
 Broadcast::channel('games.list', function () {
@@ -22,6 +23,7 @@ Broadcast::channel('games.list', function () {
 });
 
 Broadcast::channel('join.game.{idPartida}', function ($user) {
+    $user->conexion_canal = now()->toIso8601String();
     return $user;
 });
 

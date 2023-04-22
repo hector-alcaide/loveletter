@@ -4,10 +4,8 @@
 
     <div class="row">
         <div class="col-3 mb-5" v-for="item in listGames">
-            <form @submit.prevent="joinGame(item.idPartida)">
-                <p>Partida numero {{item.idPartida}}</p>
-                <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idPartida)">Unirse a partida</button>
-            </form>
+            <p>Partida numero {{item.idPartida}}</p>
+            <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idPartida)">Unirse a partida</button>
         </div>
     </div>
 

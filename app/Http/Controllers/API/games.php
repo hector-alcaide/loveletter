@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Events\CreateGame;
-use App\Events\JoinGame;
+use App\Events\PrepareGame;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -44,11 +44,20 @@ class games extends Controller
         return $partida;
     }
 
+    public function prepararPartida(Request $request){
 
-    public function unirsePartida(Request $request){
-        $result = broadcast(new JoinGame());
+        broadcast(new PrepareGame($request->idPartida));
 
-        return $result;
+        $partida = Game::find($request->idPartida);
+
+//        $partida->update(['empezada' => 1]);
+
+        $response = [
+            'status' => 'success',
+            'message' => 'partida empezada'
+        ];
+
+        return $response;
     }
 
     public function empezarPartida(){

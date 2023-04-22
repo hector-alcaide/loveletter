@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class JoinGame implements ShouldBroadcast
+class PrepareGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,10 +24,12 @@ class JoinGame implements ShouldBroadcast
         $this->idPartida = $idPartida;
     }
 
-//    public function broadcastWith()
-//    {
-//        return ['idJugador1' => $this->idPartida];
-//    }
+    public function broadcastWith()
+    {
+        return [
+            'idPartida' => $this->idPartida,
+        ];
+    }
 
     /**
      * Get the channels the event should broadcast on.
@@ -37,7 +39,7 @@ class JoinGame implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('join.game.'.$this->idPartida)
+            new PresenceChannel('join.game.'.$this->idPartida),
         ];
     }
 }

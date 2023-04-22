@@ -25,7 +25,7 @@ Route::post('getidusuario', [games::class, 'getIdUsuario']);
 Route::post('getgamedata', [games::class, 'getGameData']);
 Route::post('getgameslist', [games::class, 'getGamesActive']);
 Route::post('newgame', [games::class, 'nuevaPartida']);
-Route::post('joingame', [games::class, 'unirsePartida']);
+Route::post('preparegame', [games::class, 'prepararPartida']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
