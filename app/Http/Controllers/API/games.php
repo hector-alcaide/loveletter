@@ -21,11 +21,11 @@ class games extends Controller
             'numeroVictoriasMaximas' => $request->numeroVictoriasMaximas,
         ]);
 
-        $partida = [
-            'idPartida' => $new_game->idPartida,
-        ];
-
-        session(['partida' => $partida]);
+//        $partida = [
+//            'idPartida' => $new_game->idPartida,
+//        ];
+//
+//        session(['partida' => $partida]);
 
         broadcast(new CreateGame($new_game->idPartida));
 
@@ -40,21 +40,23 @@ class games extends Controller
 
     public function getGameData(Request $request){
         $partida = Game::select('idPartida', 'idAnfitrion', 'numeroVictoriasMaximas', 'tipo', 'empezada')->find($request->idPartida);
+        $partida->jugadores;
 
         return $partida;
     }
 
     public function prepararPartida(Request $request){
 
-        broadcast(new PrepareGame($request->idPartida));
+        $game = Game::find($request->idPartida);
 
-        $partida = Game::find($request->idPartida);
+        $game->jugadores()->attach($request->ids_jugadores);
+        $game->update(['empezada' => 1]);
 
-//        $partida->update(['empezada' => 1]);
+        broadcast(new PrepareGame($game->idPartida));
 
         $response = [
             'status' => 'success',
-            'message' => 'partida empezada'
+            'message' => 'partida preparada'
         ];
 
         return $response;

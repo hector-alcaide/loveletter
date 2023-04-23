@@ -52,7 +52,8 @@ export default {
     mounted() {
         this.echo.join('join.game.'+this.idPartida)
             .here((users) => {
-                this.usuarios = users.sort((a,b) => new Date(a.conexion_canal) - new Date(b.conexion_canal));
+                this.usuarios = users.sort((a, b) => new Date(a.conexion_canal) - new Date(b.conexion_canal));
+                this.cargandoDatos = false;
                 console.log('usuarios conectados:')
                 console.log(this.usuarios)
             })
@@ -81,7 +82,6 @@ export default {
                 }else{
                     this.partida = response.data;
                     console.log(this.partida)
-                    this.cargandoDatos = false;
                 }
             });
         },
@@ -90,8 +90,10 @@ export default {
             this.usuarios.splice(array_pos, 1);
         },
         prepareGame(idPartida){
+            let ids_jugadores = this.usuarios.map(item => item.idUsuario);
             this.$axios.post('/api/preparegame', {
                 idPartida: idPartida,
+                ids_jugadores: ids_jugadores,
             }).then(response => {
                 console.log(response)
             });

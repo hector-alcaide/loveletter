@@ -6,7 +6,7 @@
         <h2>Jugar partida</h2>
 
         <h3>Test Jugadores</h3>
-        <div v-for="item in usuarios" :key="item.id">
+        <div v-for="item in this.partida.jugadores" :key="item.id">
             <p>{{ item.alias }}</p>
         </div>
     </div>
@@ -48,20 +48,29 @@ export default {
     mounted() {
         this.echo.join('play.game.'+this.idPartida)
             .here((users) => {
-                this.usuarios = users.sort((a,b) => new Date(a.conexion_canal) - new Date(b.conexion_canal));
-                console.log('usuarios conectados:')
-                console.log(this.usuarios)
+                this.usuarios = users;
+                if(this.partida.jugadores.length == this.usuarios.length){
+                    console.log('empezar partida')
+                    
+                }else{
+                    console.log('faltan jugadores por unirse')
+                }
             })
             .joining((user) => {
                 this.usuarios.push(user);
-                console.log('subido usuario, nuevo array:')
-                console.log(this.usuarios)
+                if(this.partida.jugadores.length == this.usuarios.length){
+                    console.log('empezar partida')
+                }else{
+                    console.log('faltan jugadores por unirse')
+                }
             })
             .leaving((user) => {
                 this.deleteUserConnected(user.idUsuario);
-                console.log('usuario eliminado, nuevo array:')
-                console.log(this.usuarios)
             })
+            .listen('Action',(data)=>{
+                console.log(data)
+                window.location.href = "/games/play/"+data.idPartida;
+            });
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idPartida);
@@ -71,14 +80,18 @@ export default {
             this.$axios.post('/api/getgamedata', {
                 idPartida: this.idPartida,
             }).then(response => {
-                this.partida = response.data;
-                console.log(this.partida)
-                this.cargandoDatos = false;
+                if (response.data.empezada == 1 && response.data.jugadores.some(el => el.idUsuario === this.idUsuario) ){
+                    this.partida = response.data;
+                    this.cargandoDatos = false;
+                    console.log(this.partida)
+                }else{
+                    window.location.href = "/games";
+                }
             });
         },
         deleteUserConnected(idUsuario){
-            let array_pos = this.usuarios.map(item => item.idUsuario).indexOf(idUsuario);
-            this.usuarios.splice(array_pos, 1);
+            let usuarios_pos = this.usuarios.map(item => item.idUsuario).indexOf(idUsuario);
+            this.usuarios.splice(usuarios_pos, 1);
         },
     }
 }

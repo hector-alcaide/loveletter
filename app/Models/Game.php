@@ -36,4 +36,10 @@ class Game extends Model
         'idJugador6',
         'idGanador'
     ];
+
+    public function jugadores()
+    {
+        return $this->belongsToMany(User::class, 'partidasusuarios', 'idPartida', 'idJugador');
+    }
+
 }
