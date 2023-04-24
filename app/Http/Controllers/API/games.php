@@ -92,7 +92,8 @@ class games extends Controller
             'jugadores' => $jugadores,
             'mazo' => $mazo,
             'numRonda' => 1,
-            'jugadorTurno' => 2
+            'jugadorTurno' => 2,
+            'cartas_jugadas' => []
         ];
 
         session(['partida' => $partida]);
