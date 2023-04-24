@@ -16,29 +16,39 @@
 <!--            </div>-->
 <!--        </nav>-->
 <!--    </div>-->
-
-    <div class="container background bg-image1">
-        <div class="marcador" v-if="isLoggedin">
+    <div class="tablero" v-if="ruta == 'http://127.0.0.1:8000/board'">
+        <label>entra</label>
+        <router-view></router-view>
+    </div>
+    <div v-else>
+    <div class="container background bg-image1" v-if="isLoggedin">
+        <div class="marcador">
             <div id="marcador_content" style="display: none">
                 <div class="text-center">
-                    <a class="text-1 fs-3 my-lg-2 logout" @click="logout">Logout</a>
+                    <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
                 <div class="solicitudAmistad" v-if="solicitudAlias !== ''">
-                    <div class="text-center" v-for="item in arraySolicitudes">
+                    <div class="text-center my-lg-3" v-for="item in arraySolicitudes">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline" @submit.prevent="aceptarInvitacion(item.id)">
-                            <button class="button_aceptar d-inline" type="submit">Aceptar</button>
+                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield5.png"></button>
                         </form>
                         <form class="d-inline mx-2" @submit.prevent="rechazarInvitacion(item.id)">
-                            <button class="button_rechazar d-inline">Rechazar</button>
+                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield6.png"></button>
                         </form>
                     </div>
                 </div>
             </div>
-            <img @click="marcador" src="../images/marcador.png">
+            <div class="marcador_etiqueta">
+                <img @click="marcador" src="../images/marcador.png">
+                <label v-if="contador > 0" @click="marcador" class="text-2 fs-2">{{contador}}</label>
+            </div>
         </div>
-
         <router-view></router-view>
+    </div>
+    <div class="container background" v-if="isLoggedin == false">
+        <router-view></router-view>
+    </div>
     </div>
 </template>
 <script>
@@ -47,13 +57,16 @@ import Pusher from "pusher-js";
 export default {
     name: "App",
     data() {
-        this.cont = 0
+        this.cont = 0,
+        this.contador = 0
         return {
             isLoggedin: false,
             arraySolicitudes: [],
             solicitudAlias: "",
             solicitudId: "",
-            solicitud: ""
+            solicitud: "",
+            erre: "",
+            ruta: ""
         }
     },
     created() {
@@ -62,12 +75,16 @@ export default {
         }
     },
     mounted(){
+        this.erre = this.$route.path
+        this.ruta = window.location.href
+
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
             this.$axios.post('api/solicitudAmistad', {
             })
                 .then(response => {
                     console.log(response)
                     this.arraySolicitudes = response.data;
+                    this.contador = response.data.length;
 
                     response.data.forEach(res =>{
                         this.solicitudAlias = res.alias;
@@ -105,7 +122,35 @@ export default {
                 document.getElementById('marcador_content').style.display = 'none';
                 this.cont = 0
             }
-        }
+        },
+        aceptarInvitacion(solicitudId){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+                this.$axios.post('api/aceptarSolicitudAmistad', {
+                    solicitud: solicitudId
+                })
+                    .then(response => {
+                        console.log(response)
+                        location.reload();
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            });
+        },
+        rechazarInvitacion(solicitudId){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+                this.$axios.post('api/rechazarSolicitudAmistad', {
+                    solicitud: solicitudId
+                })
+                    .then(response => {
+                        console.log(response)
+                        location.reload();
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            });
+        },
     },
 }
 </script>

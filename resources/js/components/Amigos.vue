@@ -1,6 +1,6 @@
 <template>
     <div class="text-center mt-lg-5">
-        <img class="logo" src="../../images/logo.png">
+        <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
     </div>
     <div class="amigosVolver">
         <button class="d-block volver button_cerrar" @click="$router.push('/home')">Volver</button>
@@ -28,12 +28,15 @@
                     </div>
                 </form>
             </div>
-            <div class="text-center mt-lg-5" v-if="amigoUser !== '' ">
+            <div class="text-center mt-lg-5" v-if="amigoUser !== '' && enviada == 0 ">
                 <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">{{amigoUser}}</label>
                 <form class="d-inline">
                     <input type="hidden" v-model="idAmigo">
                     <button type="submit" class="button_addAmigo " @click="addAmigo">Solicitar Amistad</button>
                 </form>
+            </div>
+            <div class="text-center mt-lg-5" v-if="enviada == 1 ">
+                <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">Amistad enviada a {{amigoUser}}</label>
             </div>
         </div>
     </div>
@@ -45,9 +48,10 @@ export default {
         return {
             alias: "",
             amigoUser: "",
+            enviada: 0,
             idAmigo: "",
             error: null,
-            arrayAmistades: ""
+            arrayAmistades: "",
         }
     },
     mounted(){
@@ -71,6 +75,7 @@ export default {
                 })
                     .then(response => {
                         response.data.forEach(res =>{
+                            this.enviada = 0;
                             this.amigoUser = res.alias;
                             this.idAmigo = res.idUsuario;
                         });
@@ -87,8 +92,7 @@ export default {
                     idAmigo: this.idAmigo
                 })
                     .then(response => {
-                        console.log(response)
-
+                        this.enviada = 1;
                     })
                     .catch(function (error) {
                         console.error(error);
