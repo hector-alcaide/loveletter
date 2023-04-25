@@ -21,12 +21,6 @@ class games extends Controller
             'numeroVictoriasMaximas' => $request->numeroVictoriasMaximas,
         ]);
 
-//        $partida = [
-//            'idPartida' => $new_game->idPartida,
-//        ];
-//
-//        session(['partida' => $partida]);
-
         broadcast(new CreateGame($new_game->idPartida));
 
         return $new_game;
@@ -56,6 +50,8 @@ class games extends Controller
 
         foreach ($game->jugadores as $jugador){
             $jugadores[$jugador->idJugador] = [
+                'idJugador' => $jugador->idUsuario,
+                'alias' => $jugador->alias,
                 'mano' => [],
                 'activoJugador' => 1
             ];
@@ -65,12 +61,16 @@ class games extends Controller
             'idPartida' => $game->idPartida,
             'jugadores' => $jugadores,
             'mazo' => [],
-            'numRonda' => 1,
-            'jugadorTurno' => 2,
+            'numRonda' => null,
+//            'jugadorTurno' => 2,
             'cartas_jugadas' => []
         ];
 
-        broadcast(new PrepareGame($game->idPartida));
+        $partida = $this->nuevaRonda($partida);
+
+        $game->update(['partida' => json_encode($partida)]);
+
+        broadcast(new PrepareGame($partida['idPartida']));
 
         $response = [
             'status' => 'success',
@@ -78,6 +78,10 @@ class games extends Controller
         ];
 
         return $response;
+    }
+    public function getSesionPartida(Request $request){
+
+        return session('partida');
     }
 
     public function empezarPartida(){
@@ -172,7 +176,24 @@ class games extends Controller
         return $cartas;
     }
 
-    public function nuevaRonda(){
+    public function nuevaRonda($partida){
+
+        $mazo = $this->getCartas();
+
+        reset($mazo);
+
+        foreach ($partida['jugadores'] as $jugador) {
+            $jugador['mano'] = [key($mazo) => reset($mazo)];
+            unset($mazo[key($mazo)]);
+        }
+
+        $partida['mazo'] = $mazo;
+//        isset($partida['numRonda']) ? $partida['numRonda']++ : $partida['numRonda'] = 1;
+        $partida['numRonda']++;
+
+        return $partida;
+    }
+    public function nuevaRonda1(){
         //TODO: apartar la primera carta
 
         $mazo = $this->getCartas();

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('empezada')->default('0');
             $table->foreignId('idGanador')->nullable()->references('idUsuario')->on('usuarios');
             $table->integer('numeroVictoriasMaximas');
+            $table->json('partida')->nullable();
             $table->timestamps();
         });
     }

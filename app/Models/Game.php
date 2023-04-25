@@ -14,26 +14,16 @@ class Game extends Model
     protected $primaryKey = 'idPartida';
 
     protected $fillable = [
-        'idJugador1',
-        'idJugador2',
-        'idJugador3',
-        'idJugador4',
-        'idJugador5',
-        'idJugador6',
         'idAnfitrion',
         'tipo',
         'empezada',
         'idGanador',
         'numeroVictoriasMaximas',
+        'partida'
     ];
 
     protected $nullable = [
-        'idJugador1',
-        'idJugador2',
-        'idJugador3',
-        'idJugador4',
-        'idJugador5',
-        'idJugador6',
+        'partida',
         'idGanador'
     ];
 
