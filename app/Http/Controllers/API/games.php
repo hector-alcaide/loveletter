@@ -33,8 +33,10 @@ class games extends Controller
     }
 
     public function getGameData(Request $request){
-        $partida = Game::select('idPartida', 'idAnfitrion', 'numeroVictoriasMaximas', 'tipo', 'empezada')->find($request->idPartida);
+        $partida = Game::select('idPartida', 'idAnfitrion', 'numeroVictoriasMaximas', 'tipo', 'empezada', 'partida')->find($request->idPartida);
         $partida->jugadores;
+
+//        $partida->partida = json_decode($partida->partida);
 
         return $partida;
     }
@@ -49,7 +51,7 @@ class games extends Controller
         $jugadores = [];
 
         foreach ($game->jugadores as $jugador){
-            $jugadores[$jugador->idJugador] = [
+            $jugadores[$jugador->idUsuario] = [
                 'idJugador' => $jugador->idUsuario,
                 'alias' => $jugador->alias,
                 'mano' => [],
@@ -78,10 +80,6 @@ class games extends Controller
         ];
 
         return $response;
-    }
-    public function getSesionPartida(Request $request){
-
-        return session('partida');
     }
 
     public function empezarPartida(){

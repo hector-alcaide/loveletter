@@ -12,14 +12,6 @@
 
         <h3>El {{jugadorTurno}} juega el turno</h3>
     </div>
-
-
-
-
-
-
-
-
 </template>
 
 <script>
@@ -31,7 +23,6 @@ export default {
             idPartida: this.$route.params.idPartida,
             cargandoDatos: true,
             idUsuario: window.Laravel.user.idUsuario,
-            // partida: null,
             partida: null,
             usuarios: [],
             jugadorTurno: null,
@@ -47,35 +38,26 @@ export default {
         }
     },
     beforeMount(){
-        // this.getSessionPartida();
-        // this.assignPartidaData();
+        this.assignPartidaData();
     },
     mounted() {
         this.echo.join('play.game.'+this.idPartida)
             .here((users) => {
-
-                this.getSessionPartida().then(response =>{
-                    this.usuarios = users;
-                    console.log(response)
-                    if(this.partida.jugadores.length == this.usuarios.length){
-                        console.log('empezar partida')
-                        console.log(this.partida)
-                        // this.jugarTurno(1);
-                    }else{
-                        console.log('faltan jugadores por unirse')
-                    }
-                });
-            })
-            .joining((user) => {
-                this.usuarios.push(user);
-                if(this.partida.jugadores.length == this.usuarios.length){
+                this.usuarios = users;
+                if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
                     console.log('empezar partida')
+                    this.jugarTurno(1);
                 }else{
                     console.log('faltan jugadores por unirse')
                 }
             })
-            .leaving((user) => {
-                this.deleteUserConnected(user.idUsuario);
+            .joining((user) => {
+                this.usuarios.push(user);
+                if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
+                    console.log('empezar partida')
+                }else{
+                    console.log('faltan jugadores por unirse')
+                }
             })
             .listen('Action',(data)=>{
                 console.log(data)
@@ -86,39 +68,21 @@ export default {
         this.echo.leave('play.game.'+this.idPartida);
     },
     methods: {
-        // assignPartidaData(){
-        //     this.$axios.post('/api/getgamedata', {
-        //         idPartida: this.idPartida,
-        //     }).then(response => {
-        //         if (response.data.empezada == 1 && response.data.jugadores.some(el => el.idUsuario === this.idUsuario) ){
-        //             this.partida = response.data;
-        //             this.cargandoDatos = false;
-        //             console.log(this.partida)
-        //         }else{
-        //             window.location.href = "/games";
-        //         }
-        //     });
-        // },
-        getSessionPartida(){
-            return this.$axios.post('/api/getgamesession', {
-            }).then(response => {
-                this.partida = response.data;
-            });
-        },
-        getPartidaData(){
+        assignPartidaData(){
             this.$axios.post('/api/getgamedata', {
                 idPartida: this.idPartida,
             }).then(response => {
-                if (response.data.empezada == 1){
-                    window.location.href = "/games";
-                }else{
-                    this.partida = response.data;
+                if (response.data.empezada == 1 && response.data.jugadores.some(el => el.idUsuario === this.idUsuario) ){
+                    this.partida = JSON.parse(response.data.partida);
+                    // this.partida = response.data.partida;
+                    this.cargandoDatos = false;
                     console.log(this.partida)
+                }else{
+                    window.location.href = "/games";
                 }
             });
         },
         jugarTurno(idJugadorTurno){
-
 
             this.jugadorTurno == this.partida.jugadores['idJugadorTurno'];
 

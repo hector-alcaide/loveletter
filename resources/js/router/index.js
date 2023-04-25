@@ -72,7 +72,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 
-    console.log(window.Laravel.isLoggedin);
+    // console.log(window.Laravel.isLoggedin);
     if (to.matched.some(record => record.meta.requiresAuth) && (window.Laravel.isLoggedin === false)) {
         next('/login')
     } else {
