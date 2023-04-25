@@ -52,6 +52,24 @@ class games extends Controller
         $game->jugadores()->attach($request->ids_jugadores);
         $game->update(['empezada' => 1]);
 
+        $jugadores = [];
+
+        foreach ($game->jugadores as $jugador){
+            $jugadores[$jugador->idJugador] = [
+                'mano' => [],
+                'activoJugador' => 1
+            ];
+        }
+
+        $partida = [
+            'idPartida' => $game->idPartida,
+            'jugadores' => $jugadores,
+            'mazo' => [],
+            'numRonda' => 1,
+            'jugadorTurno' => 2,
+            'cartas_jugadas' => []
+        ];
+
         broadcast(new PrepareGame($game->idPartida));
 
         $response = [
