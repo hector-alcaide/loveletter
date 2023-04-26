@@ -10,7 +10,11 @@
             <p>{{ item.alias }}</p>
         </div>
 
-        <h3>El {{jugadorTurno}} juega el turno</h3>
+        <h3>El {{this.partida.numJugadorTurno}} juega el turno</h3>
+        <button v-if="this.partida && this.partida.idAnfitrion == this.idUsuario" class="mx-auto" @click="prepareGame(this.idPartida)">
+            Robar carta
+        </button>
+
     </div>
 </template>
 
@@ -25,7 +29,6 @@ export default {
             idUsuario: window.Laravel.user.idUsuario,
             partida: null,
             usuarios: [],
-            jugadorTurno: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -46,23 +49,29 @@ export default {
                 this.usuarios = users;
                 if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
                     console.log('empezar partida')
-                    this.jugarTurno(1);
+                    this.jugarTurno();
                 }else{
                     console.log('faltan jugadores por unirse')
                 }
             })
             .joining((user) => {
                 this.usuarios.push(user);
+                console.log(this.usuarios)
                 if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
                     console.log('empezar partida')
+                    this.jugarTurno();
                 }else{
                     console.log('faltan jugadores por unirse')
                 }
+            })
+            .leaving((user) => {
+                this.deleteUserConnected(user.idUsuario);
             })
             .listen('Action',(data)=>{
                 console.log(data)
                 window.location.href = "/games/play/"+data.idPartida;
             });
+
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idPartida);
@@ -82,14 +91,21 @@ export default {
                 }
             });
         },
-        jugarTurno(idJugadorTurno){
+        deleteUserConnected(idUsuario){
+            let array_pos = this.usuarios.map(item => item.idUsuario).indexOf(idUsuario);
+            this.usuarios.splice(array_pos, 1);
+        },
+        jugarTurno(){
 
-            this.jugadorTurno == this.partida.jugadores['idJugadorTurno'];
+            let jugadorTurno = this.partida.numJugadorTurno;
+            let numJugador = this.partida.jugadores[this.idUsuario].numJugador;
 
-            if(idJugadorTurno == this.idUsuario){
-                console.log()
+            console.log(jugadorTurno)
+            console.log(numJugador)
+            if(jugadorTurno == numJugador){
+                console.log('te toca jugar');
             }else{
-
+                console.log('otro jugador juega el turno')
             }
         }
     }

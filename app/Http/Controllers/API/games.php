@@ -50,12 +50,13 @@ class games extends Controller
 
         $jugadores = [];
 
-        foreach ($game->jugadores as $jugador){
+        foreach ($game->jugadores as $key => $jugador){
             $jugadores[$jugador->idUsuario] = [
                 'idJugador' => $jugador->idUsuario,
                 'alias' => $jugador->alias,
                 'mano' => [],
-                'activoJugador' => 1
+                'activoJugador' => 1,
+                'numJugador' => ($key + 1)
             ];
         }
 
@@ -64,7 +65,7 @@ class games extends Controller
             'jugadores' => $jugadores,
             'mazo' => [],
             'numRonda' => null,
-//            'jugadorTurno' => 2,
+            'numJugadorTurno' => 1,
             'cartas_jugadas' => []
         ];
 
