@@ -6,14 +6,14 @@ class Card
 {
     public $idCarta;
     public $nivel;
-    public $carta;
+    public $titulo;
 //    public $descripcion;
     public $imagen;
 
-    public function __construct($idCarta, $nivel, $carta, $imagen) {
+    public function __construct($idCarta, $nivel, $titulo, $imagen) {
         $this->idCarta = $idCarta;
         $this->nivel = $nivel;
-        $this->carta = $carta;
+        $this->titulo = $titulo;
 //        $this->descripcion = $descripcion;
         $this->imagen = $imagen;
     }

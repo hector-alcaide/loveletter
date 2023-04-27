@@ -185,7 +185,7 @@ class games extends Controller
         reset($mazo);
 
         foreach ($partida['jugadores'] as $jugador) {
-            $jugador['mano'] = [key($mazo) => reset($mazo)];
+            $partida['jugadores'][$jugador['idJugador']]['mano'] = [key($mazo) => reset($mazo)];
             unset($mazo[key($mazo)]);
         }
 
@@ -202,7 +202,7 @@ class games extends Controller
 
         reset($partida['mazo']);
 
-        $partida['jugadores'][$request->idUsuario]['mano'] = [key($partida['mazo']) => reset($partida['mazo'])];
+        $partida['jugadores'][$request->idUsuario]['mano'] += [key($partida['mazo']) => reset($partida['mazo'])];
         unset($partida['mazo'][key($partida['mazo'])]);
 
         $game = Game::find($partida['idPartida']);
@@ -246,6 +246,125 @@ class games extends Controller
     }
 
     public function resolverJugada(Request $request){
+
+        //posibles parametros necesitados para operar los efectos de las cartas:
+//        $parameters = [
+//            'idPartida' => $request->idPartida,
+//            'idJugador' => $request->idJugador,
+//            'jugada' => $request->cartaJugada
+//                //carta jugada:
+//                [
+//                'idCarta',
+//                'cartaMano' => 'carta1', //TAL VEZ ESTO SOBRA
+//                'idRival',
+//                'cartaAdivinar'
+//            ]
+//        ];
+
+        $cartas = $this->getCartas();
+
+        $jugada = $request->jugada;
+        $idUsuario = auth()->id();
+
+        $partida = session('partida');
+
+        //segun la carta ocurre un efecto u otro
+        switch ($cartas[$jugada['idCarta']['carta']]){
+            case 'Espía':
+                break;
+            case 'Guardia':
+                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
+
+                if($jugada['cartaAdivinar'] === $carta_rival){
+                    //la carta ha sido adivinada, el rival queda eliminado
+                    $partida['jugadores'][$jugada['idRival']]['activoJugador'] = 0;
+
+                    $status = 'removeuser';
+                    $message = 'Carta adivinada, el jugador _ ha sido eliminado.';
+                    $user_to_remove = $jugada['idRival'];
+                }else{
+                    $status = true;
+                    $message = 'El jugador _ no tiene la carta _ en su mano.';
+                }
+                break;
+            case 'Sacerdote':
+                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
+
+                //TODO: devolver la carta del rival al usuario que efectua la jugada por canal privado
+                break;
+            case 'Barón':
+                unset($partida['jugadores'][$idUsuario]['mano'][$jugada['idCarta']]);
+
+                $carta_jugador = reset($partida['jugadores'][$idUsuario]['mano']);
+                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
+
+                if($carta_jugador < $carta_rival){
+                    $user_to_remove = $idUsuario;
+                    $message = 'Jugador _ eliminado.';
+                }else if($carta_jugador > $carta_rival){
+                    $user_to_remove = $jugada['idRival'];
+                    $message = 'Jugador _ eliminado.';
+                }else if($carta_jugador == $carta_rival){
+                    $status = true;
+                    $message = 'Las cartas de los jugadores tal son iguales, ninguno eliminado.';
+                }
+                break;
+            case 'Doncella':
+                //TODO: pensar una forma distinta, más óptima, de comprobar si el jugador está protegido
+                //TODO: pensar una forma de comprobar cuando ha acabado el turno para eliminar la proteccion
+                $partida['jugadores'][$idUsuario]['protegidoJugador'] = 1;
+                break;
+            case 'Príncipe':
+                //TODO: elemento afectado puede ser rival o jugador mismo, por lo que podria verse como enviar este dato
+                // (idElemento, tanto para rival como jugador¿?) para hacer lo mas legible
+
+                $jugador_afectado = $jugada['idRival'];
+
+                //comprobar si tiene la princesa
+                if(isset($partida['jugadores'][$jugador_afectado]['mano'][21])){
+                    $user_to_remove = $jugador_afectado;
+                    $message = 'Jugador eliminado al descartar princesa.';
+                }
+
+                //vaciar el array de mano, para descartar la carta
+                $partida['jugadores'][$jugador_afectado]['mano'] = reset($partida['mazo']);
+                array_shift($partida['mazo']);
+
+                break;
+            case 'Canciller':
+                //TODO: robar dos cartas del mazo, mostrar las al usuario, decidir con cual de las 3 se queda
+                break;
+            case 'Rey':
+                //TODO: conservar clave y valor de las cartas al extraerlas del mazo para añadirlas a la mano y viceversa
+                unset($partida['jugadores'][$idUsuario]['mano'][$jugada['idCarta']]);
+
+                $carta_jugador = reset($partida['jugadores'][$idUsuario]['mano']);
+                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
+
+                $partida['jugadores'][$jugada['idRival']]['mano'] = $carta_rival;
+                break;
+            case 'Condesa':
+                //TODO: revisar si tiene al rey o principe para jugar a la condesa,
+                // esta carta no tiene efecto, simplemente comprobar por frontend si tiene esa carta en mano
+                break;
+            case 'Princesa':
+                $user_to_remove = $idUsuario;
+                $message = 'Jugador eliminado al descartar princesa.';
+                break;
+        }
+
+        //eliminar de la mano la carta utilizada. TODO: tal vez vaciar la mano de quién haya sido eliminado
+        unset($partida['jugadores'][$idUsuario]['mano'][$jugada['idCarta']]);
+        session(['partida' => $partida]);
+
+        //TODO: revisar a quien le toca jugar el turno
+
+        $response=[
+            'message' => $message,
+        ];
+    }
+
+    public function resolverJugada1(Request $request){
 
         //posibles parametros necesitados para operar los efectos de las cartas:
 //        $parameters = [

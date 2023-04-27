@@ -1,32 +1,40 @@
 <template>
-    <div v-if="this.cargandoDatos" class="pantalla-carga">
+    <div v-if="cargandoDatos" class="pantalla-carga">
         <span><p>Cargando...</p></span>
     </div>
-    <div v-if="this.partida">
+    <div v-if="partida">
         <h2>Jugar partida</h2>
 
         <h3>Test Jugadores</h3>
-        <div v-for="item in this.partida.jugadores" :key="item.id">
+        <div v-for="item in partida.jugadores" :key="item.id">
             <p>{{ item.alias }}</p>
-        </div>
-
-        <h3>Turno de {{this.partida.jugadores[this.partida.numJugadorTurno].alias}} </h3>
-        <div v-if="this.partida.numJugadorTurno == this.partida.jugadores[this.idUsuario].numJugador">
-            <button class="mx-auto" @click="robarCarta(this.idPartida)">
-                Robar carta
+            <button class="mx-auto" v-if="cartaJugada" @click="resolverJugada(item.idJugador, cartaJugada)">
+                Elegir este jugador
             </button>
         </div>
 
+        <h3>Turno de {{partida.jugadores[partida.numJugadorTurno].alias}} </h3>
+        <div  v-for="carta in partida.jugadores[idUsuario].mano">
+            <p> {{ carta.titulo }} </p>
+            <button class="mx-auto" v-if="permitirJugarCarta" @click="jugarCarta(carta.idCarta)">
+                Jugar carta
+            </button>
+        </div>
+        <button class="mx-auto" v-if="permitirRobar" @click="robarCarta(idPartida)">
+            Robar carta
+        </button>
 
 
-
-
+        <!--        <div v-if="this.partida.numJugadorTurno == this.partida.jugadores[this.idUsuario].numJugador">-->
+        <!--            <button class="mx-auto" @click="robarCarta(this.idPartida)">-->
+        <!--                Robar carta-->
+        <!--            </button>-->
+        <!--        </div>-->
     </div>
 </template>
 
 <script>
 import Echo from "laravel-echo";
-import callback from "pusher-js/src/core/events/callback";
 
 export default {
     data() {
@@ -36,6 +44,9 @@ export default {
             idUsuario: window.Laravel.user.idUsuario,
             partida: null,
             usuarios: [],
+            permitirRobar: false,
+            permitirJugarCarta: false,
+            cartaJugada: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -78,7 +89,6 @@ export default {
                 console.log(data);
                 this.refreshPartidaData();
                 console.log("hola")
-
             });
 
     },
@@ -113,16 +123,48 @@ export default {
             console.log(numJugador)
             if(jugadorTurno == numJugador){
                 console.log('te toca jugar');
+                this.permitirRobar = true;
             }else{
                 console.log('otro jugador juega el turno')
             }
         },
         robarCarta(){
+            this.permitirRobar = false;
+
             this.$axios.post('/api/stealcard', {
                 partida: this.partida,
                 idUsuario: this.idUsuario
             }).then(response => {
                // this.partida = response.data;
+                console.log(response.data)
+                this.permitirJugarCarta = true;
+            });
+        },
+        jugarCarta(idCarta){
+            this.permitirRobar = false;
+            this.permitirJugarCarta = false;
+
+            this.cartaJugada = idCarta;
+
+            // this.$axios.post('/api/playcard', {
+            //     partida: this.partida,
+            //     idUsuario: this.idUsuario,
+            //     idCarta: idCarta,
+            // }).then(response => {
+            //     // this.partida = response.data;
+            //     console.log(response.data)
+            //     this.permitirJugarCarta = true;
+            // });
+        },
+        resolverJugada(idRival, idCarta){
+            this.cartaJugada = null;
+
+            this.$axios.post('/api/playcard', {
+                partida: this.partida,
+                idUsuario: this.idUsuario,
+                idCarta: idCarta,
+                idRival: idRival,
+            }).then(response => {
                 console.log(response)
             });
         },
@@ -130,9 +172,8 @@ export default {
             this.$axios.post('/api/getgamedata', {
                 idPartida: this.idPartida,
             }).then(response => {
-                this.partida = response.data;
+                this.partida = JSON.parse(response.data.partida);
                 console.log(this.partida)
-
             });
         }
     }
