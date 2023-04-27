@@ -10,16 +10,23 @@
             <p>{{ item.alias }}</p>
         </div>
 
-        <h3>El {{this.partida.numJugadorTurno}} juega el turno</h3>
-        <button v-if="this.partida && this.partida.idAnfitrion == this.idUsuario" class="mx-auto" @click="prepareGame(this.idPartida)">
-            Robar carta
-        </button>
+        <h3>Turno de {{this.partida.jugadores[this.partida.numJugadorTurno].alias}} </h3>
+        <div v-if="this.partida.numJugadorTurno == this.partida.jugadores[this.idUsuario].numJugador">
+            <button class="mx-auto" @click="robarCarta(this.idPartida)">
+                Robar carta
+            </button>
+        </div>
+
+
+
+
 
     </div>
 </template>
 
 <script>
 import Echo from "laravel-echo";
+import callback from "pusher-js/src/core/events/callback";
 
 export default {
     data() {
@@ -67,9 +74,11 @@ export default {
             .leaving((user) => {
                 this.deleteUserConnected(user.idUsuario);
             })
-            .listen('Action',(data)=>{
-                console.log(data)
-                window.location.href = "/games/play/"+data.idPartida;
+            .listen('PublicActionUser',(data)=>{
+                console.log(data);
+                this.refreshPartidaData();
+                console.log("hola")
+
             });
 
     },
@@ -107,6 +116,24 @@ export default {
             }else{
                 console.log('otro jugador juega el turno')
             }
+        },
+        robarCarta(){
+            this.$axios.post('/api/stealcard', {
+                partida: this.partida,
+                idUsuario: this.idUsuario
+            }).then(response => {
+               // this.partida = response.data;
+                console.log(response)
+            });
+        },
+        refreshPartidaData(){
+            this.$axios.post('/api/getgamedata', {
+                idPartida: this.idPartida,
+            }).then(response => {
+                this.partida = response.data;
+                console.log(this.partida)
+
+            });
         }
     }
 }

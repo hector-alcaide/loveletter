@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Events\CreateGame;
 use App\Events\PrepareGame;
+use App\Events\PublicActionUser;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -179,6 +180,8 @@ class games extends Controller
 
         $mazo = $this->getCartas();
 
+        shuffle($mazo);
+
         reset($mazo);
 
         foreach ($partida['jugadores'] as $jugador) {
@@ -192,6 +195,33 @@ class games extends Controller
 
         return $partida;
     }
+
+    public function robarCarta(Request $request){
+
+        $partida = $request->partida;
+
+        reset($partida['mazo']);
+
+        $partida['jugadores'][$request->idUsuario]['mano'] = [key($partida['mazo']) => reset($partida['mazo'])];
+        unset($partida['mazo'][key($partida['mazo'])]);
+
+        $game = Game::find($partida['idPartida']);
+        $game->update(['partida' => $partida]);
+
+        $message = [
+            'El jugador ' .  $partida['jugadores'][$request->idUsuario]['alias'] . ' ha robado carta.'
+        ];
+
+        broadcast(new PublicActionUser($partida['idPartida'], $message));
+
+        $response = [
+            'status' => 'success',
+            'message' => 'Juega una de tus cartas.'
+        ];
+
+        return $response;
+    }
+
     public function nuevaRonda1(){
         //TODO: apartar la primera carta
 
@@ -213,16 +243,6 @@ class games extends Controller
 
         //TODO: devolver la sesion a todos los jugadores, al frontend, com
 //        return $mazo;
-    }
-
-    public function robarCarta(Request $request){
-
-        $partida = session('partida');
-
-        reset($partida['mazo']);
-
-        $partida[$jugadores][$request->idJugador]['mano'] = [key($mazo) => reset($mazo)];
-        unset($mazo[key($mazo)]);
     }
 
     public function resolverJugada(Request $request){
