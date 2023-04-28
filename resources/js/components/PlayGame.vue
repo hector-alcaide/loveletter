@@ -6,9 +6,9 @@
         <h2>Jugar partida</h2>
 
         <h3>Test Jugadores</h3>
-        <div v-for="item in partida.jugadores" :key="item.id">
-            <p>{{ item.alias }}</p>
-            <button class="mx-auto" v-if="cartaJugada" @click="resolverJugada(item.idJugador, cartaJugada)">
+        <div v-for="item in partida.jugadores">
+            <p :id="item.idJugador" :class="item.alias">{{ item.alias }}</p>
+            <button class="mx-auto" v-if="cartaSobreJugador" @click="jugarCarta(cartaJugada, item.idJugador)">
                 Elegir este jugador
             </button>
         </div>
@@ -16,11 +16,11 @@
         <h3>Turno de {{partida.jugadores[partida.numJugadorTurno].alias}} </h3>
         <div  v-for="carta in partida.jugadores[idUsuario].mano">
             <p> {{ carta.titulo }} </p>
-            <button class="mx-auto" v-if="permitirJugarCarta" @click="jugarCarta(carta.idCarta)">
+            <button class="mx-auto" v-if="permitirJugarCarta" @click="escogerCarta(carta.idCarta)">
                 Jugar carta
             </button>
         </div>
-        <button class="mx-auto" v-if="permitirRobar" @click="robarCarta(idPartida)">
+        <button class="mx-auto" v-if="permitirRobar" @click="robarCarta()">
             Robar carta
         </button>
 
@@ -46,6 +46,7 @@ export default {
             usuarios: [],
             permitirRobar: false,
             permitirJugarCarta: false,
+            cartaSobreJugador: false,
             cartaJugada: null,
             echo: new Echo({
                 broadcaster: 'pusher',
@@ -88,8 +89,12 @@ export default {
             .listen('PublicActionUser',(data)=>{
                 console.log(data);
                 this.refreshPartidaData();
-                console.log("hola")
             });
+
+        // this.echo.join('play.game.'+this.idPartida+'player.'+this.idUsuario)
+        //     .listen('PrivateActionUser',(data)=>{
+        //         console.log(data);
+        //     });
 
     },
     beforeUnmount(){
@@ -140,33 +145,57 @@ export default {
                 this.permitirJugarCarta = true;
             });
         },
-        jugarCarta(idCarta){
+        escogerCarta(idCarta){
+            // console.log(idCarta)
             this.permitirRobar = false;
             this.permitirJugarCarta = false;
-
             this.cartaJugada = idCarta;
 
+            //TODO: solo tener un espia, mostrar mensaje se descarta el espia
+
+            const tipoJugada = {
+                'Espía': 'directa',
+                'Guardia': 'sobreJugador',
+                'Sacerdote': 'sobreJugador',
+                'Barón': 'sobreJugador',
+                'Doncella': 'directa',
+                'Príncipe': 'sobreJugador',
+                'Canciller': 'sobreMazo',
+                'Rey': 'sobreJugador',
+                'Condesa': 'directa',
+                'Princesa': 'directa',
+            };
+
+            const carta = this.partida.referenciaMazo[idCarta];
+
+            if(tipoJugada[carta.titulo] == 'directa'){
+                this.jugarCarta(idCarta);
+            }else if(tipoJugada[carta.titulo] == 'sobreJugador'){
+                this.cartaSobreJugador = true;
+            };
+
+        },
+        jugarCarta(idCarta, idRival = null){
+            this.cartaSobreJugador = false;
+
+            // const manoJugador = this.partida.jugadores[this.idUsuario].mano;
+            // console.log(manoJugador)
+            // const cartaEliminar = manoJugador.indexOf(idCarta);
+
+            const tst = ['1', '2', '3'];
+            const cartaEliminar = tst.indexOf('2');
+            console.log(cartaEliminar)
+
+            // this.partida.jugadores[this.idUsuario].mano[];
             // this.$axios.post('/api/playcard', {
             //     partida: this.partida,
-            //     idUsuario: this.idUsuario,
+            //     idJugador: this.idUsuario,
             //     idCarta: idCarta,
+            //     idRival: idRival,
             // }).then(response => {
-            //     // this.partida = response.data;
-            //     console.log(response.data)
-            //     this.permitirJugarCarta = true;
+            //     console.log(response)
+            //
             // });
-        },
-        resolverJugada(idRival, idCarta){
-            this.cartaJugada = null;
-
-            this.$axios.post('/api/playcard', {
-                partida: this.partida,
-                idUsuario: this.idUsuario,
-                idCarta: idCarta,
-                idRival: idRival,
-            }).then(response => {
-                console.log(response)
-            });
         },
         refreshPartidaData(){
             this.$axios.post('/api/getgamedata', {

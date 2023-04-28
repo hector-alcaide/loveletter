@@ -65,9 +65,10 @@ class games extends Controller
             'idPartida' => $game->idPartida,
             'jugadores' => $jugadores,
             'mazo' => [],
+            'referenciaMazo' => $this->getCartas(),
             'numRonda' => null,
             'numJugadorTurno' => 1,
-            'cartas_jugadas' => []
+            'cartasTiradas' => []
         ];
 
         $partida = $this->nuevaRonda($partida);
@@ -84,67 +85,67 @@ class games extends Controller
         return $response;
     }
 
-    public function empezarPartida(){
-
-//        $primera_ronda = $this->nuevaRonda();
-
-        $mazo = $this->getCartas();
-
-        /** TODO: guardar el objeto completo de carta en la mano, en vez de sus ids.
-            Dónde, igual que en el mazo, la clave es la id de la carta
-         **/
-        $jugadores = [
-            '2' => [
-                'mano' => [
-                    'carta1' => 3,
-                    'carta2' => 5,
-                ],
-                'activoJugador' => 1
-            ],
-            '7' => [
-                'mano' => [
-                    'carta1' => 9,
-                ],
-                'activoJugador' => 1
-            ],
-        ];
-
-        $partida = [
-            'idPartida' => 1,
-            'jugadores' => $jugadores,
-            'mazo' => $mazo,
-            'numRonda' => 1,
-            'jugadorTurno' => 2,
-            'cartas_jugadas' => []
-        ];
-
-        session(['partida' => $partida]);
-
-        $test = session('partida');
-
-        $id = auth()->id();
-
-        $mano = [
-            3 => new Card(3, 1, 'Guardia', '/resources/images/cartas/guardia.png'),
-            8 => new Card(8, 1, 'Guardia', '/resources/images/cartas/guardia.png'),
-        ];
-
-        $test1_mazo = $this->getCartas();
-        $test2_mazo = $this->getCartas();
-
-        $primera_carta = reset($test2_mazo);
-        $clave_primera_carta = key($test2_mazo);
-
-//        $posicion = array_search('7', array_keys($jugadores));
-
-//        if($posicion == $partida['jugadorTurno']){
+//    public function empezarPartida(){
 //
-//        }
-
-        shuffle($mazo);
-
-        return json_encode($mazo);
-    }
+////        $primera_ronda = $this->nuevaRonda();
+//
+//        $mazo = $this->getCartas();
+//
+//        /** TODO: guardar el objeto completo de carta en la mano, en vez de sus ids.
+//            Dónde, igual que en el mazo, la clave es la id de la carta
+//         **/
+//        $jugadores = [
+//            '2' => [
+//                'mano' => [
+//                    'carta1' => 3,
+//                    'carta2' => 5,
+//                ],
+//                'activoJugador' => 1
+//            ],
+//            '7' => [
+//                'mano' => [
+//                    'carta1' => 9,
+//                ],
+//                'activoJugador' => 1
+//            ],
+//        ];
+//
+//        $partida = [
+//            'idPartida' => 1,
+//            'jugadores' => $jugadores,
+//            'mazo' => $mazo,
+//            'numRonda' => 1,
+//            'jugadorTurno' => 2,
+//            'cartas_jugadas' => []
+//        ];
+//
+//        session(['partida' => $partida]);
+//
+//        $test = session('partida');
+//
+//        $id = auth()->id();
+//
+//        $mano = [
+//            3 => new Card(3, 1, 'Guardia', '/resources/images/cartas/guardia.png'),
+//            8 => new Card(8, 1, 'Guardia', '/resources/images/cartas/guardia.png'),
+//        ];
+//
+//        $test1_mazo = $this->getCartas();
+//        $test2_mazo = $this->getCartas();
+//
+//        $primera_carta = reset($test2_mazo);
+//        $clave_primera_carta = key($test2_mazo);
+//
+////        $posicion = array_search('7', array_keys($jugadores));
+//
+////        if($posicion == $partida['jugadorTurno']){
+////
+////        }
+//
+//        shuffle($mazo);
+//
+//        return json_encode($mazo);
+//    }
 
     public function getCartas(){
 
@@ -180,7 +181,7 @@ class games extends Controller
 
         $mazo = $this->getCartas();
 
-        shuffle($mazo);
+        $mazo = $this->shuffleDeck($mazo);
 
         reset($mazo);
 
@@ -249,6 +250,7 @@ class games extends Controller
 
         //posibles parametros necesitados para operar los efectos de las cartas:
 //        $parameters = [
+//            'partida' => $request->partida;
 //            'idPartida' => $request->idPartida,
 //            'idJugador' => $request->idJugador,
 //            'jugada' => $request->cartaJugada
@@ -261,16 +263,21 @@ class games extends Controller
 //            ]
 //        ];
 
-        $cartas = $this->getCartas();
+        $partida = $request->partida;
+        $jugadores = $partida['jugadores'];
+        $idJugador = $request->idJugador;
 
-        $jugada = $request->jugada;
-        $idUsuario = auth()->id();
+        $rivalCard = !empty($request->idRival) ? reset($jugadores[$request->idRival]['mano']) : '';
 
-        $partida = session('partida');
-
-        //segun la carta ocurre un efecto u otro
-        switch ($cartas[$jugada['idCarta']['carta']]){
+        switch ($partida['referenciaMazo'][$request->idCarta]['titulo']){
             case 'Espía':
+                    $jugadores[$idJugador]['espia'] = true;
+                    unset($jugadores[$idJugador]['mano'][$request->idCarta]);
+
+                    array_push($partida['cartasTiradas'], $request->idCarta);
+
+                    $status = 'success';
+                    $message = 'El jugador '. $jugadores[$idJugador]['alias'] . ' ha jugado el espía.';
                 break;
             case 'Guardia':
                 $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
@@ -288,7 +295,8 @@ class games extends Controller
                 }
                 break;
             case 'Sacerdote':
-                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
+                //TODO: girar la carta por js al jugador
+                $message = $rivalCard['titulo'];
 
                 //TODO: devolver la carta del rival al usuario que efectua la jugada por canal privado
                 break;
@@ -481,5 +489,35 @@ class games extends Controller
         $response=[
             'message' => $message,
         ];
+    }
+
+//    function shuffleDeck($deck)
+//    {
+//        $deck_keys = array_keys($deck);
+//        shuffle($deck_keys);
+//        $random = [];
+//
+//        foreach($deck_keys as $key)
+//        {
+//            $random[$key] = $deck[$key];
+//        }
+//
+//        return $random;
+//    }
+
+    function shuffleDeck($my_array)
+    {
+        $keys = array_keys($my_array);
+
+        shuffle($keys);
+
+        $new = [];
+
+        foreach($keys as $key) {
+            array_push($new, $my_array[$key]);
+//            $new[$key] = $my_array[$key];
+        }
+
+        return $new;
     }
 }
