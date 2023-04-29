@@ -267,7 +267,7 @@ class games extends Controller
         $jugadores = $partida['jugadores'];
         $idJugador = $request->idJugador;
 
-        $rivalCard = !empty($request->idRival) ? reset($jugadores[$request->idRival]['mano']) : '';
+        $rivalCard = isset($request->idRival) ? reset($jugadores[$request->idRival]['mano']) : '';
 
         switch ($partida['referenciaMazo'][$request->idCarta]['titulo']){
             case 'Espía':
@@ -359,15 +359,22 @@ class games extends Controller
                 break;
         }
 
-        //eliminar de la mano la carta utilizada. TODO: tal vez vaciar la mano de quién haya sido eliminado
-        unset($partida['jugadores'][$idUsuario]['mano'][$jugada['idCarta']]);
-        session(['partida' => $partida]);
+        $partida['numJugadorTurno'] == count($partida['jugadores']) ? $partida['numJugadorTurno'] = 1 : $partida['numJugadorTurno']++;
 
-        //TODO: revisar a quien le toca jugar el turno
+        $gameObj = Game::find($partida['idPartida']);
+        $gameObj->update(['partida' => $partida]);
+
+        if(isset($request->idRival)){
+            broadcast(new PrivateActionUser($partida['idPartida'], $message));
+        }
+        broadcast(new PublicActionUser($partida['idPartida'], $message));
 
         $response=[
+            'status' => $status,
             'message' => $message,
         ];
+
+        return $response;
     }
 
     public function resolverJugada1(Request $request){
