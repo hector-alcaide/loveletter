@@ -8,7 +8,7 @@
         <h3>Test Jugadores</h3>
         <div v-for="item in partida.jugadores">
             <p :id="item.idJugador" :class="item.alias">{{ item.alias }}</p>
-            <button class="mx-auto" v-if="cartaSobreJugador" @click="jugarCarta(cartaJugada, item.idJugador)">
+            <button class="mx-auto" v-if="cartaSobreJugador" @click="playCard(cartaJugada, item.idJugador)">
                 Elegir este jugador
             </button>
         </div>
@@ -169,33 +169,28 @@ export default {
             const carta = this.partida.referenciaMazo[idCarta];
 
             if(tipoJugada[carta.titulo] == 'directa'){
-                this.jugarCarta(idCarta);
+                this.playCard(idCarta);
             }else if(tipoJugada[carta.titulo] == 'sobreJugador'){
                 this.cartaSobreJugador = true;
             };
 
         },
-        jugarCarta(idCarta, idRival = null){
+        playCard(idCarta, idRival = null){
             this.cartaSobreJugador = false;
 
-            // const manoJugador = this.partida.jugadores[this.idUsuario].mano;
-            // console.log(manoJugador)
-            // const cartaEliminar = manoJugador.indexOf(idCarta);
+            const arrayHand = Object.values(this.partida.jugadores[this.idUsuario].mano);
+            const cardKeyDelete = arrayHand.findIndex(card => card.idCarta === idCarta);
 
-            const tst = ['1', '2', '3'];
-            const cartaEliminar = tst.indexOf('2');
-            console.log(cartaEliminar)
+            delete this.partida.jugadores[this.idUsuario].mano[cardKeyDelete];
 
-            // this.partida.jugadores[this.idUsuario].mano[];
-            // this.$axios.post('/api/playcard', {
-            //     partida: this.partida,
-            //     idJugador: this.idUsuario,
-            //     idCarta: idCarta,
-            //     idRival: idRival,
-            // }).then(response => {
-            //     console.log(response)
-            //
-            // });
+            this.$axios.post('/api/playcard', {
+                partida: this.partida,
+                idJugador: this.idUsuario,
+                idCarta: idCarta,
+                idRival: idRival,
+            }).then(response => {
+                console.log(response)
+            });
         },
         refreshPartidaData(){
             this.$axios.post('/api/getgamedata', {

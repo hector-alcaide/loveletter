@@ -280,9 +280,7 @@ class games extends Controller
                     $message = 'El jugador '. $jugadores[$idJugador]['alias'] . ' ha jugado el espía.';
                 break;
             case 'Guardia':
-                $carta_rival = reset($partida['jugadores'][$jugada['idRival']]['mano']);
-
-                if($jugada['cartaAdivinar'] === $carta_rival){
+                if($request->cardToGuess === $rivalCard){
                     //la carta ha sido adivinada, el rival queda eliminado
                     $partida['jugadores'][$jugada['idRival']]['activoJugador'] = 0;
 
