@@ -37,7 +37,7 @@ body{
 .marcador{
     position: fixed;
     top: 0px;
-    left: 1080px;
+    left: 950px;
 }
 #marcador_content{
     width: 280px;
@@ -49,7 +49,7 @@ body{
     text-shadow: 2px -1px 3px black;
 }
 .marcador > div > img{
-    width: 35px;
+    width: 50px;
     cursor: pointer;
 }
 .logout{
@@ -244,26 +244,193 @@ button:hover, button:focus{
 
 /*Board*/
 .tablero{
-    background-image: url(../images/tablero.jpg);
+    background-image: url(../images/fondo_madera1.jpg);
     background-repeat: no-repeat;
-    width: 1360px;
-    height: 850px;
+    width: 1365px;
+    height: 656px;
+    max-width: 1347px;
 }
-.col1{
-    width: 220px;
-    /*background-color: red;*/
-    height: 220px;
+.container-cartas{
+    /*max-width: 1360px;*/
+    /*margin-left: 20px;*/
+    /* position: fixed; */
+    position: relative;
+    top: 20px;
+    /* left: 20px; */
+    width: 1005px;
+    background-image: url(../images/tablero_f1.png);
+    background-repeat: no-repeat;
+    height: 620px;
+    display: inline-block;
 }
-.col2{
-    width: 220px;
-    /*background-color: blue;*/
-    height: 220px;
+.container-marco{
+    background-image: url(../images/marco4.png);
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 580px;
+    position: relative;
+    display: inline-block;
+    margin-left: 25px;    
+    text-shadow: 2px -1px 3px black;
+    float: right;
+    margin-top: 50px;
+    margin-right: 15px;
+    /* background-color: #191313;
+    border-radius: 20px; */
 }
-.col3{
-    width: 220px;
-    /*background-color: green;*/
-    height: 220px;
+.container-marco > div{
+    /* background: linear-gradient(180deg, #6b2d35, transparent); */
+    text-align: center;
+    width: 200px;
+    margin-left: 25px;
+    color: wheat;
+    margin-top: 20px;    
 }
+.exit-board{
+    width: 90px;
+    color: wheat;
+}
+
+.div-player-3{
+    transform: rotate(325deg);
+    position: absolute;
+    top: 33px;
+    width: 100px;
+    height: 190px;
+    margin-left: 126px;
+    margin-right: 175px;
+}
+.div-player-2{
+    position: absolute;
+    left: 440px;
+    width: 100px;
+    height: 190px;
+    top: 1px;
+}
+.div-player-4{
+    transform: rotate(37deg);
+    margin-top: 25px;
+    position: absolute;
+    left: 605px;
+    top: 10px;
+    width: 100px;
+    height: 190px;
+    margin-left: 175px;
+}
+.container-cartas-fila1{
+    height: 250px;
+}
+.cartas-tiradas{
+    position: absolute;
+    margin-left: 315px;
+    /* margin-right: 150px; */
+}
+.mazo-cartas{
+    position: absolute;
+    left: 600px;
+}
+.mazo-cartas > label{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e3c99e;
+}
+.container-cartas-fila2{
+    height: 150px;
+}
+.container-cartas-fila3{
+    height: 200px;
+}
+.div-player-5{
+    position: absolute;
+    top: 357px;
+    width: 100px;
+    height: 190px;
+    transform: rotate(36deg);
+    margin-left: 145px;
+}
+.div-player-1{
+    position: absolute;
+    top: 380px;
+    left: 240px;
+    width: 350px;
+    margin-left: 80px;
+    padding-bottom: 95px;
+}
+.div-player-1 > div{
+    display: block;
+    width: 350px;
+    height: 47px;
+    margin-bottom: 10px;
+}
+.div-player-1 > div > div{
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+/* .card-player-1{
+    width: 90px;
+}
+.card-player-1:hover{
+    width: 200px;
+} */
+.div-player-6{
+    transform: rotate(324deg);
+    position: absolute;
+    top: 353px;
+    left: 760px;
+    width: 100px;
+    height: 190px;
+}
+.div-extras-abajo{
+    width: 100px;
+    height: 47px;
+    margin-top: 10px;
+}
+.div-extras-abajo > div{
+    display: inline-block;
+}
+.div-extras-arriba{
+    width: 100px;
+    height: 47px;
+    margin-bottom: 10px;
+}
+.div-extras-arriba > div{
+    display: inline-block;
+}
+.container-cartas-fila1 > div > div > label{
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+.div-player-2 > div > label{
+    margin-bottom: 10px !important;
+    margin-top: 3px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+.container-cartas-fila3 > div > div > label{
+    margin-top: 15px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+
+/*.col1{*/
+/*    width: 220px;*/
+/*    !*background-color: red;*!*/
+/*    height: 220px;*/
+/*}*/
+/*.col2{*/
+/*    width: 220px;*/
+/*    !*background-color: blue;*!*/
+/*    height: 220px;*/
+/*}*/
+/*.col3{*/
+/*    width: 220px;*/
+/*    !*background-color: green;*!*/
+/*    height: 220px;*/
+/*}*/
 .carta-tirada{
     position: relative;
 }
@@ -290,4 +457,88 @@ button:hover, button:focus{
 .carta5{
     position: absolute;
     transform: rotate(-7deg);
+}
+.col4{
+    width: 200px;
+    height: 150px;
+}
+.div-tercero{
+    padding-bottom: 55px;
+}
+
+.tablero > div > div{
+    /*padding-top: 62px;*/
+    /*margin-bottom: 0px;*/
+    /* width: 975px; */
+}
+.tablero > div > div > div{
+    /*margin-right: 100px;*/
+}
+/* .card-jugador-1{
+    margin-left: 163px;
+    margin-right: 175px;
+}
+.card-jugador-1 > img{
+    transform: rotate(339deg);
+    margin-top: 60px;
+    margin-bottom: 30px;
+}
+.card-jugador-3{
+    margin-left: 175px;
+}
+.card-jugador-3 > img{
+    transform: rotate(23deg);
+    margin-top: 25px;
+} */
+
+.card-jugador-4{
+    position: relative;
+    top: 42px;
+    left: 150px;
+    display: inline-block;
+    width: 100px;
+}
+.card-jugador-4 > img{
+    transform: rotate(27deg);
+}
+.card-jugador-5{
+    position: relative;
+    top: 50px;
+    left: 140px;
+    width: 350px;
+    display: inline-block;
+    text-align: center;
+    margin-left: 80px;
+    padding-bottom: 95px;
+}
+.card-jugador-6{
+    position: relative;
+    display: inline-block;
+    top: 35px;
+    left: 214px;
+    padding-bottom: 95px;
+}
+.card-jugador-6 > img{
+    transform: rotate(328deg);
+}
+.tablero-datos{
+    width: 280px;
+    height: 600px;
+    position: absolute;
+    left: 1050px;
+    top: 20px;
+}
+
+/* PERFIL */
+.titulo-perfil{
+    display: inline-block;
+    float: right;
+    margin-right: 260px;
+    font-size: 3.5rem;
+}
+.div-king{
+    float: right;
+}
+.div-king > img{
+    width: 370px;
 }

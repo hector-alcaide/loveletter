@@ -16,8 +16,7 @@
 <!--            </div>-->
 <!--        </nav>-->
 <!--    </div>-->
-    <div class="tablero" v-if="ruta == 'http://127.0.0.1:8000/board'">
-        <label>entra</label>
+    <div class="tablero container" v-if="ruta == 'http://127.0.0.1:8000/board'">
         <router-view></router-view>
     </div>
     <div v-else>

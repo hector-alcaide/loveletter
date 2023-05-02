@@ -16,32 +16,38 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'idUsuario'     => 1,
-                'alias'         => 'jake',
-                'email'         => 'j',
+                'alias'         => 'Jake',
+                'email'         => 'jake@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
                 'idUsuario'     => 2,
-                'alias'         => 'hector',
-                'email'         => 'h',
+                'alias'         => 'Hector',
+                'email'         => 'hector@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
                 'idUsuario'     => 3,
-                'alias'         => 'ferran',
-                'email'         => 'f',
+                'alias'         => 'Ferran',
+                'email'         => 'ferran@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
                 'idUsuario'     => 4,
-                'alias'         => 'david',
-                'email'         => 'd',
+                'alias'         => 'David',
+                'email'         => 'david@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
                 'idUsuario'     => 5,
-                'alias'         => 'luis',
-                'email'         => 'l',
+                'alias'         => 'Luis',
+                'email'         => 'luis@mail.com',
+                'password'      => bcrypt("123"),
+            ],
+            [
+                'idUsuario'     => 6,
+                'alias'         => 'Miriam',
+                'email'         => 'miriam@mail.com',
                 'password'      => bcrypt("123"),
             ],
         ];

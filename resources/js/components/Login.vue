@@ -54,6 +54,7 @@ export default {
                             if (response.data.success) {
                                 console.log('Login OK');
                                 this.$router.go('/')
+
                             } else {
                                 console.error('No loggin');
                                 this.error = response.data.message
