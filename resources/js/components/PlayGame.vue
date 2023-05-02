@@ -14,9 +14,9 @@
         </div>
 
         <h3>Turno de {{game.players[game.turnPlayerNum].alias}} </h3>
-        <div  v-for="card in game.players[idUser].hand">
-            <p> {{ card.title }} </p>
-            <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(card.idCard)">
+        <div  v-for="idCard in game.players[idUser].hand">
+            <p> {{ game.deckReference[idCard].title }} </p>
+            <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
                 Jugar carta
             </button>
         </div>
@@ -167,14 +167,6 @@ export default {
             let playerNum = this.game.players[this.idUser].playerNum;
 
             this.allowSteal = playerTurno != playerNum || this.allowPlayCard === true ? false : true;
-
-            // if(playerTurno == playerNum){
-            //     console.log('te toca jugar');
-            //     this.allowSteal = true;
-            // }else{
-            //     this.allowSteal = false;
-            //     console.log('otro player juega el turno')
-            // }
         },
         stealCard(){
             this.allowSteal = false;

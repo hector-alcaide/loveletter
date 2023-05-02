@@ -179,24 +179,20 @@ class games extends Controller
 
     public function newRound($game){
 
-        $deck = $this->getAllCards();
+        $deck = array_column($this->getAllCards(), 'idCard');
 
         shuffle($deck);
 
         reset($deck);
 
-//        foreach ($game['players'] as $player) {
-//            $game['players'][$player['idPlayer']]['hand'] = [key($deck) => reset($deck)];
-//            unset($deck[key($deck)]);
-//        }
-
         foreach ($game['players'] as $key => $player) {
-            $game['players'][$player['idPlayer']]['hand'] = $deck[key($deck)]->idCard;
+            $game['players'][$player['idPlayer']]['hand'] = [
+                reset($deck)
+            ];
             unset($deck[key($deck)]);
         }
 
         $game['deck'] = $deck;
-//        isset($game['roundNum']) ? $game['roundNum']++ : $game['roundNum'] = 1;
         $game['roundNum']++;
 
         return $game;
@@ -277,7 +273,7 @@ class games extends Controller
         switch ($game['deckReference'][$request->idCard]['title']){
             case 'Espía':
                     $players[$idPlayer]['espia'] = true;
-                    unset($players[$idPlayer]['hand'][$request->idCard]);
+                    $players[$idPlayer]['hand'] = [];
 
                     array_push($game['thrownCards'], $request->idCard);
 
@@ -365,12 +361,13 @@ class games extends Controller
         }
 
         $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+        $game['players'] = $players;
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
         if(!empty($request->idRival)){
-            broadcast(new PrivateActionUser($game['idGame'], $message));
+            broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage));
         }
         broadcast(new PublicActionUser($game['idGame'], $message));
 
