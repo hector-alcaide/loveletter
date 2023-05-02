@@ -20,13 +20,12 @@ Route::post('login', [users::class, 'login']);
 Route::post('register', [users::class, 'register']);
 Route::post('logout', [users::class, 'logout'])->middleware(['auth:sanctum']);
 
-Route::post('getidusuario', [games::class, 'getIdUsuario']);
-
 Route::post('getgamedata', [games::class, 'getGameData']);
 Route::post('getgameslist', [games::class, 'getGamesActive']);
-Route::post('newgame', [games::class, 'nuevaPartida']);
-Route::post('preparegame', [games::class, 'prepararPartida']);
-Route::post('stealcard', [games::class, 'robarCarta']);
+Route::post('newgame', [games::class, 'newGame']);
+Route::post('preparegame', [games::class, 'prepareGame']);
+Route::post('stealcard', [games::class, 'stealCard']);
+Route::post('playcard', [games::class, 'resolvePlay']);
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});

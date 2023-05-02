@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('partidasusuarios', function (Blueprint $table) {
-            $table->id('idPartidaUsuario');
-            $table->foreignId('idPartida')->references('idPartida')->on('partidas');
-            $table->foreignId('idJugador')->references('idUsuario')->on('usuarios');
+        Schema::create('gamesusers', function (Blueprint $table) {
+            $table->id('idGameUser');
+            $table->foreignId('idGame')->references('idGame')->on('games');
+            $table->foreignId('idPlayer')->references('idUser')->on('users');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('partidasusuarios');
+        Schema::dropIfExists('gamesusers');
     }
 };

@@ -14,22 +14,22 @@ class PublicActionUser implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $idPartida;
+    public $idGame;
     public $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idPartida, $message)
+    public function __construct($idGame, $message)
     {
-        $this->idPartida = $idPartida;
+        $this->idGame = $idGame;
         $this->message = $message;
     }
 
     public function broadcastWith()
     {
         return [
-            'idPartida' => $this->idPartida,
+            'idGame' => $this->idGame,
             'message' => $this->message
         ];
     }
@@ -42,7 +42,7 @@ class PublicActionUser implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('play.game.'.$this->idPartida),
+            new PresenceChannel('play.game.'.$this->idGame),
         ];
     }
 }

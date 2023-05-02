@@ -14,20 +14,20 @@ class PrepareGame implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $idPartida;
+    public $idGame;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idPartida)
+    public function __construct($idGame)
     {
-        $this->idPartida = $idPartida;
+        $this->idGame = $idGame;
     }
 
     public function broadcastWith()
     {
         return [
-            'idPartida' => $this->idPartida,
+            'idGame' => $this->idGame,
         ];
     }
 
@@ -39,7 +39,7 @@ class PrepareGame implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('join.game.'.$this->idPartida),
+            new PresenceChannel('join.game.'.$this->idGame),
         ];
     }
 }

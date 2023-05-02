@@ -45,7 +45,7 @@ export const routes = [
     },
     {
         name: 'joinGame',
-        path: '/games/join/:idPartida',
+        path: '/games/join/:idGame',
         component: JoinGame,
         meta:{
             requiresAuth: true
@@ -53,7 +53,7 @@ export const routes = [
     },
     {
         name: 'playGame',
-        path: '/games/play/:idPartida',
+        path: '/games/play/:idGame',
         component: PlayGame,
         meta:{
             requiresAuth: true

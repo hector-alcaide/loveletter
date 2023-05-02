@@ -1,33 +1,32 @@
 <template>
-    <div v-if="cargandoDatos" class="pantalla-carga">
+    <div v-if="loadingData" class="pantalla-carga">
         <span><p>Cargando...</p></span>
     </div>
-    <div v-if="partida">
+    <div v-if="game">
         <h2>Jugar partida</h2>
 
         <h3>Test Jugadores</h3>
-        <div v-for="item in partida.jugadores">
-            <p :id="item.idJugador" :class="item.alias">{{ item.alias }}</p>
-            <button class="mx-auto" v-if="cartaSobreJugador" @click="playCard(cartaJugada, item.idJugador)">
+        <div v-for="item in game.players">
+            <p :id="item.idPlayer" :class="item.alias">{{ item.alias }}</p>
+            <button class="mx-auto" v-if="typesCardResolution['onPlayer'] && item.idPlayer != idUser" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: item.idPlayer, setFalseOnTypeRes: true})">
                 Elegir este jugador
             </button>
         </div>
 
-        <h3>Turno de {{partida.jugadores[partida.numJugadorTurno].alias}} </h3>
-        <div  v-for="carta in partida.jugadores[idUsuario].mano">
-            <p> {{ carta.titulo }} </p>
-            <button class="mx-auto" v-if="permitirJugarCarta" @click="escogerCarta(carta.idCarta)">
+        <h3>Turno de {{game.players[game.turnPlayerNum].alias}} </h3>
+        <div  v-for="card in game.players[idUser].hand">
+            <p> {{ card.title }} </p>
+            <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(card.idCard)">
                 Jugar carta
             </button>
         </div>
-        <button class="mx-auto" v-if="permitirRobar" @click="robarCarta()">
+        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
             Robar carta
         </button>
 
-
-        <!--        <div v-if="this.partida.numJugadorTurno == this.partida.jugadores[this.idUsuario].numJugador">-->
-        <!--            <button class="mx-auto" @click="robarCarta(this.idPartida)">-->
-        <!--                Robar carta-->
+        <!--        <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">-->
+        <!--            <button class="mx-auto" @click="stealCard(this.idGame)">-->
+        <!--                Robar card-->
         <!--            </button>-->
         <!--        </div>-->
     </div>
@@ -39,15 +38,33 @@ import Echo from "laravel-echo";
 export default {
     data() {
         return {
-            idPartida: this.$route.params.idPartida,
-            cargandoDatos: true,
-            idUsuario: window.Laravel.user.idUsuario,
-            partida: null,
-            usuarios: [],
-            permitirRobar: false,
-            permitirJugarCarta: false,
-            cartaSobreJugador: false,
-            cartaJugada: null,
+            idGame: this.$route.params.idGame,
+            loadingData: true,
+            idUser: window.Laravel.user.idUser,
+            game: null,
+            users: [],
+            allowSteal: false,
+            allowPlayCard: false,
+            // cardOnPlayer: false,
+            playedCard: null,
+            typesCardResolution : {
+                'direct': 'default',
+                'onPlayer': false,
+                'onPlayerOnCard': false,
+                'onDeck': false,
+            },
+            cardsResolution: {
+                '0': 'direct',
+                '1': 'onPlayerOnCard',
+                '2': 'onPlayer',
+                '3': 'onPlayer',
+                '4': 'direct',
+                '5': 'onPlayer',
+                '6': 'onDeck',
+                '7': 'onPlayer',
+                '8': 'direct',
+                '9': 'direct',
+            },
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -56,150 +73,153 @@ export default {
                 wsPort: 6001,
                 forceTLS: false,
                 disableStats: true
-            })
+            }),
         }
     },
     beforeMount(){
-        this.assignPartidaData();
+        this.assignGameData();
     },
     mounted() {
-        this.echo.join('play.game.'+this.idPartida)
+        this.echo.join('play.game.'+this.idGame)
             .here((users) => {
-                this.usuarios = users;
-                if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
-                    console.log('empezar partida')
-                    this.jugarTurno();
+                this.users = users;
+                if(Object.keys(this.game.players).length == this.users.length){
+                    console.log('empezar game')
+                    this.playTurn();
                 }else{
-                    console.log('faltan jugadores por unirse')
+                    console.log('faltan players por unirse')
                 }
             })
             .joining((user) => {
-                this.usuarios.push(user);
-                console.log(this.usuarios)
-                if(Object.keys(this.partida.jugadores).length == this.usuarios.length){
-                    console.log('empezar partida')
-                    this.jugarTurno();
+                this.users.push(user);
+                console.log(this.users)
+                if(Object.keys(this.game.players).length == this.users.length){
+                    console.log('empezar game')
+                    this.playTurn();
                 }else{
-                    console.log('faltan jugadores por unirse')
+                    console.log('faltan players por unirse')
                 }
             })
             .leaving((user) => {
-                this.deleteUserConnected(user.idUsuario);
+                this.deleteUserConnected(user.idUser);
+                if(Object.keys(this.game.players).length == this.users.length){
+                    console.log('empezar game')
+                    this.playTurn();
+                }
             })
             .listen('PublicActionUser',(data)=>{
                 console.log(data);
-                this.refreshPartidaData();
+                this.assignGameData().then(() => {
+                    this.playTurn();
+                });
             });
 
-        // this.echo.join('play.game.'+this.idPartida+'player.'+this.idUsuario)
+        // this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
         //     .listen('PrivateActionUser',(data)=>{
         //         console.log(data);
         //     });
 
     },
     beforeUnmount(){
-        this.echo.leave('play.game.'+this.idPartida);
+        this.echo.leave('play.game.'+this.idGame);
     },
     methods: {
-        assignPartidaData(){
-            this.$axios.post('/api/getgamedata', {
-                idPartida: this.idPartida,
-            }).then(response => {
-                if (response.data.empezada == 1 && response.data.jugadores.some(el => el.idUsuario === this.idUsuario) ){
-                    this.partida = JSON.parse(response.data.partida);
-                    // this.partida = response.data.partida;
-                    this.cargandoDatos = false;
-                    console.log(this.partida)
-                }else{
-                    window.location.href = "/games";
-                }
+        assignGameData(){
+            return new Promise((resolve, reject) => {
+                this.$axios.post('/api/getgamedata', {
+                    idGame: this.idGame,
+                }).then(response => {
+                    if(response.data.started == 0 || !response.data.players.some(el => el.idUser === this.idUser) ) {
+                        window.location.href = "/games";
+                    }
+
+                    this.game = JSON.parse(response.data.game);
+                    console.log(this.game);
+
+                    this.loadingData = false;
+
+                    resolve();
+                }).catch(error => {
+                    reject(error);
+                });
             });
         },
-        deleteUserConnected(idUsuario){
-            let array_pos = this.usuarios.map(item => item.idUsuario).indexOf(idUsuario);
-            this.usuarios.splice(array_pos, 1);
+        // assignGameData(){
+        //     this.$axios.post('/api/getgamedata', {
+        //         idGame: this.idGame,
+        //     }).then(response => {
+        //         if(response.data.started == 0 || !response.data.players.some(el => el.idUser === this.idUser) ) {
+        //             window.location.href = "/games";
+        //         }
+        //
+        //         this.game = JSON.parse(response.data.game);
+        //         console.log(this.game);
+        //
+        //         this.loadingData = false;
+        //     });
+        // },
+        deleteUserConnected(idUser){
+            let array_pos = this.users.map(item => item.idUser).indexOf(idUser);
+            this.users.splice(array_pos, 1);
         },
-        jugarTurno(){
+        playTurn(){
+            let playerTurno = this.game.turnPlayerNum;
+            let playerNum = this.game.players[this.idUser].playerNum;
 
-            let jugadorTurno = this.partida.numJugadorTurno;
-            let numJugador = this.partida.jugadores[this.idUsuario].numJugador;
+            this.allowSteal = playerTurno != playerNum || this.allowPlayCard === true ? false : true;
 
-            console.log(jugadorTurno)
-            console.log(numJugador)
-            if(jugadorTurno == numJugador){
-                console.log('te toca jugar');
-                this.permitirRobar = true;
-            }else{
-                console.log('otro jugador juega el turno')
-            }
+            // if(playerTurno == playerNum){
+            //     console.log('te toca jugar');
+            //     this.allowSteal = true;
+            // }else{
+            //     this.allowSteal = false;
+            //     console.log('otro player juega el turno')
+            // }
         },
-        robarCarta(){
-            this.permitirRobar = false;
+        stealCard(){
+            this.allowSteal = false;
 
             this.$axios.post('/api/stealcard', {
-                partida: this.partida,
-                idUsuario: this.idUsuario
+                game: this.game,
+                idUser: this.idUser
             }).then(response => {
-               // this.partida = response.data;
+               // this.game = response.data;
                 console.log(response.data)
-                this.permitirJugarCarta = true;
+                this.allowPlayCard = true;
             });
         },
-        escogerCarta(idCarta){
-            // console.log(idCarta)
-            this.permitirRobar = false;
-            this.permitirJugarCarta = false;
-            this.cartaJugada = idCarta;
+        checkTypeCardResolve: function (idCard) {
+            //TODO: solo tiene un espia, mostrar mensaje se descarta el espia
+            this.allowPlayCard = false;
 
-            //TODO: solo tener un espia, mostrar mensaje se descarta el espia
+            this.playedCard = this.game.deckReference[idCard];
 
-            const tipoJugada = {
-                'Espía': 'directa',
-                'Guardia': 'sobreJugador',
-                'Sacerdote': 'sobreJugador',
-                'Barón': 'sobreJugador',
-                'Doncella': 'directa',
-                'Príncipe': 'sobreJugador',
-                'Canciller': 'sobreMazo',
-                'Rey': 'sobreJugador',
-                'Condesa': 'directa',
-                'Princesa': 'directa',
-            };
+            const cardResolution = this.cardsResolution[this.playedCard.level];
 
-            const carta = this.partida.referenciaMazo[idCarta];
-
-            if(tipoJugada[carta.titulo] == 'directa'){
-                this.playCard(idCarta);
-            }else if(tipoJugada[carta.titulo] == 'sobreJugador'){
-                this.cartaSobreJugador = true;
-            };
-
+            if (this.typesCardResolution[cardResolution] === 'default') {
+                this.resolvePlayedCard({idCard: idCard});
+            } else {
+                this.typesCardResolution[cardResolution] = true;
+            }
         },
-        playCard(idCarta, idRival = null){
-            this.cartaSobreJugador = false;
+        resolvePlayedCard({idCard, idRival = null, idCardToGuess = null, setFalseOnTypeRes = false}){
+            setFalseOnTypeRes === true ? this.typesCardResolution[this.cardsResolution[this.playedCard.level]] = false : '';
 
-            const arrayHand = Object.values(this.partida.jugadores[this.idUsuario].mano);
-            const cardKeyDelete = arrayHand.findIndex(card => card.idCarta === idCarta);
+            const arrayHand = Object.values(this.game.players[this.idUser].hand);
+            const cardKeyDelete = arrayHand.findIndex(card => card.idCard === idCard);
 
-            delete this.partida.jugadores[this.idUsuario].mano[cardKeyDelete];
+            delete this.game.players[this.idUser].hand[cardKeyDelete];
 
             this.$axios.post('/api/playcard', {
-                partida: this.partida,
-                idJugador: this.idUsuario,
-                idCarta: idCarta,
+                game: this.game,
+                idPlayer: this.idUser,
+                idCard: idCard,
                 idRival: idRival,
+                idCardToGuess: idCardToGuess,
             }).then(response => {
                 console.log(response)
             });
         },
-        refreshPartidaData(){
-            this.$axios.post('/api/getgamedata', {
-                idPartida: this.idPartida,
-            }).then(response => {
-                this.partida = JSON.parse(response.data.partida);
-                console.log(this.partida)
-            });
-        }
     }
 }
 </script>
