@@ -7,6 +7,7 @@ import Games from '../components/Games.vue';
 import CreateGame from '../components/CreateGame.vue';
 import JoinGame from '../components/JoinGame.vue';
 import PlayGame from '../components/PlayGame.vue';
+import Amigos from '../components/Amigos.vue';
 
 export const routes = [
     {
@@ -26,6 +27,14 @@ export const routes = [
         name: 'login',
         path: '/login',
         component: Login
+    },
+    {
+        name: 'amigos',
+        path: '/amigos',
+        component: Amigos,
+        meta:{
+            requiresAuth: true
+        }
     },
     {
         name: 'games',
