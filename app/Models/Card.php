@@ -4,17 +4,15 @@ namespace App\Models;
 
 class Card
 {
-    public $idCarta;
-    public $nivel;
-    public $carta;
-//    public $descripcion;
-    public $imagen;
+    public $idCard;
+    public $level;
+    public $title;
+    public $image;
 
-    public function __construct($idCarta, $nivel, $carta, $imagen) {
-        $this->idCarta = $idCarta;
-        $this->nivel = $nivel;
-        $this->carta = $carta;
-//        $this->descripcion = $descripcion;
-        $this->imagen = $imagen;
+    public function __construct($idCard, $level, $title, $image) {
+        $this->idCard = $idCard;
+        $this->level = $level;
+        $this->title = $title;
+        $this->image = $image;
     }
 }

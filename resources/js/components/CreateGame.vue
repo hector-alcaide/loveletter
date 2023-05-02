@@ -1,24 +1,24 @@
 <template>
-    <button class="button_jugar mx-auto mt-lg-5" @click="$router.push('/games')">Lista partidas</button>
+    <button class="button_jugar mx-auto mt-lg-5" @click="$router.push('/games')">Lista games</button>
 
     <form>
         <div class="row">
             <div class="col-md-3">
-                <label for="tipo" class="col-sm-4 col-form-label text-md-right">Tipo</label>
-                <select name="tipo" id="tipo" v-model="tipo">
+                <label for="type" class="col-sm-4 col-form-label text-md-right">Tipo</label>
+                <select name="type" id="type" v-model="type">
                     <option value="" disabled>-</option>
-                    <option value="publica">Pública</option>
-                    <option value="privada">Privada</option>
+                    <option value="public">Pública</option>
+                    <option value="private">Privada</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <label for="tipo" class="col-sm-4 col-form-label text-md-right">Victorias por partida</label>
-                <input id="numeroVictoriasMaximas" type="number" v-model="numeroVictoriasMaximas" required autofocus autocomplete="off">
+                <label for="type" class="col-sm-4 col-form-label text-md-right">Victorias por game</label>
+                <input id="numMaxWins" type="number" v-model="numMaxWins" required autofocus autocomplete="off">
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
-                <button type="submit" @click="newGame">Crear partida</button>
+                <button type="submit" @click="newGame">Crear game</button>
             </div>
         </div>
     </form>
@@ -34,10 +34,10 @@ export default {
     data() {
         return {
             //CREAR PARTIDA
-            tipo: "publica",
-            numeroVictoriasMaximas: 3,
+            type: "public",
+            numMaxWins: 3,
             //SALA PREVIA A PARTIDA COMENZADA
-            partida_id: 4,
+            game_id: '',
         }
     },
     mounted() {
@@ -50,7 +50,7 @@ export default {
             forceTLS: false,
             disableStats: true
         })
-        // echo.channel('game.'+ this.partida_id).listen('CreateGame',(e)=>{
+        // echo.channel('game.'+ this.game_id).listen('CreateGame',(e)=>{
         //     console.log('go GameAction');
         //     //code for displaying the serve data
         //     console.log(e); // the data from the server
@@ -60,11 +60,11 @@ export default {
         newGame(e){
             e.preventDefault();
             this.$axios.post('/api/newgame', {
-                tipo: this.tipo,
-                numeroVictoriasMaximas: this.numeroVictoriasMaximas,
+                type: this.type,
+                numMaxWins: this.numMaxWins,
             }).then(response => {
                 console.log(response)
-                this.$router.push('/games/join/'+response.data.idPartida);
+                this.$router.push('/games/join/'+response.data.idGame);
             }).catch(function (error) {
                 console.error(error);
             });

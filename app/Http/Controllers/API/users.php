@@ -84,5 +84,4 @@ class users extends Controller
         return json_encode($results);
     }
 
-
 }

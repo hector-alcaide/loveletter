@@ -233,6 +233,7 @@ button:hover, button:focus{
 .buscarAmigo{
     margin-top: 6rem;
 }
+<<<<<<< HEAD
 .button_cerrar{
     background-color: #5e2235;
     font-family: vinque;
@@ -542,3 +543,22 @@ button:hover, button:focus{
 .div-king > img{
     width: 370px;
 }
+=======
+
+/*PANTALLA DE CARGA*/
+.pantalla-carga{
+    position:absolute;
+    left:0;
+    right:0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 99999999;
+}
+
+.pantalla-carga span{
+    color: white;
+    font-size: 40px;
+}
+>>>>>>> origin

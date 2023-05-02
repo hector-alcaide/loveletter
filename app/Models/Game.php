@@ -9,30 +9,27 @@ class Game extends Model
 {
     use HasFactory;
 
-    protected $table = 'partidas';
+    protected $table = 'games';
 
-    protected $primaryKey = 'idPartida';
+    protected $primaryKey = 'idGame';
 
     protected $fillable = [
-        'idJugador1',
-        'idJugador2',
-        'idJugador3',
-        'idJugador4',
-        'idJugador5',
-        'idJugador6',
-        'tipo',
-        'empezada',
-        'idGanador',
-        'numeroVictoriasMaximas',
+        'idHost',
+        'type',
+        'started',
+        'idWinner',
+        'numMaxWins',
+        'game'
     ];
 
     protected $nullable = [
-        'idJugador1',
-        'idJugador2',
-        'idJugador3',
-        'idJugador4',
-        'idJugador5',
-        'idJugador6',
-        'idGanador'
+        'game',
+        'idWinner'
     ];
+
+    public function players()
+    {
+        return $this->belongsToMany(User::class, 'gamesusers', 'idGame', 'idPlayer');
+    }
+
 }

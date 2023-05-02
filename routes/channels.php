@@ -13,16 +13,18 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('game.{idPartida}', function () {
-    return true;
+Broadcast::channel('play.game.{idGame}', function ($user) {
+    $user->channel_conn_date = now()->format('Y-m-d H:i:s.u');
+    return $user;
 });
 
 Broadcast::channel('games.list', function () {
     return true;
 });
 
-Broadcast::channel('join.game.{idUsuario}', function () {
-    return true;
+Broadcast::channel('join.game.{idGame}', function ($user) {
+    $user->channel_conn_date = now()->format('Y-m-d H:i:s.u');
+    return $user;
 });
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
