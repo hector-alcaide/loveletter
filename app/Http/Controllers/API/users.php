@@ -78,5 +78,4 @@ class users extends Controller
         return response()->json($response);
     }
 
-
 }

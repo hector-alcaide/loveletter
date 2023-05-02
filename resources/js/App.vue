@@ -40,22 +40,11 @@ export default {
             this.isLoggedin =true;
         }
     },
-    mounted() {
-        let echo = new Echo({
-            broadcaster: 'pusher',
-            key: 'local',
-            cluster: 'mt1',
-            wsHost: '127.0.0.1',
-            wsPort: 6001,
-            forceTLS: false,
-            disableStats: true
-        });
-    },
     methods: {
         logout(e) {
             e.preventDefault()
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                this.$axios.post('api/logout')
+                this.$axios.post('/api/logout')
                     .then(response => {
                         if (response.data.success) {
                             window.location.href = "/"

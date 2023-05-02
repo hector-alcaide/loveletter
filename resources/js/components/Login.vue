@@ -5,7 +5,7 @@
                 <form class="auth-form">
                     <div class="row ps-5 pe-4 pt-2 mb-3">
                         <div class="col-md-12 ps-5 pe-3">
-                            <input id="alias" type="alias" class="form-control" v-model="alias" required autofocus autocomplete="off" placeholder="Alias">
+                            <input id="alias" type="text" class="form-control" v-model="alias" required autofocus autocomplete="off" placeholder="Alias">
                         </div>
                     </div>
                     <div class="row ps-5 pe-4 pt-2 mb-3">
