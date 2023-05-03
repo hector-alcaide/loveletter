@@ -29,12 +29,12 @@ Route::post('stealcard', [games::class, 'stealCard']);
 Route::post('playcard', [games::class, 'resolvePlay']);
 
 //friends
-Route::post('amigo', [\App\Http\Controllers\API\users::class, 'amigo']);
-Route::post('addAmigo', [\App\Http\Controllers\API\amistades::class, 'addAmigo']);
-Route::post('solicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'solicitudAmistad']);
-Route::post('aceptarSolicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'aceptarSolicitudAmistad']);
-Route::post('rechazarSolicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'rechazarSolicitudAmistad']);
-Route::post('tusAmigos', [\App\Http\Controllers\API\amistades::class, 'tusAmigos']);
+Route::post('searchFriend', [\App\Http\Controllers\API\users::class, 'searchFriend']);
+Route::post('addFriend', [\App\Http\Controllers\API\friends::class, 'addFriend']);
+Route::post('requestFriend', [\App\Http\Controllers\API\friends::class, 'requestFriend']);
+Route::post('acceptRequestInvitation', [\App\Http\Controllers\API\friends::class, 'acceptRequestInvitation']);
+Route::post('rejectRequestInvitation', [\App\Http\Controllers\API\friends::class, 'rejectRequestInvitation']);
+Route::post('yourFriends', [\App\Http\Controllers\API\friends::class, 'yourFriends']);
 
 //profile
 Route::post('yourProfile', [\App\Http\Controllers\API\profiles::class, 'yourProfile']);

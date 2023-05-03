@@ -15,41 +15,41 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'idUsuario'     => 1,
+                'idUser'     => 1,
                 'alias'         => 'Jake',
                 'email'         => 'jake@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
-                'idUsuario'     => 2,
+                'idUser'     => 2,
                 'alias'         => 'Hector',
                 'email'         => 'hector@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
-                'idUsuario'     => 3,
+                'idUser'     => 3,
                 'alias'         => 'Ferran',
                 'email'         => 'ferran@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
-                'idUsuario'     => 4,
+                'idUser'     => 4,
                 'alias'         => 'David',
                 'email'         => 'david@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
-                'idUsuario'     => 5,
+                'idUser'     => 5,
                 'alias'         => 'Luis',
                 'email'         => 'luis@mail.com',
                 'password'      => bcrypt("123"),
             ],
             [
-                'idUsuario'     => 6,
+                'idUser'     => 6,
                 'alias'         => 'Miriam',
                 'email'         => 'miriam@mail.com',
                 'password'      => bcrypt("123"),
-            ],
+            ]
         ];
         User::insert($users);
     }

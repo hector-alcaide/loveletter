@@ -13,7 +13,7 @@ class profiles extends Controller
 {
     public function yourProfile(){
         $id = Auth::id();
-        $results = User::where('idUsuario', $id)->get();
+        $results = User::where('idUser', $id)->get();
 
         return json_encode($results);
 
@@ -22,8 +22,8 @@ class profiles extends Controller
     public function findAlias(Request $request){
         $id = Auth::id();
         $result = User::
-            select('idUsuario')
-            ->where( 'idUsuario' , '!=' , $id)
+            select('idUser')
+            ->where( 'idUser' , '!=' , $id)
             ->where( 'alias' , $request->alias)
             ->get();
         
@@ -35,8 +35,8 @@ class profiles extends Controller
         } 
         
         $result = User::
-            select('idUsuario')
-            ->where( 'idUsuario' , '!=' , $id)
+            select('idUser')
+            ->where( 'idUser' , '!=' , $id)
             ->where( 'email' , $request->email)
             ->get();
 
@@ -53,21 +53,21 @@ class profiles extends Controller
         $id = Auth::id();
         if(!empty($request->password)){
             $message = $request->password;
-            $result = User::where('idUsuario', $id)
+            $result = User::where('idUser', $id)
             ->update([
                 'alias' => $request->alias,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'nombre' => $request->nombre,
-                'apellidos' => $request->apellidos
+                'name' => $request->name,
+                'surnames' => $request->surnames
             ]);
         }else{
-            $result = User::where('idUsuario', $id)
+            $result = User::where('idUser', $id)
             ->update([
                 'alias' => $request->alias,
                 'email' => $request->email,
-                'nombre' => $request->nombre,
-                'apellidos' => $request->apellidos
+                'name' => $request->name,
+                'surnames' => $request->surnames
             ]);
         }
         

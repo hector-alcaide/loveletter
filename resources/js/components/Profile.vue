@@ -2,9 +2,9 @@
     <div class="text-center mt-lg-5">
         <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>        
     </div>
-    <div class="amigosVolver">
-        <button class="d-inline volver button_cerrar" @click="$router.push('/home')">Volver</button>
-        <h1 class="text-1 titulo-perfil">Perfil</h1>
+    <div class="divReturn">
+        <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
+        <h1 class="text-1 title-profile">Perfil</h1>
     </div>
     <div class="mx-auto mt-lg-5 text-center" style="width: 80%">
         <div class="text-center d-inline-block">
@@ -17,22 +17,22 @@
                     <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Apellidos: </label>
                 </div>
                 <div class="d-inline-block">                    
-                    <input class="d-block amigosInput mx-lg-3 my-lg-3" type="text" id="alias" v-model="alias" required>
-                    <input class="d-block amigosInput mx-lg-3 my-lg-3" type="text" id="email" v-model="email" required>
-                    <input class="d-block amigosInput mx-lg-3 my-lg-3" type="password" id="password" v-model="password">
-                    <input class="d-block amigosInput mx-lg-3 my-lg-3" type="text" id="nombre" v-model="nombre">
-                    <input class="d-block amigosInput mx-lg-3 my-lg-3" type="text" id="apellido" v-model="apellidos">
+                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="alias" v-model="alias" required>
+                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="email" v-model="email" required>
+                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="password" id="password" v-model="password">
+                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="name" v-model="name">
+                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="surnames" v-model="surnames">
                 </div>
                 <div v-if="aliasEmailBusy == 1">
                     <label class="text-danger text-1 fs-3">Este {{aliasEmail}} ya está en uso, introduce otro.</label>
                 </div>
                 <div class="mt-lg-4">
-                    <button type="submit" class="volver mx-lg-4">Actualizar</button>
+                    <button type="submit" class="return mx-lg-4">Actualizar</button>
                 </div>
             </form>
         </div>
         <div class="d-inline-block div-king">
-            <img class="" src="../../images/rey3.png">
+            <img class="" src="../../images/king.png">
         </div>
     </div>
 </template>
@@ -44,8 +44,8 @@ export default {
             alias: "",
             email: "",
             password: "",
-            nombre: "",
-            apellidos: "",
+            name: "",
+            surnames: "",
             aliasEmailBusy: 0,
             aliasEmail: ""
         }
@@ -58,8 +58,8 @@ export default {
                     this.alias = response.data[0].alias;
                     this.email = response.data[0].email;
                     this.password = response.data[0].password;
-                    this.nombre = response.data[0].nombre;
-                    this.apellidos = response.data[0].apellidos;
+                    this.name = response.data[0].name;
+                    this.surnames = response.data[0].surnames;
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -73,8 +73,8 @@ export default {
                     alias: this.alias,
                     email: this.email,
                     password: this.password,
-                    nombre: this.nombre,
-                    apellidos: this.apellidos                    
+                    name: this.name,
+                    surnames: this.surnames                    
                 })
                     .then(response => {
                         if(response.data == 1){
@@ -100,8 +100,8 @@ export default {
                     alias: this.alias,
                     email: this.email,
                     password: this.password,
-                    nombre: this.nombre,
-                    apellidos: this.apellidos
+                    name: this.name,
+                    surnames: this.surnames
                 })
                     .then(response => {
                         console.log(response);

@@ -1,18 +1,18 @@
 <template>
-    <div class="container-cartas">
-        <div class="container-cartas-fila1">
+    <div class="container-cards">
+        <div class="container-cards-row-1">
             <div id="div-player-3" class="div-player-3 text-center">
                 <div>
                     <label class="text-2">{{alias_3}}</label>
                 </div>
                 <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
                 <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
-                <div class="div-extras-abajo">
-                    <div id="protegido-3" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                <div class="div-extras-down">
+                    <div id="protection-3" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-3" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-3" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
             </div>
@@ -21,12 +21,12 @@
                     <label class="text-2">{{alias_2}}</label>
                 </div>
                 <img src="../../images/back-card.jpg" style="width: 90px">
-                <div class="div-extras-abajo">
-                    <div id="protegido-2" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                <div class="div-extras-down">
+                    <div id="protection-2" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-2" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-2" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
             </div>
@@ -35,33 +35,33 @@
                     <label class="text-2">{{alias_4}}</label>
                 </div>
                 <img src="../../images/back-card.jpg" style="width: 90px">
-                <div class="div-extras-abajo">
-                    <div id="protegido-4" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                <div class="div-extras-down">
+                    <div id="protection-4" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-4" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-4" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container-cartas-fila2">
-            <div id="tiradas" class="cartas-tiradas">
+        <div class="container-cards-row-2">
+            <div id="tiradas" class="thrown-cards">
                 <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
             </div>
-            <div class="mazo-cartas">
-                <img src="../../images/mazo-6.png" style="width: 90px">
+            <div class="mallet-cards">
+                <img src="../../images/mallet_5.png" style="width: 90px">
                 <label class="text-1 fs-4">15</label>
             </div>
         </div>
-        <div class="container-cartas-fila3">
+        <div class="container-cards-row-3">
             <div id="div-player-5" class="div-player-5 text-center">
-                <div class="div-extras-arriba">
-                    <div id="protegido-5" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                <div class="div-extras-up">
+                    <div id="protection-5" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-5" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-5" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
                 <img src="../../images/back-card.jpg" style="width: 90px">
@@ -71,11 +71,11 @@
             </div>
             <div id="div-player-1" class="div-player-1 text-center">
                 <div>
-                    <div id="protegido-1" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                    <div id="protection-1" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-1" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-1" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
                 <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
@@ -85,12 +85,12 @@
                 </div>
             </div>
             <div id="div-player-6" class="div-player-6 text-center">
-                <div class="div-extras-arriba">
-                    <div id="protegido-6" style="display: none">
-                        <img class="" src="../../images/protegido.png">
+                <div class="div-extras-up">
+                    <div id="protection-6" style="display: none">
+                        <img class="" src="../../images/protection.png">
                     </div>
-                    <div id="espia-6" style="display: none">
-                        <img class="" src="../../images/espia1.png">
+                    <div id="spy-6" style="display: none">
+                        <img class="" src="../../images/spy.png">
                     </div>
                 </div>
                 <img src="../../images/back-card.jpg" style="width: 90px">
@@ -100,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="container-marco">
+    <div class="container-frame">
         <div>
             <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
         </div>
@@ -122,7 +122,7 @@
         </div>      
     </div>
     <button @click="poner">Poner</button>
-    <!-- <div class="container-cartas">
+    <!-- <div class="container-cards">
         <div>
             <div class="col4 d-inline card-jugador-1">
                 <img class="" src="../../images/back-card.jpg" style="width: 100px">
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div>
-            <div class="col4 d-inline cartas-tiradas">
+            <div class="col4 d-inline thrown-cards">
                 <img src="../../images/card1.jpg" style="width: 100px">
             </div>
             <div class="col4 d-inline">

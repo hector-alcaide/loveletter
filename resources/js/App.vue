@@ -16,31 +16,31 @@
 <!--            </div>-->
 <!--        </nav>-->
 <!--    </div>-->
-    <div class="tablero container" v-if="ruta == 'http://127.0.0.1:8000/board'">
+    <div class="board container" v-if="ruta == 'http://127.0.0.1:8000/board'">
         <router-view></router-view>
     </div>
     <div v-else>
     <div class="container background bg-image1" v-if="isLoggedin">
-        <div class="marcador">
-            <div id="marcador_content" style="display: none">
+        <div class="marker">
+            <div id="markerContent" style="display: none">
                 <div class="text-center">
                     <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
-                <div class="solicitudAmistad" v-if="solicitudAlias !== ''">
-                    <div class="text-center my-lg-3" v-for="item in arraySolicitudes">
+                <div class="requestFriend" v-if="requestAlias !== ''">
+                    <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
-                        <form class="d-inline" @submit.prevent="aceptarInvitacion(item.id)">
-                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield5.png"></button>
+                        <form class="d-inline" @submit.prevent="acceptInvitation(item.id)">
+                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield_yes.png"></button>
                         </form>
-                        <form class="d-inline mx-2" @submit.prevent="rechazarInvitacion(item.id)">
-                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield6.png"></button>
+                        <form class="d-inline mx-2" @submit.prevent="rejectInvitation(item.id)">
+                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield_no.png"></button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="marcador_etiqueta">
-                <img @click="marcador" src="../images/marcador.png">
-                <label v-if="contador > 0" @click="marcador" class="text-2 fs-2">{{contador}}</label>
+            <div class="markerLabel">
+                <img @click="marker" src="../images/marker.png">
+                <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
         </div>
         <router-view></router-view>
@@ -60,11 +60,10 @@ export default {
         this.contador = 0
         return {
             isLoggedin: false,
-            arraySolicitudes: [],
-            solicitudAlias: "",
-            solicitudId: "",
+            arrayRequests: [],
+            requestAlias: "",
+            requestId: "",
             solicitud: "",
-            erre: "",
             ruta: ""
         }
     },
@@ -74,20 +73,20 @@ export default {
         }
     },
     mounted(){
-        this.erre = this.$route.path
+        //this.ruta = this.$route.path
         this.ruta = window.location.href
 
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.post('api/solicitudAmistad', {
+            this.$axios.post('api/requestFriend', {
             })
                 .then(response => {
                     console.log(response)
-                    this.arraySolicitudes = response.data;
+                    this.arrayRequests = response.data;
                     this.contador = response.data.length;
 
                     response.data.forEach(res =>{
-                        this.solicitudAlias = res.alias;
-                        this.solicitudId = res.id;
+                        this.requestAlias = res.alias;
+                        this.requestId = res.id;
                     });
                 })
                 .catch(function (error) {
@@ -113,19 +112,19 @@ export default {
                     });
             })
         },
-        marcador(){
+        marker(){
             if (this.cont == 0){
-                document.getElementById('marcador_content').style.display = 'block';
+                document.getElementById('markerContent').style.display = 'block';
                 this.cont = 1
             }else{
-                document.getElementById('marcador_content').style.display = 'none';
+                document.getElementById('markerContent').style.display = 'none';
                 this.cont = 0
             }
         },
-        aceptarInvitacion(solicitudId){
+        acceptInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                this.$axios.post('api/aceptarSolicitudAmistad', {
-                    solicitud: solicitudId
+                this.$axios.post('api/acceptRequestInvitation', {
+                    solicitud: requestId
                 })
                     .then(response => {
                         console.log(response)
@@ -136,10 +135,10 @@ export default {
                     });
             });
         },
-        rechazarInvitacion(solicitudId){
+        rejectInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                this.$axios.post('api/rechazarSolicitudAmistad', {
-                    solicitud: solicitudId
+                this.$axios.post('api/rejectRequestInvitation', {
+                    solicitud: requestId
                 })
                     .then(response => {
                         console.log(response)
