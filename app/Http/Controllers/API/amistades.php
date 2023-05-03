@@ -92,4 +92,44 @@ class amistades extends Controller
         return $result;
     }
 
+    public function getFriends(){
+
+        $userid = auth()->id();
+
+//        $friend = Amistad::select( function ($query) {
+//           $query
+//                ->where('idUser1', $userid)->select('User1')
+//               ->orWhere('idUser2', $userid)->select('User2');
+//        })->get();
+
+//        $friends = Amistad::where('idUser1', $userid)->orWhere('idUser2', $userid)->get();
+//        $friends = Amistad::where(function($query) use ($userid) {
+//            $query->select('idUser2')->where('idUser1', $userid);
+//        }, $userid)->get();
+
+//        $friends = Amistad::where(function($query) use ($userid) {
+//            $query->select('idUser')
+//                ->from('friendships')
+//                ->where('idUser2', $userid);
+//        })->get();
+
+//        $friends = Amistad::where(function($query) use ($userid) {
+//            $query->select('idUser1')
+//                ->from('friendships')
+//                ->where('idUser2', $userid);
+//        })->get();
+
+        $friends = Amistad::select(DB::raw(
+                'CASE
+                        WHEN idUser1 = ' . $userid . ' THEN idUser2
+                        WHEN idUser2 = ' . $userid . ' THEN idUser1
+                      END as idFriend'
+            ))->where('idUser1', $userid)
+            ->orWhere('idUser2', $userid)
+            ->get();
+
+        $test = $friends->user;
+
+        return $friends->user;
+    }
 }

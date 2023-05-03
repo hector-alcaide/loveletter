@@ -9,18 +9,18 @@ class Amistad extends Model
 {
     use HasFactory;
 
-    protected $table = 'amistad';
+    protected $table = 'friendships';
 
     //public $timestamps = true;
     protected $fillable = [
-        'idUsuario1',
-        'idUsuario2',
+        'idUser1',
+        'idUser2',
         'estado',
     ];
 
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(Usuario::class, 'idUsuario1')->orWhere('idUsuario2', $this->idUsuario);
+        return $this->belongsTo(User::class, 'idUser1')->orWhere('idUser2', $this->idUser);
     }
 
 }

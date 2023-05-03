@@ -35,6 +35,7 @@ Route::post('solicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'so
 Route::post('aceptarSolicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'aceptarSolicitudAmistad']);
 Route::post('rechazarSolicitudAmistad', [\App\Http\Controllers\API\amistades::class, 'rechazarSolicitudAmistad']);
 Route::post('tusAmigos', [\App\Http\Controllers\API\amistades::class, 'tusAmigos']);
+Route::get('getfriends', [\App\Http\Controllers\API\amistades::class, 'getFriends']);
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();

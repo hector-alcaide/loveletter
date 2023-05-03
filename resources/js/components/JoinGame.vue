@@ -18,6 +18,9 @@
 
     <button v-if="this.game && this.game.idHost == this.idUser" class="mx-auto" @click="prepareGame(this.idGame)">Empezar game</button>
 
+
+    <button class="mx-auto button_secondary" @click="listFriends()">Invitar partida</button>
+
     <!--    <div v-for="item in items" :key="item.id">-->
 <!--        {{ item.name }}-->
 <!--    </div>-->
@@ -35,6 +38,7 @@ export default {
             idUser: window.Laravel.user.idUser,
             game: null,
             users: [],
+            friends: [],
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -98,6 +102,12 @@ export default {
                 console.log(response)
             });
         },
+        listFriends(){
+            this.$axios.get('/api/getfriends').then(response => {
+                console.log(response.data)
+                this.friends = response.data;
+            });
+        }
     }
 }
 </script>
