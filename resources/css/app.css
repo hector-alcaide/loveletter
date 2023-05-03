@@ -33,9 +33,59 @@ body{
     height: 971px;
 }
 
+/*Marker*/
+.marker{
+    position: fixed;
+    top: 0px;
+    left: 950px;
+}
+#markerContent{
+    width: 280px;
+    border: #e3c99e solid 2px;
+    border-end-end-radius: 20px;
+    border-end-start-radius: 20px;
+    border-top: none;
+    background: linear-gradient(180deg, #6b2d35, transparent);
+    text-shadow: 2px -1px 3px black;
+}
+.marker > div > img{
+    width: 50px;
+    cursor: pointer;
+}
+.logout{
+    text-decoration: none;
+    color: #e3c99e;
+    cursor: pointer;
+}
+.requestFriend > div > label{
+    color: #e3c99e;
+}
+.shield{
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+.shield:hover, shield:focus{
+    box-shadow: none;
+}
+.markerLabel{
+    position: relative;
+    display: inline-block;
+    width: 280px;
+    text-align: center;
+}
+.markerLabel > label{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e3c99e;
+    cursor: pointer;
+}
+
 /**backgrounds**/
 .bg-image1{
-    background-image: url("../images/pergamino.png");
+    background-image: url("../images/parchment.png");
     background-repeat: no-repeat;
 }
 
@@ -86,11 +136,12 @@ body{
 }
 
 .fondo{
-    background-image: url(../images/pergamino.png);
+    background-image: url(../images/parchment.png);
 }
 
 .logo{
     width: 100px;
+    margin-top: 4rem;
 }
 
 /* buttons */
@@ -138,17 +189,17 @@ button:hover, button:focus{
 }
 
 /*AMIGOS*/
-.volver{
+.return{
     margin-left: 8rem;
     width: 150px;
     font-size: 1.5rem;
     padding-top: 8px;
     padding-bottom: 8px;
 }
-.tituloAmigos{
+.titleFriend{
     font-size: 2.5rem;
 }
-.amigosInput{
+.styleInput{
     width: 200px;
     height: 50px;
     font-family: vinque;
@@ -158,29 +209,292 @@ button:hover, button:focus{
     border-left: none;
     border-right: none;
 }
-.button_buscarAmigos{
+/*.button_buscarAmigos{
     width: 170px;
     font-size: 1.7rem;
     padding-top: 10px;
     padding-bottom: 10px;
-}
-.button_addAmigo{
+}*/
+.button_addFriend{
     width: 210px;
     font-size: 1.1rem;
     padding-top: 9px;
     padding-bottom: 9px;
 }
-.amigosVolver{
+.divReturn{
     width: 100%;
     margin-bottom: 6rem;
 }
-.misAmigos{
+.myFriends{
     width: 65%;
     float: right;
     margin-right: 50px;
 }
-.buscarAmigo{
+.searchFriend{
     margin-top: 6rem;
+}
+.buttonClose{
+    background-color: #5e2235;
+    font-family: vinque;
+    border-radius: 15px;
+    border: 2px solid #e3c99e;
+    color: white;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
+}
+
+/*Board*/
+.board{
+    background-image: url(../images/woodBackground.jpg);
+    background-repeat: no-repeat;
+    width: 1365px;
+    height: 656px;
+    max-width: 1347px;
+}
+.container-cards{
+    /*max-width: 1360px;*/
+    /*margin-left: 20px;*/
+    /* position: fixed; */
+    position: relative;
+    top: 20px;
+    /* left: 20px; */
+    width: 1005px;
+    background-image: url(../images/board.png);
+    background-repeat: no-repeat;
+    height: 620px;
+    display: inline-block;
+}
+.container-frame{
+    background-image: url(../images/frame.png);
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 580px;
+    position: relative;
+    display: inline-block;
+    margin-left: 25px;    
+    text-shadow: 2px -1px 3px black;
+    float: right;
+    margin-top: 50px;
+    margin-right: 15px;
+    /* background-color: #191313;
+    border-radius: 20px; */
+}
+.container-frame > div{
+    /* background: linear-gradient(180deg, #6b2d35, transparent); */
+    text-align: center;
+    width: 200px;
+    margin-left: 25px;
+    color: wheat;
+    margin-top: 20px;    
+}
+.exit-board{
+    width: 90px;
+    color: wheat;
+}
+
+.div-player-3{
+    transform: rotate(325deg);
+    position: absolute;
+    top: 33px;
+    width: 100px;
+    height: 190px;
+    margin-left: 126px;
+    margin-right: 175px;
+}
+.div-player-2{
+    position: absolute;
+    left: 440px;
+    width: 100px;
+    height: 190px;
+    top: 1px;
+}
+.div-player-4{
+    transform: rotate(37deg);
+    margin-top: 25px;
+    position: absolute;
+    left: 605px;
+    top: 10px;
+    width: 100px;
+    height: 190px;
+    margin-left: 175px;
+}
+.container-cards-row-1{
+    height: 250px;
+}
+.thrown-cards{
+    position: absolute;
+    margin-left: 315px;
+    /* margin-right: 150px; */
+}
+.mallet-cards{
+    position: absolute;
+    left: 600px;
+}
+.mallet-cards > label{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e3c99e;
+}
+.container-cards-row-2{
+    height: 150px;
+}
+.container-cards-row-3{
+    height: 200px;
+}
+.div-player-5{
+    position: absolute;
+    top: 357px;
+    width: 100px;
+    height: 190px;
+    transform: rotate(36deg);
+    margin-left: 145px;
+}
+.div-player-1{
+    position: absolute;
+    top: 380px;
+    left: 240px;
+    width: 350px;
+    margin-left: 80px;
+    padding-bottom: 95px;
+}
+.div-player-1 > div{
+    display: block;
+    width: 350px;
+    height: 47px;
+    margin-bottom: 10px;
+}
+.div-player-1 > div > div{
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.div-player-6{
+    transform: rotate(324deg);
+    position: absolute;
+    top: 353px;
+    left: 760px;
+    width: 100px;
+    height: 190px;
+}
+.div-extras-down{
+    width: 100px;
+    height: 47px;
+    margin-top: 10px;
+}
+.div-extras-down > div{
+    display: inline-block;
+}
+.div-extras-up{
+    width: 100px;
+    height: 47px;
+    margin-bottom: 10px;
+}
+.div-extras-up > div{
+    display: inline-block;
+}
+.container-cards-row-1 > div > div > label{
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+.div-player-2 > div > label{
+    margin-bottom: 10px !important;
+    margin-top: 3px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+.container-cards-row-3 > div > div > label{
+    margin-top: 15px;
+    font-size: 1.3rem;
+    color: wheat;
+}
+
+/*.carta-tirada{
+    position: relative;
+}*/
+.carta0{
+    position: absolute;
+    transform: rotate(10deg);
+}
+.carta1{
+    position: absolute;
+    transform: rotate(-10deg);
+}
+.carta2{
+    position: absolute;
+    transform: rotate(5deg);
+}
+.carta3{
+    position: absolute;
+    transform: rotate(-2deg);
+}
+.carta4{
+    position: absolute;
+    transform: rotate(16deg);
+}
+.carta5{
+    position: absolute;
+    transform: rotate(-7deg);
+}
+/*.col4{
+    width: 200px;
+    height: 150px;
+}
+.div-tercero{
+    padding-bottom: 55px;
+}
+.card-jugador-4{
+    position: relative;
+    top: 42px;
+    left: 150px;
+    display: inline-block;
+    width: 100px;
+}
+.card-jugador-4 > img{
+    transform: rotate(27deg);
+}
+.card-jugador-5{
+    position: relative;
+    top: 50px;
+    left: 140px;
+    width: 350px;
+    display: inline-block;
+    text-align: center;
+    margin-left: 80px;
+    padding-bottom: 95px;
+}
+.card-jugador-6{
+    position: relative;
+    display: inline-block;
+    top: 35px;
+    left: 214px;
+    padding-bottom: 95px;
+}
+.card-jugador-6 > img{
+    transform: rotate(328deg);
+}
+.tablero-datos{
+    width: 280px;
+    height: 600px;
+    position: absolute;
+    left: 1050px;
+    top: 20px;
+}*/
+
+/* PERFIL */
+.title-profile{
+    display: inline-block;
+    float: right;
+    margin-right: 260px;
+    font-size: 3.5rem;
+}
+.div-king{
+    float: right;
+}
+.div-king > img{
+    width: 370px;
 }
 
 /*PANTALLA DE CARGA*/

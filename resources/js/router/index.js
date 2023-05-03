@@ -7,7 +7,9 @@ import Games from '../components/Games.vue';
 import CreateGame from '../components/CreateGame.vue';
 import JoinGame from '../components/JoinGame.vue';
 import PlayGame from '../components/PlayGame.vue';
-import Amigos from '../components/Amigos.vue';
+import Friends from '../components/Friends.vue';
+import Board from '../components/Board.vue';
+import Profile from '../components/Profile.vue';
 
 export const routes = [
     {
@@ -29,9 +31,9 @@ export const routes = [
         component: Login
     },
     {
-        name: 'amigos',
-        path: '/amigos',
-        component: Amigos,
+        name: 'friends',
+        path: '/friends',
+        component: Friends,
         meta:{
             requiresAuth: true
         }
@@ -68,6 +70,22 @@ export const routes = [
             requiresAuth: true
         },
     },
+    {
+        name: 'board',
+        path: '/board',
+        component: Board,
+        meta:{
+            requiresAuth: true
+        },
+    },
+    {
+        name: 'profile',
+        path: '/profile',
+        component: Profile,
+        meta:{
+            requiresAuth: true
+        },
+    },    
     {
         path: '/:pathMatch(.*)*',
         redirect: '/'
