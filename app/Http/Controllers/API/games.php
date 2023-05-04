@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Events\CreateGame;
 use App\Events\PrepareGame;
 use App\Events\PublicActionUser;
+use App\Events\PrivateActionUser;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
@@ -47,6 +48,7 @@ class games extends Controller
         $gameObj->players()->attach($request->ids_players);
 
         $players = [];
+        $idsPlayersByTurnNum = [];
 
         foreach ($gameObj->players as $key => $player){
             $players[$player->idUser] = [
@@ -55,6 +57,10 @@ class games extends Controller
                 'hand' => [],
                 'activePlayer' => true,
                 'playerNum' => ($key + 1)
+            ];
+
+            $idsPlayersByTurnNum += [
+                ($key + 1) => $player->idUser
             ];
         }
 
@@ -65,6 +71,7 @@ class games extends Controller
             'deckReference' => $this->getAllCards(),
             'roundNum' => null,
             'turnPlayerNum' => 1,
+            'idsPlayersByTurnNum' => $idsPlayersByTurnNum,
             'thrownCards' => []
         ];
 
@@ -181,7 +188,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-        shuffle($deck);
+//        shuffle($deck);
 
 //        reset($deck);
 
@@ -191,7 +198,9 @@ class games extends Controller
 //            ];
 //            unset($deck[key($deck)]);
 
-            $game['players'][$player['idPlayer']]['hand'] = array_shift($deck);
+            $game['players'][$player['idPlayer']]['hand'] = [
+                array_shift($deck)
+            ];
         }
 
         $game['deck'] = $deck;
@@ -209,7 +218,7 @@ class games extends Controller
 //        $game['players'][$request->idUser]['hand'] += [key($game['deck']) => reset($game['deck'])];
 //        unset($game['deck'][key($game['deck'])]);
 
-        $game['players'][$request->idUser]['hand'] += array_shift($game['deck']);
+        array_push($game['players'][$request->idUser]['hand'], array_shift($game['deck']));
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
@@ -302,7 +311,9 @@ class games extends Controller
                     $message_result = 'El jugador '. $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
                     $discarded_card = $players[$request->idRival]['hand'];
-                    $players[$request->idRival]['hand'] = array_shift($game['deck']);
+                    $players[$request->idRival]['hand'] = [
+                        array_shift($game['deck'])
+                    ];
 
                     $message_result = 'El jugador' . $players[$request->idRival]['alias'] . ' ha descartado su mano y ha robado una nueva carta';
                 }

@@ -3,32 +3,128 @@
         <span><p>Cargando...</p></span>
     </div>
     <div v-if="game">
-        <h2>Jugar partida</h2>
-
-        <h3>Test Jugadores</h3>
-        <div v-for="item in game.players">
-            <p :id="item.idPlayer" :class="item.alias">{{ item.alias }}</p>
-            <button class="mx-auto" v-if="typesCardResolution['onPlayer'] && item.idPlayer != idUser" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: item.idPlayer, setFalseOnTypeRes: true})">
-                Elegir este jugador
-            </button>
+        <div class="container-cards">
+            <div class="container-cards-row-1">
+                <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
+                    <div>
+                        <label class="text-2">{{players[2].alias}}</label>
+                    </div>
+                    <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                    <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                    <div class="div-extras-down">
+                        <div id="protection-3" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-3" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                </div>
+                <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
+                    <div>
+                        <label class="text-2">{{players[1].alias}}</label>
+                    </div>
+                    <img src="../../images/back-card.jpg" style="width: 90px">
+                    <div class="div-extras-down">
+                        <div id="protection-2" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-2" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                </div>
+                <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
+                    <div>
+                        <label class="text-2">{{players[3].alias}}</label>
+                    </div>
+                    <img src="../../images/back-card.jpg" style="width: 90px">
+                    <div class="div-extras-down">
+                        <div id="protection-4" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-4" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-cards-row-2">
+                <div id="tiradas" class="thrown-cards">
+                    <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
+                </div>
+                <div class="mallet-cards">
+                    <img src="../../images/mallet_5.png" style="width: 90px">
+                    <label class="text-1 fs-4">15</label>
+                </div>
+            </div>
+            <div class="container-cards-row-3">
+                <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
+                    <div class="div-extras-up">
+                        <div id="protection-5" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-5" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                    <img src="../../images/back-card.jpg" style="width: 90px">
+                    <div>
+                        <label class="text-2">{{players[4].alias}}</label>
+                    </div>
+                </div>
+                <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
+                    <div>
+                        <div id="protection-1" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-1" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                    <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
+                    <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
+                    <div>
+                        <label class="text-2">{{players[0].alias}}</label>
+                    </div>
+                </div>
+                <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
+                    <div class="div-extras-up">
+                        <div id="protection-6" style="display: none">
+                            <img class="" src="../../images/protection.png">
+                        </div>
+                        <div id="spy-6" style="display: none">
+                            <img class="" src="../../images/spy.png">
+                        </div>
+                    </div>
+                    <img src="../../images/back-card.jpg" style="width: 90px">
+                    <div>
+                        <label class="text-2">{{players[5].alias}}</label>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <h3>Turno de {{game.players[game.turnPlayerNum].alias}} </h3>
-        <div  v-for="idCard in game.players[idUser].hand">
-            <p> {{ game.deckReference[idCard].title }} </p>
-            <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
-                Jugar carta
-            </button>
+        <div class="container-frame">
+            <div>
+                <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
+            </div>
+            <div>
+                <label class="text-2 fs-4">Última tirada:</label>
+                <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
+            </div>
+            <div >
+                <label class="text-2 d-block fs-4">Puntos:</label>
+                <label class="text-2 d-block fs-5">Jake 2</label>
+                <label class="text-2 d-block fs-5">Hector 2</label>
+                <label class="text-2 d-block fs-5">David 1</label>
+            </div>
+            <div>
+                <label class="text-2 fs-4">Puntos para victoria: 5</label>
+            </div>
+            <div>
+                <button class="exit-board" @click="$router.push('/home')">Salir</button>
+            </div>
         </div>
-        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-            Robar carta
-        </button>
-
-        <!--        <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">-->
-        <!--            <button class="mx-auto" @click="stealCard(this.idGame)">-->
-        <!--                Robar card-->
-        <!--            </button>-->
-        <!--        </div>-->
     </div>
 </template>
 
@@ -42,6 +138,7 @@ export default {
             loadingData: true,
             idUser: window.Laravel.user.idUser,
             game: null,
+            players: [],
             users: [],
             allowSteal: false,
             allowPlayCard: false,
@@ -135,6 +232,71 @@ export default {
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
 
+                    // let playersLength = Object.keys(this.game.players).length;
+                    // let playerNum = this.game.players[this.idUser].playerNum;
+                    //
+                    // let players = Object.values(this.game.players);
+                    // console.log(players)
+                    // let player = players.findIndex(pl => pl.playerNum === playerNum);
+                    // console.log(player);
+                    // console.log(this.game.players[player]);
+                    //
+                    // this.players[0] = this.game.players[this.idUser];
+                    // let arrayposi = []
+                    //
+                    // let i;
+                    // for(i = 1; i < playersLength ; i ++){
+
+
+                        /*playerNum < playersLength ? playerNum++ : playerNum = 1;
+                        let players = Object.values(this.game.players);
+                        console.log(players)
+                        let player = players.findIndex(pl => pl.playerNum === playerNum);
+                        console.log(player);
+                        console.log(i)
+                        this.players[i] = this.game.players[player];*/
+                    // }
+                    // console.log(this.players)
+                    // // Object.keys(this.game.players).forEach(i =>{
+                    // //
+                    // //     if(this.game.players[this.idUser] == this.idUser){
+                    // //         this.players[0] = this.game.players[i];
+                    // //     }
+                    // //
+                    // //     if(count == 0){
+                    // //         this.players[count] = this.game.players[this.idUser];
+                    // //     }
+                    // //     this.players[count] = this.game.players[i];
+                    // //     count++;
+                    // // });
+
+                    let arrayPositions = [5,3,2,4,6]
+                    let playersLength = Object.keys(this.game.players).length;
+
+                    this.players[0] = this.game.players[this.idUser];
+                    let player = this.game.players[this.idUser].playerNum;
+                    let i;
+                    let a = 1;
+                    let b = 0;
+                    for (let i = 0; i < (playersLength -1); i++) {
+                        b = player + a
+                        if (b > playersLength) {
+                            b = 1;
+                        }
+                        for(let j = 0; j < arrayPositions.length; j++){
+                            if (playersLength >= arrayPositions[j]) {
+                                let players = Object.values(this.game.players);
+                                let player = players.findIndex(pl => pl.playerNum === b);
+                                
+                                this.players[arrayPositions[i]] = this.game.players[player];
+                            }
+                        }
+
+                    a++;
+                    }
+
+                    console.log(this.players);
+
                     this.loadingData = false;
 
                     resolve();
@@ -148,10 +310,10 @@ export default {
             this.users.splice(array_pos, 1);
         },
         playTurn(){
-            let playerTurno = this.game.turnPlayerNum;
+            let playerTurn = this.game.turnPlayerNum;
             let playerNum = this.game.players[this.idUser].playerNum;
 
-            this.allowSteal = playerTurno != playerNum || this.allowPlayCard === true ? false : true;
+            this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
         },
         stealCard(){
             this.allowSteal = false;
