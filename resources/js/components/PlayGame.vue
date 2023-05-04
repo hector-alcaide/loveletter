@@ -51,7 +51,6 @@ export default {
                 'direct': 'default',
                 'onPlayer': false,
                 'onPlayerOnCard': false,
-                'onDeck': false,
             },
             cardsResolution: {
                 '0': 'direct',
@@ -60,7 +59,7 @@ export default {
                 '3': 'onPlayer',
                 '4': 'direct',
                 '5': 'onPlayer',
-                '6': 'onDeck',
+                '6': 'direct',
                 '7': 'onPlayer',
                 '8': 'direct',
                 '9': 'direct',
@@ -144,20 +143,6 @@ export default {
                 });
             });
         },
-        // assignGameData(){
-        //     this.$axios.post('/api/getgamedata', {
-        //         idGame: this.idGame,
-        //     }).then(response => {
-        //         if(response.data.started == 0 || !response.data.players.some(el => el.idUser === this.idUser) ) {
-        //             window.location.href = "/games";
-        //         }
-        //
-        //         this.game = JSON.parse(response.data.game);
-        //         console.log(this.game);
-        //
-        //         this.loadingData = false;
-        //     });
-        // },
         deleteUserConnected(idUser){
             let array_pos = this.users.map(item => item.idUser).indexOf(idUser);
             this.users.splice(array_pos, 1);
@@ -208,6 +193,20 @@ export default {
                 idCard: idCard,
                 idRival: idRival,
                 idCardToGuess: idCardToGuess,
+            }).then(response => {
+                console.log(response)
+            });
+        },
+        resolveChancellor({idCard}){
+            const arrayHand = Object.values(this.game.players[this.idUser].hand);
+            const cardKeyDelete = arrayHand.findIndex(card => card.idCard === idCard);
+
+            delete this.game.players[this.idUser].hand[cardKeyDelete];
+
+            this.$axios.post('/api/resolvechancellor', {
+                game: this.game,
+                idPlayer: this.idUser,
+                idCard: idCard,
             }).then(response => {
                 console.log(response)
             });
