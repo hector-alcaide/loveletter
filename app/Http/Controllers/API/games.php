@@ -53,7 +53,7 @@ class games extends Controller
                 'idPlayer' => $player->idUser,
                 'alias' => $player->alias,
                 'hand' => [],
-                'activePlayer' => 1,
+                'activePlayer' => true,
                 'playerNum' => ($key + 1)
             ];
         }
@@ -211,115 +211,82 @@ class games extends Controller
         $gameObj->update(['game' => $game]);
 
         $message = [
-            'El player ' .  $game['players'][$request->idUser]['alias'] . ' ha robado card.'
+            'El jugador ' .  $game['players'][$request->idUser]['alias'] . ' ha robado carta.'
         ];
 
         broadcast(new PublicActionUser($game['idGame'], $message));
 
         $response = [
             'status' => 'success',
-            'message' => 'Juega una de tus cards.'
+            'message' => 'Juega una de tus cartas.'
         ];
 
         return $response;
     }
 
-    public function newRound1(){
-        //TODO: apartar la primera card
-
-        $deck = $this->getAllCards();
-
-        $game = session('game');
-
-        //apunta el puntero a la 1a posicion del array deck
-        reset($deck);
-
-        foreach ($game['players'] as $player) {
-            $player['hand'] = [key($deck) => reset($deck)];
-            unset($deck[key($deck)]);
-        }
-
-        //TODO: comprobar el numero de ronda y añadirlo a la sesion de game
-        $game['deck'] = $deck;
-        session(['game' => $game]);
-
-        //TODO: devolver la sesion a todos los players, al frontend, com
-//        return $deck;
-    }
-
     public function resolvePlay(Request $request){
-
-        //posibles parametros necesitados para operar los efectos de las cards:
-//        $parameters = [
-//            'game' => $request->game;
-//            'idGame' => $request->idGame,
-//            'idPlayer' => $request->idPlayer,
-//            'jugada' => $request->playedCard
-//                //card jugada:
-//                [
-//                'idCard',
-//                'cardMano' => 'card1', //TAL VEZ ESTO SOBRA
-//                'idRival',
-//                'cardAdivinar'
-//            ]
-//        ];
 
         $game = $request->game;
         $players = $game['players'];
         $idPlayer = $request->idPlayer;
+        $thrown_card = $request->idCard;
 
-        $rivalCard = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
 
-        switch ($game['deckReference'][$request->idCard]['title']){
+        $player_card = $players[$idPlayer]['hand'];
+        $rival_card = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
+
+        //unset maid
+        unset($players[$idPlayer]['maid']);
+
+        switch ($game['deckReference'][$thrown_card]['title']){
             case 'Espía':
-                    $players[$idPlayer]['espia'] = true;
-                    $players[$idPlayer]['hand'] = [];
+                $players[$idPlayer]['spy'] = true;
+                $players[$idPlayer]['hand'] = [];
 
-                    array_push($game['thrownCards'], $request->idCard);
-
-                    $status = 'success';
-                    $message = 'El player '. $players[$idPlayer]['alias'] . ' ha jugado el espía.';
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Espía.';
                 break;
             case 'Guardia':
-                if($request->cardToGuess === $rivalCard){
-                    //la card ha sido adivinada, el rival queda eliminado
-                    $game['players'][$jugada['idRival']]['activePlayer'] = 0;
+                if($request->cardToGuess == $rival_card){
+                    $player_to_remove = $request->idRival;
 
-                    $status = 'removeuser';
-                    $message = 'Carta adivinada, el player _ ha sido eliminado.';
-                    $user_to_remove = $jugada['idRival'];
+                    $message_result = 'Carta adivinada, jugador eliminado.';
                 }else{
-                    $status = true;
-                    $message = 'El player _ no tiene la card _ en su hand.';
+                    $message_result = 'Carta no adivinada.';
                 }
+
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Guardia sobre el jugador '.$players[$request->idRival]['alias'].'. Adivina la carta '.$game['deckReference'][$request->cardToGuess]['title'].'. ' .$message_result;
                 break;
             case 'Sacerdote':
                 //TODO: girar la card por js al player
-                $message = $rivalCard['title'];
 
-                //TODO: devolver la card del rival al usuario que efectua la jugada por canal privado
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Sacerdote.';
                 break;
             case 'Barón':
-                unset($game['players'][$idUser]['hand'][$jugada['idCard']]);
+                $player_card_level = $game['deckReference'][$player_card]['level'];
+                $rival_card_level = $game['deckReference'][$rival_card]['level'];
 
-                $card_player = reset($game['players'][$idUser]['hand']);
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
-
-                if($card_player < $card_rival){
-                    $user_to_remove = $idUser;
-                    $message = 'Jugador _ eliminado.';
-                }else if($card_player > $card_rival){
-                    $user_to_remove = $jugada['idRival'];
-                    $message = 'Jugador _ eliminado.';
-                }else if($card_player == $card_rival){
-                    $status = true;
-                    $message = 'Las cards de los players tal son iguales, ninguno eliminado.';
+                if($player_card_level < $rival_card_level){
+                    $player_to_remove = $idPlayer;
+                }else if($rival_card_level < $player_card_level){
+                    $player_to_remove = $request->idRival;
                 }
+
+                if($player_card_level == $rival_card_level){
+                    $message_result = 'Empate, el nivel de las cartas es el mismo.';
+                }else{
+                    $message_result = 'El jugador '.$players[$player_to_remove]['alias'].' ha sido eliminado.';
+                }
+
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Barón. ' . $message_result;
                 break;
             case 'Doncella':
-                //TODO: pensar una forma distinta, más óptima, de comprobar si el player está protegido
-                //TODO: pensar una forma de comprobar cuando ha acabado el turno para eliminar la proteccion
-                $game['players'][$idUser]['protegidoJugador'] = 1;
+                $players[$idPlayer]['maid'] = true;
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado la Doncella.';
                 break;
             case 'Príncipe':
                 //TODO: elemento afectado puede ser rival o player mismo, por lo que podria verse como enviar este dato
@@ -333,7 +300,7 @@ class games extends Controller
                     $message = 'Jugador eliminado al descardr princesa.';
                 }
 
-                //vaciar el array de hand, para descardr la card
+                //vaciar el array de hand, para descartar la card
                 $game['players'][$player_afectado]['hand'] = reset($game['deck']);
                 array_shift($game['deck']);
 
@@ -342,22 +309,34 @@ class games extends Controller
                 //TODO: robar dos cards del deck, mostrar las al usuario, decidir con cual de las 3 se queda
                 break;
             case 'Rey':
-                //TODO: conservar clave y valor de las cards al extraerlas del deck para añadirlas a la hand y viceversa
-                unset($game['players'][$idUser]['hand'][$jugada['idCard']]);
+                //rival card
+                $players[$request->idRival]['hand'] = $player_card;
 
-                $card_player = reset($game['players'][$idUser]['hand']);
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
+                //player card
+                $players[$idPlayer]['hand'] = $rival_card;
 
-                $game['players'][$jugada['idRival']]['hand'] = $card_rival;
+                $status = 'success';
+                $message = 'El jugador '.$players[$idPlayer]['alias'].' ha jugado el rey, ha intercambiado mano con el jugador ' . $players[$request->idRival]['alias'] . '.';
                 break;
             case 'Condesa':
-                //TODO: revisar si tiene al rey o principe para jugar a la condesa,
-                // esta card no tiene efecto, simplemente comprobar por frontend si tiene esa card en hand
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'].' ha jugado la Condesa.';
                 break;
             case 'Princesa':
-                $user_to_remove = $idUser;
-                $message = 'Jugador eliminado al descardr princesa.';
+                $player_to_remove = $idPlayer;
+
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'].' ha sido eliminado al descartar la Princesa.';
                 break;
+        }
+
+        array_push($game['thrownCards'], $thrown_card);
+
+        if(isset($player_to_remove) && $player_to_remove){
+            $players[$player_to_remove]['activePlayer'] = false;
+
+            !empty($players[$player_to_remove]['hand']) ? array_push($game['thrownCards'], $players[$player_to_remove]['hand']) : '';
+            $players[$player_to_remove]['hand'] = [];
         }
 
         $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
@@ -377,124 +356,5 @@ class games extends Controller
         ];
 
         return $response;
-    }
-
-    public function resolvePlay1(Request $request){
-
-        //posibles parametros necesitados para operar los efectos de las cards:
-//        $parameters = [
-//            'idGame' => $request->idGame,
-//            'idPlayer' => $request->idPlayer,
-//            'jugada' => $request->playedCard
-//                //card jugada:
-//                [
-//                'idCard',
-//                'cardMano' => 'card1', //TAL VEZ ESTO SOBRA
-//                'idRival',
-//                'cardAdivinar'
-//            ]
-//        ];
-
-        $cards = $this->getAllCards();
-
-        $jugada = $request->jugada;
-        $idUser = auth()->id();
-
-        $game = session('game');
-
-        //segun la card ocurre un efecto u otro
-        switch ($cards[$jugada['idCard']['card']]){
-            case 'Espía':
-                break;
-            case 'Guardia':
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
-
-                if($jugada['cardAdivinar'] === $card_rival){
-                    //la card ha sido adivinada, el rival queda eliminado
-                    $game['players'][$jugada['idRival']]['activePlayer'] = 0;
-
-                    $status = 'removeuser';
-                    $message = 'Carta adivinada, el player _ ha sido eliminado.';
-                    $user_to_remove = $jugada['idRival'];
-                }else{
-                    $status = true;
-                    $message = 'El player _ no tiene la card _ en su hand.';
-                }
-                break;
-            case 'Sacerdote':
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
-
-                //TODO: devolver la card del rival al usuario que efectua la jugada por canal privado
-                break;
-            case 'Barón':
-                unset($game['players'][$idUser]['hand'][$jugada['idCard']]);
-
-                $card_player = reset($game['players'][$idUser]['hand']);
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
-
-                if($card_player < $card_rival){
-                    $user_to_remove = $idUser;
-                    $message = 'Jugador _ eliminado.';
-                }else if($card_player > $card_rival){
-                    $user_to_remove = $jugada['idRival'];
-                    $message = 'Jugador _ eliminado.';
-                }else if($card_player == $card_rival){
-                    $status = true;
-                    $message = 'Las cards de los players tal son iguales, ninguno eliminado.';
-                }
-                break;
-            case 'Doncella':
-                //TODO: pensar una forma distinta, más óptima, de comprobar si el player está protegido
-                //TODO: pensar una forma de comprobar cuando ha acabado el turno para eliminar la proteccion
-                $game['players'][$idUser]['protegidoJugador'] = 1;
-                break;
-            case 'Príncipe':
-                //TODO: elemento afectado puede ser rival o player mismo, por lo que podria verse como enviar este dato
-                // (idElemento, tanto para rival como player¿?) para hacer lo mas legible
-
-                $player_afectado = $jugada['idRival'];
-
-                //comprobar si tiene la princesa
-                if(isset($game['players'][$player_afectado]['hand'][21])){
-                    $user_to_remove = $player_afectado;
-                    $message = 'Jugador eliminado al descardr princesa.';
-                }
-
-                //vaciar el array de hand, para descardr la card
-                $game['players'][$player_afectado]['hand'] = reset($game['deck']);
-                array_shift($game['deck']);
-
-                break;
-            case 'Canciller':
-                //TODO: robar dos cards del deck, mostrar las al usuario, decidir con cual de las 3 se queda
-                break;
-            case 'Rey':
-                //TODO: conservar clave y valor de las cards al extraerlas del deck para añadirlas a la hand y viceversa
-                unset($game['players'][$idUser]['hand'][$jugada['idCard']]);
-
-                $card_player = reset($game['players'][$idUser]['hand']);
-                $card_rival = reset($game['players'][$jugada['idRival']]['hand']);
-
-                $game['players'][$jugada['idRival']]['hand'] = $card_rival;
-                break;
-            case 'Condesa':
-                //TODO: revisar si tiene al rey o principe para jugar a la condesa,
-                // esta card no tiene efecto, simplemente comprobar por frontend si tiene esa card en hand
-                break;
-            case 'Princesa':
-                $user_to_remove = $idUser;
-                $message = 'Jugador eliminado al descardr princesa.';
-                break;
-        }
-
-        //eliminar de la hand la card utilizada. TODO: tal vez vaciar la hand de quién haya sido eliminado
-        unset($game['players'][$idUser]['hand'][$jugada['idCard']]);
-        session(['game' => $game]);
-
-        //TODO: revisar a quien le toca jugar el turno
-
-        $response=[
-            'message' => $message,
-        ];
     }
 }

@@ -30,7 +30,7 @@ body{
     /*min-height: 1007px;*/
     /*max-height: 1080px;*/
     /*height: 100vh;*/
-    height: 971px;
+    height: 945px;
 }
 
 /*Marker*/
@@ -270,7 +270,7 @@ button:hover, button:focus{
     height: 580px;
     position: relative;
     display: inline-block;
-    margin-left: 25px;    
+    margin-left: 25px;
     text-shadow: 2px -1px 3px black;
     float: right;
     margin-top: 50px;
@@ -284,7 +284,7 @@ button:hover, button:focus{
     width: 200px;
     margin-left: 25px;
     color: wheat;
-    margin-top: 20px;    
+    margin-top: 20px;
 }
 .exit-board{
     width: 90px;

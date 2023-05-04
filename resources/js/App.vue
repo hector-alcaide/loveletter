@@ -77,7 +77,7 @@ export default {
         this.ruta = window.location.href
 
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.post('api/requestFriend', {
+            this.$axios.post('/api/requestFriend', {
             })
                 .then(response => {
                     console.log(response)
