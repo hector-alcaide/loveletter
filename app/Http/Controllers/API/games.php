@@ -183,13 +183,15 @@ class games extends Controller
 
         shuffle($deck);
 
-        reset($deck);
+//        reset($deck);
 
         foreach ($game['players'] as $key => $player) {
-            $game['players'][$player['idPlayer']]['hand'] = [
-                reset($deck)
-            ];
-            unset($deck[key($deck)]);
+//            $game['players'][$player['idPlayer']]['hand'] = [
+//                reset($deck)
+//            ];
+//            unset($deck[key($deck)]);
+
+            $game['players'][$player['idPlayer']]['hand'] = array_shift($deck);
         }
 
         $game['deck'] = $deck;
@@ -202,10 +204,12 @@ class games extends Controller
 
         $game = $request->game;
 
-        reset($game['deck']);
+//        reset($game['deck']);
 
-        $game['players'][$request->idUser]['hand'] += [key($game['deck']) => reset($game['deck'])];
-        unset($game['deck'][key($game['deck'])]);
+//        $game['players'][$request->idUser]['hand'] += [key($game['deck']) => reset($game['deck'])];
+//        unset($game['deck'][key($game['deck'])]);
+
+        $game['players'][$request->idUser]['hand'] += array_shift($game['deck']);
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
@@ -226,11 +230,12 @@ class games extends Controller
 
     public function resolvePlay(Request $request){
 
+        $changeTurn = true;
+
         $game = $request->game;
         $players = $game['players'];
         $idPlayer = $request->idPlayer;
         $thrown_card = $request->idCard;
-
 
         $player_card = $players[$idPlayer]['hand'];
         $rival_card = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
@@ -249,6 +254,7 @@ class games extends Controller
             case 'Guardia':
                 if($request->cardToGuess == $rival_card){
                     $player_to_remove = $request->idRival;
+                    $discarded_card = $players[$player_to_remove]['hand'];
 
                     $message_result = 'Carta adivinada, jugador eliminado.';
                 }else{
@@ -277,6 +283,7 @@ class games extends Controller
                 if($player_card_level == $rival_card_level){
                     $message_result = 'Empate, el nivel de las cartas es el mismo.';
                 }else{
+                    $discarded_card = $players[$player_to_remove]['hand'];
                     $message_result = 'El jugador '.$players[$player_to_remove]['alias'].' ha sido eliminado.';
                 }
 
@@ -289,24 +296,28 @@ class games extends Controller
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado la Doncella.';
                 break;
             case 'Príncipe':
-                //TODO: elemento afectado puede ser rival o player mismo, por lo que podria verse como enviar este dato
-                // (idElemento, tanto para rival como player¿?) para hacer lo mas legible
 
-                $player_afectado = $jugada['idRival'];
+                if($game['deckReference'][$player_card]['level'] == 9){
+                    $player_to_remove = $request->idRival;
+                    $message_result = 'El jugador '. $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
+                }else{
+                    $discarded_card = $players[$request->idRival]['hand'];
+                    $players[$request->idRival]['hand'] = array_shift($game['deck']);
 
-                //comprobar si tiene la princesa
-                if(isset($game['players'][$player_afectado]['hand'][21])){
-                    $user_to_remove = $player_afectado;
-                    $message = 'Jugador eliminado al descardr princesa.';
+                    $message_result = 'El jugador' . $players[$request->idRival]['alias'] . ' ha descartado su mano y ha robado una nueva carta';
                 }
 
-                //vaciar el array de hand, para descartar la card
-                $game['players'][$player_afectado]['hand'] = reset($game['deck']);
-                array_shift($game['deck']);
-
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Príncipe. ' . $message_result;
                 break;
             case 'Canciller':
-                //TODO: robar dos cards del deck, mostrar las al usuario, decidir con cual de las 3 se queda
+
+                $players[$idPlayer]['hand'] += array_slice($game['deck'], 0, 2);
+                $game['deck'] = array_slice($game['deck'], 2);
+
+                $changeTurn = false;
+                $status = 'success';
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Canciller. Debe escoger que carta conservar.';
                 break;
             case 'Rey':
                 //rival card
@@ -334,12 +345,12 @@ class games extends Controller
 
         if(isset($player_to_remove) && $player_to_remove){
             $players[$player_to_remove]['activePlayer'] = false;
-
-            !empty($players[$player_to_remove]['hand']) ? array_push($game['thrownCards'], $players[$player_to_remove]['hand']) : '';
             $players[$player_to_remove]['hand'] = [];
         }
 
-        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+        isset($discarded_card) && $discarded_card ? array_push($game['thrownCards'], $discarded_card) : '';
+
+        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
         $game['players'] = $players;
 
         $gameObj = Game::find($game['idGame']);
@@ -357,4 +368,31 @@ class games extends Controller
 
         return $response;
     }
+
+    public function resolveChancellor(Request $request){
+        $game = $request->game;
+
+        $hand = $game['players'][$request->idPlayer]['hand'];
+        array_push($game['deck'], $hand[0]);
+        array_push($game['deck'], $hand[1]);
+
+        $game['players'][$request->idPlayer]['hand'] = $request->idCard;
+
+        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
+
+        $message = 'El jugador'. $game['players'][$request->idPlayer]['alias'] .'ha conservado una de sus cartas y ha descartado las demás.';
+
+        broadcast(new PublicActionUser($game['idGame'], $message));
+
+        $response=[
+            'status' => 'success',
+            'message' => $message,
+        ];
+
+        return $response;
+    }
+
 }
