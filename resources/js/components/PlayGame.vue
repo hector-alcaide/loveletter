@@ -10,7 +10,7 @@
                         <label class="text-2">{{players[2].alias}}</label>
                     </div>
                     <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                    <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                    <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
                     <div class="div-extras-down">
                         <div id="protection-3" style="display: none">
                             <img class="" src="../../images/protection.png">
@@ -19,6 +19,9 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
                 </div>
                 <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
                     <div>
@@ -33,6 +36,9 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
                 </div>
                 <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
                     <div>
@@ -47,6 +53,9 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
                 </div>
             </div>
             <div class="container-cards-row-2">
@@ -55,7 +64,10 @@
                 </div>
                 <div class="mallet-cards">
                     <img src="../../images/mallet_5.png" style="width: 90px">
-                    <label class="text-1 fs-4">15</label>
+                    <label class="text-1 fs-4">{{ game.deck.length }}</label>
+                    <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
+                        Robar carta
+                    </button>
                 </div>
             </div>
             <div class="container-cards-row-3">
@@ -72,6 +84,9 @@
                     <div>
                         <label class="text-2">{{players[4].alias}}</label>
                     </div>
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
                 </div>
                 <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
                     <div>
@@ -82,8 +97,14 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
-                    <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
-                    <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
+                    <span v-for="idCard in game.players[idUser].hand">
+                        <span v-if="idCard">
+                        <img class="mx-2" :src="game.deckReference[idCard].image" style="width: 90px">
+                        <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
+                            Jugar carta
+                        </button>
+                            </span>
+                    </span>
                     <div>
                         <label class="text-2">{{players[0].alias}}</label>
                     </div>
@@ -101,6 +122,9 @@
                     <div>
                         <label class="text-2">{{players[5].alias}}</label>
                     </div>
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
                 </div>
             </div>
         </div>
@@ -112,7 +136,7 @@
                 <label class="text-2 fs-4">Última tirada:</label>
                 <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
             </div>
-            <div >
+            <div>
                 <label class="text-2 d-block fs-4">Puntos:</label>
                 <label class="text-2 d-block fs-5">Jake 2</label>
                 <label class="text-2 d-block fs-5">Hector 2</label>
@@ -188,7 +212,7 @@ export default {
             })
             .joining((user) => {
                 this.users.push(user);
-                console.log(this.users)
+                // console.log(this.users)
                 if(Object.keys(this.game.players).length == this.users.length){
                     console.log('empezar game')
                     this.playTurn();
@@ -232,70 +256,34 @@ export default {
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
 
-                    // let playersLength = Object.keys(this.game.players).length;
-                    // let playerNum = this.game.players[this.idUser].playerNum;
-                    //
-                    // let players = Object.values(this.game.players);
-                    // console.log(players)
-                    // let player = players.findIndex(pl => pl.playerNum === playerNum);
-                    // console.log(player);
-                    // console.log(this.game.players[player]);
-                    //
-                    // this.players[0] = this.game.players[this.idUser];
-                    // let arrayposi = []
-                    //
-                    // let i;
-                    // for(i = 1; i < playersLength ; i ++){
-
-
-                        /*playerNum < playersLength ? playerNum++ : playerNum = 1;
-                        let players = Object.values(this.game.players);
-                        console.log(players)
-                        let player = players.findIndex(pl => pl.playerNum === playerNum);
-                        console.log(player);
-                        console.log(i)
-                        this.players[i] = this.game.players[player];*/
-                    // }
-                    // console.log(this.players)
-                    // // Object.keys(this.game.players).forEach(i =>{
-                    // //
-                    // //     if(this.game.players[this.idUser] == this.idUser){
-                    // //         this.players[0] = this.game.players[i];
-                    // //     }
-                    // //
-                    // //     if(count == 0){
-                    // //         this.players[count] = this.game.players[this.idUser];
-                    // //     }
-                    // //     this.players[count] = this.game.players[i];
-                    // //     count++;
-                    // // });
-
-                    let arrayPositions = [5,3,2,4,6]
+                    let arrayPositions = [4,2,1,3,5];
                     let playersLength = Object.keys(this.game.players).length;
 
                     this.players[0] = this.game.players[this.idUser];
-                    let player = this.game.players[this.idUser].playerNum;
+                    let playerNum = this.game.players[this.idUser].playerNum;
+
                     let i;
                     let a = 1;
                     let b = 0;
-                    for (let i = 0; i < (playersLength -1); i++) {
-                        b = player + a
+                    let d = 0;
+                    let z = 0;
+                    for (let i = 0; i < (playersLength - 1); i++) {
+                        b = playerNum + a;
                         if (b > playersLength) {
-                            b = 1;
+                            d++;
+                            b = d;
                         }
-                        for(let j = 0; j < arrayPositions.length; j++){
-                            if (playersLength >= arrayPositions[j]) {
+                        for(let j = z; j < arrayPositions.length; j++){
+                            if (playersLength -1 >= arrayPositions[j]) {
                                 let players = Object.values(this.game.players);
                                 let player = players.findIndex(pl => pl.playerNum === b);
-                                
-                                this.players[arrayPositions[i]] = this.game.players[player];
+                                this.players[arrayPositions[j]] = players[player];
+                                z = j + 1;
+                                break;
                             }
                         }
-
                     a++;
                     }
-
-                    console.log(this.players);
 
                     this.loadingData = false;
 
@@ -345,9 +333,12 @@ export default {
             setFalseOnTypeRes === true ? this.typesCardResolution[this.cardsResolution[this.playedCard.level]] = false : '';
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
-            const cardKeyDelete = arrayHand.findIndex(card => card.idCard === idCard);
+            console.log(arrayHand)
+            const cardKeyDelete = arrayHand.indexOf(idCard);
+            console.log(cardKeyDelete)
 
-            delete this.game.players[this.idUser].hand[cardKeyDelete];
+            this.game.players[this.idUser].hand.splice(cardKeyDelete, 1);
+            console.log( this.game.players[this.idUser].hand);
 
             this.$axios.post('/api/playcard', {
                 game: this.game,
@@ -357,11 +348,13 @@ export default {
                 idCardToGuess: idCardToGuess,
             }).then(response => {
                 console.log(response)
+            }).catch(e => {
+                console.log(e)
             });
         },
         resolveChancellor({idCard}){
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
-            const cardKeyDelete = arrayHand.findIndex(card => card.idCard === idCard);
+            const cardKeyDelete = arrayHand.findIndex(idCard => idCard === idCard);
 
             delete this.game.players[this.idUser].hand[cardKeyDelete];
 
