@@ -6,7 +6,7 @@
                     <label class="text-2">{{alias_3}}</label>
                 </div>
                 <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
                 <div class="div-extras-down">
                     <div id="protection-3" style="display: none">
                         <img class="" src="../../images/protection.png">
@@ -51,7 +51,7 @@
             </div>
             <div class="mallet-cards">
                 <img src="../../images/mallet_5.png" style="width: 90px">
-                <label class="text-1 fs-4">15</label>
+                <label class="text-1 fs-4">z</label>
             </div>
         </div>
         <div class="container-cards-row-3">
@@ -78,8 +78,8 @@
                         <img class="" src="../../images/spy.png">
                     </div>
                 </div>
-                <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
-                <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
+                <img class="mx-2" src="../../images/cards/card2.jpg" style="width: 90px">
+                <img class="mx-2" src="../../images/cards/card3.jpg" style="width: 90px">
                 <div>
                     <label class="text-2">{{alias_1}}</label>
                 </div>
@@ -113,13 +113,13 @@
             <label class="text-2 d-block fs-5">Jake 2</label>
             <label class="text-2 d-block fs-5">Hector 2</label>
             <label class="text-2 d-block fs-5">David 1</label>
-        </div> 
+        </div>
         <div>
             <label class="text-2 fs-4">Puntos para victoria: 5</label>
         </div>
         <div>
             <button class="exit-board" @click="$router.push('/home')">Salir</button>
-        </div>      
+        </div>
     </div>
     <button @click="poner">Poner</button>
     <!-- <div class="container-cards">
@@ -162,7 +162,7 @@
 
 <script>
 export default {
-    name: "Board",       
+    name: "Board",
     cartas: [],
     data(){
         return{
@@ -175,8 +175,8 @@ export default {
         }
     },
     mounted(){
-        this.turnCard = 0, 
-        this.positionPlayers()
+        this.turnCard = 0,
+        this.positionPlayers();
 
         //Depende de los jugadores que haya ocultar al resto
         this.playersNumber = "";
@@ -200,7 +200,7 @@ export default {
         poner(e){
             //e.preventDefault()
             this.cartas = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
-            
+
             let div = document.getElementById('tiradas');
             this.cartas.forEach(res =>{
                 div.innerHTML +=
@@ -226,10 +226,10 @@ export default {
             //Coger posiciones de los jugadores. Coger como primera posición para mostrar en el tablero a tu usuario.
             this.alias_1 = "Jake";
             //Después poner los siguientes jugadores en este orden.
-            this.alias_5 = "David";            
+            this.alias_5 = "David";
             this.alias_3 = "Ferran";
             this.alias_2 = "Hector";
-            this.alias_4 = "Luis";            
+            this.alias_4 = "Luis";
             this.alias_6 = "Míriam";
             //Las tiradas deberán seguir este orden
         }
