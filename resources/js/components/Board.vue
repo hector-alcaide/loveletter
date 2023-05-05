@@ -5,7 +5,7 @@
                 <div>
                     <label class="text-2">{{alias_3}}</label>
                 </div>
-                <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                <img id="card3-down" class="allCards" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
                 <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
                 <div class="div-extras-down">
                     <div id="protection-3" style="display: none">

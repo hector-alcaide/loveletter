@@ -1,4 +1,126 @@
 <template>
+    <div class="container-cards">
+        <div class="container-cards-row-1">
+            <div id="div-player-3" class="div-player-3 text-center">
+                <div>
+                    <label class="text-2">{{alias_3}}</label>
+                </div>
+                <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                <div class="div-extras-down">
+                    <div id="protection-3" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-3" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+            </div>
+            <div id="div-player-2" class="div-player-2 text-center">
+                <div>
+                    <label class="text-2">{{alias_2}}</label>
+                </div>
+                <img src="../../images/back-card.jpg" style="width: 90px">
+                <div class="div-extras-down">
+                    <div id="protection-2" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-2" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+            </div>
+            <div id="div-player-4" class="div-player-4 text-center">
+                <div>
+                    <label class="text-2">{{alias_4}}</label>
+                </div>
+                <img src="../../images/back-card.jpg" style="width: 90px">
+                <div class="div-extras-down">
+                    <div id="protection-4" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-4" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-cards-row-2">
+            <div id="tiradas" class="thrown-cards">
+                <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
+            </div>
+            <div class="mallet-cards">
+                <img src="../../images/mallet_5.png" style="width: 90px">
+                <label class="text-1 fs-4">15</label>
+            </div>
+        </div>
+        <div class="container-cards-row-3">
+            <div id="div-player-5" class="div-player-5 text-center">
+                <div class="div-extras-up">
+                    <div id="protection-5" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-5" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+                <img src="../../images/back-card.jpg" style="width: 90px">
+                <div>
+                    <label class="text-2">{{alias_5}}</label>
+                </div>
+            </div>
+            <div id="div-player-1" class="div-player-1 text-center">
+                <div>
+                    <div id="protection-1" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-1" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+                <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
+                <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
+                <div>
+                    <label class="text-2">{{alias_1}}</label>
+                </div>
+            </div>
+            <div id="div-player-6" class="div-player-6 text-center">
+                <div class="div-extras-up">
+                    <div id="protection-6" style="display: none">
+                        <img class="" src="../../images/protection.png">
+                    </div>
+                    <div id="spy-6" style="display: none">
+                        <img class="" src="../../images/spy.png">
+                    </div>
+                </div>
+                <img src="../../images/back-card.jpg" style="width: 90px">
+                <div>
+                    <label class="text-2">{{alias_6}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-frame">
+        <div>
+            <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
+        </div>
+        <div>
+            <label class="text-2 fs-4">Última tirada:</label>
+            <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
+        </div>
+        <div >
+            <label class="text-2 d-block fs-4">Puntos:</label>
+            <label class="text-2 d-block fs-5">Jake 2</label>
+            <label class="text-2 d-block fs-5">Hector 2</label>
+            <label class="text-2 d-block fs-5">David 1</label>
+        </div> 
+        <div>
+            <label class="text-2 fs-4">Puntos para victoria: 5</label>
+        </div>
+        <div>
+            <button class="exit-board" @click="$router.push('/home')">Salir</button>
+        </div>      
+    </div>
     <div v-if="loadingData" class="pantalla-carga">
         <span><p>Cargando...</p></span>
     </div>
@@ -24,11 +146,11 @@
             Robar carta
         </button>
 
-        <!--        <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">-->
-        <!--            <button class="mx-auto" @click="stealCard(this.idGame)">-->
-        <!--                Robar card-->
-        <!--            </button>-->
-        <!--        </div>-->
+            <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">
+                   <button class="mx-auto" @click="stealCard(this.idGame)">
+                       Robar card
+                   </button>
+            </div>
     </div>
 </template>
 
@@ -134,6 +256,77 @@ export default {
 
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
+
+                    let arrayPosicones = [5,3,2,4,6]
+
+                    this.players[0] = this.game.players[this.idUser];
+                    let player = this.game.players[this.idUser].playerNum;
+                    let i;
+                    let a = 1;
+                    let b = 0;
+                    for (let i = 0; i < (array.length -1); i++) {
+                        b = player + a
+                        if(b > 6){
+                            b = 1;
+                        }
+                        for(let j = 0; j < arrayPosicones.length; j++){
+                            if(totalJugadores >= arrayPosicones[j]){
+                                this.players[arrayPosicones[i]] = this.game.playerNum[b];
+                            }
+                        }
+                        
+                        
+                        /*if(i == 0){
+                            this.players[5] = this.game.playerNum[b]
+                        }else if(i == 1){
+                            this.players[3] = this.game.playerNum[b]
+                        }else if(i == 2){
+                            this.players[2] = this.game.playerNum[b]
+                        }else if(i == 3){
+                            this.players[4] = this.game.playerNum[b]
+                        }else if(i == 4){
+                            this.players[6] = this.game.playerNum[b]
+                        }*/
+                        
+                        a++;
+                    }
+                    /*
+                    
+let playerUser = 3;
+let arrayPosicones = [4,2,1,3,5];
+let jugadores = [1,2,3,4];
+let players = [];
+
+players[0] = playerUser;
+let a = 1;
+let b = 0;
+let d = 0;
+let z = 0;
+
+for (let i = 0; i < (jugadores.length -1); i++) {
+  b = playerUser + a
+  if(b > jugadores.length){
+    d++;
+    b = d;    
+  }  
+  for(let j = z; j < arrayPosicones.length; j++){  
+    if((jugadores.length-1) >= arrayPosicones[j]){
+      players[arrayPosicones[j]] = b;
+      z = j+1;
+      break;
+    }    
+  }                     
+  a++;
+}
+
+console.log(players[0])
+console.log(players[1])
+console.log(players[2])
+console.log(players[3])
+console.log(players[4])
+console.log(players[5])   
+
+                    */
 
                     this.loadingData = false;
 

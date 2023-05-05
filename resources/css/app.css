@@ -244,7 +244,7 @@ button:hover, button:focus{
 
 /*Board*/
 .board{
-    background-image: url(../images/woodBackground.jpg);
+    background-image: url(../images/woodBackground4.jpg);
     background-repeat: no-repeat;
     width: 1365px;
     height: 656px;
@@ -512,4 +512,9 @@ button:hover, button:focus{
 .pantalla-carga span{
     color: white;
     font-size: 40px;
+}
+
+.allCards:hover, allCards:focus{
+    border: wheat solid 3px;
+    cursor: pointer;
 }
