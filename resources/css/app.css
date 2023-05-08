@@ -21,21 +21,21 @@
 }
 
 /**background principal**/
-body{
+/*body{
     background-color: #6b2d35;
-}
+}*/
 
-.background{
-    /* max-width: 1370px; */
-    /*min-height: 1007px;*/
-    /*max-height: 1080px;*/
-    /*height: 100vh;*/
-    /* height: 945px; */
-    max-width: 1355px;
+.container{
+    max-width: 1260px;
     padding: 0px;
     margin: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 /*Marker*/
 .marker{
     position: fixed;
@@ -66,10 +66,10 @@ body{
 .shield{
     background: transparent;
     border: none;
-    box-shadow: none;  
+    box-shadow: none;
 }
 .shield:hover, shield:focus{
-    box-shadow: none; 
+    box-shadow: none;
 }
 .shield_yes{
     background-image: url("../images/shield7.png");
@@ -99,7 +99,14 @@ body{
 .bg-image1{
     background-image: url("../images/parchment3.png");
     background-repeat: no-repeat;
-    margin-left: 50px;
+    width: 100%;
+}
+
+.bg-color1{
+    background-color: #6b2d35;
+}
+.bg-color2{
+    background-color: #fadf99;
 }
 
 /*Login and register*/
@@ -149,7 +156,7 @@ body{
 }
 
 .fondo{
-    background-image: url(../images/parchment.png);
+    background-image: url('../images/parchment.png');
 }
 
 .logo{
