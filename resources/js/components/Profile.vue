@@ -1,38 +1,40 @@
 <template>
-    <div class="text-center mt-lg-5">
-        <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>        
-    </div>
-    <div class="divReturn">
-        <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
-        <h1 class="text-1 title-profile">Perfil</h1>
-    </div>
-    <div class="mx-auto mt-lg-5 text-center" style="width: 80%">
-        <div class="text-center d-inline-block">
-            <form @submit.prevent="findAlias()">
-                <div class="d-inline-block">
-                    <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Alias: </label>
-                    <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Email: </label>
-                    <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Contraseña: </label>
-                    <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Nombre: </label>
-                    <label class="d-block text-1 fs-3 my-lg-4 me-lg-4">Apellidos: </label>
-                </div>
-                <div class="d-inline-block">                    
-                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="alias" v-model="alias" required>
-                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="email" v-model="email" required>
-                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="password" id="password" v-model="password">
-                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="name" v-model="name">
-                    <input class="d-block styleInput mx-lg-3 my-lg-3" type="text" id="surnames" v-model="surnames">
-                </div>
-                <div v-if="aliasEmailBusy == 1">
-                    <label class="text-danger text-1 fs-3">Este {{aliasEmail}} ya está en uso, introduce otro.</label>
-                </div>
-                <div class="mt-lg-4">
-                    <button type="submit" class="return mx-lg-4">Actualizar</button>
-                </div>
-            </form>
+    <div class="bg-image1"> 
+        <div class="text-center mt-lg-2">
+            <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>        
         </div>
-        <div class="d-inline-block div-king">
-            <img class="" src="../../images/king.png">
+        <div class="divReturn">
+            <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
+            <h1 class="text-1 title-profile">Perfil</h1>
+        </div>
+        <div class="mx-auto mt-lg-5 text-center" style="width: 75%; padding-bottom: 6rem;">
+            <div class="text-center d-inline-block">
+                <form @submit.prevent="findAlias()">
+                    <div class="d-inline-block">
+                        <label class="d-block text-1 fs-4 my-lg-3 me-lg-4">Alias: </label>
+                        <label class="d-block text-1 fs-4 my-lg-3 me-lg-4">Email: </label>
+                        <label class="d-block text-1 fs-4 my-lg-3 me-lg-4">Contraseña: </label>
+                        <label class="d-block text-1 fs-4 my-lg-3 me-lg-4">Nombre: </label>
+                        <label class="d-block text-1 fs-4 my-lg-3 me-lg-4">Apellidos: </label>
+                    </div>
+                    <div class="d-inline-block">                    
+                        <input class="d-block styleInput mx-lg-3" type="text" id="alias" v-model="alias" required>
+                        <input class="d-block styleInput mx-lg-3" type="text" id="email" v-model="email" required>
+                        <input class="d-block styleInput mx-lg-3" type="password" id="password" v-model="password">
+                        <input class="d-block styleInput mx-lg-3" type="text" id="name" v-model="name">
+                        <input class="d-block styleInput mx-lg-3" type="text" id="surnames" v-model="surnames">
+                    </div>
+                    <div v-if="aliasEmailBusy == 1">
+                        <label class="text-danger text-1 fs-3">Este {{aliasEmail}} ya está en uso, introduce otro.</label>
+                    </div>
+                    <div class="mt-lg-4">
+                        <button type="submit" class="return mx-lg-4">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="d-inline-block div-king">
+                <img class="" src="../../images/king.png">
+            </div>
         </div>
     </div>
 </template>
@@ -47,7 +49,7 @@ export default {
             name: "",
             surnames: "",
             aliasEmailBusy: 0,
-            aliasEmail: ""
+            aliasEmail: "",
         }
     },
     mounted(){

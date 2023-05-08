@@ -26,11 +26,14 @@ body{
 }
 
 .background{
-    max-width: 1300px;
+    /* max-width: 1370px; */
     /*min-height: 1007px;*/
     /*max-height: 1080px;*/
     /*height: 100vh;*/
-    height: 945px;
+    /* height: 945px; */
+    max-width: 1355px;
+    padding: 0px;
+    margin: 0px;
 }
 
 /*Marker*/
@@ -63,10 +66,19 @@ body{
 .shield{
     background: transparent;
     border: none;
-    box-shadow: none;
+    box-shadow: none;  
 }
 .shield:hover, shield:focus{
-    box-shadow: none;
+    box-shadow: none; 
+}
+.shield_yes{
+    background-image: url("../images/shield7.png");
+    width: 35px;
+    height: 44px;
+    cursor: pointer;
+}
+.shield_yes:hover{
+    background-image: url("../images/shield3.png");
 }
 .markerLabel{
     position: relative;
@@ -85,8 +97,9 @@ body{
 
 /**backgrounds**/
 .bg-image1{
-    background-image: url("../images/parchment.png");
+    background-image: url("../images/parchment3.png");
     background-repeat: no-repeat;
+    margin-left: 50px;
 }
 
 /*Login and register*/
@@ -140,8 +153,8 @@ body{
 }
 
 .logo{
-    width: 100px;
-    margin-top: 4rem;
+    width: 85px;
+    margin-top: 2rem;
 }
 
 /* buttons */
@@ -158,17 +171,17 @@ button:hover, button:focus{
     cursor: pointer;
 }
 .button_jugar{
-    width: 220px;
-    font-size: 2.3rem;
+    width: 175px;
+    font-size: 1.6rem;
     padding-top: 5px;
     padding-bottom: 5px;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
 }
 .button_menu{
-    width: 170px;
-    font-size: 1.6rem;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    width: 145px;
+    font-size: 1.3rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .button_secondary{
     background-color: #5e2235;
@@ -185,29 +198,30 @@ button:hover, button:focus{
 
 /*HOME*/
 .guardia{
-    width: 300px;
+    width: 200px;
 }
 
 /*AMIGOS*/
 .return{
     margin-left: 8rem;
-    width: 150px;
-    font-size: 1.5rem;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    width: 125px;
+    font-size: 1.2rem;
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 .titleFriend{
-    font-size: 2.5rem;
+    font-size: 2.2rem;
 }
 .styleInput{
     width: 200px;
-    height: 50px;
+    height: 47px;
     font-family: vinque;
     font-size: 1.5rem;
     background: transparent;
     border-top: none;
     border-left: none;
     border-right: none;
+    margin-top: 7px;
 }
 /*.button_buscarAmigos{
     width: 170px;
@@ -222,8 +236,8 @@ button:hover, button:focus{
     padding-bottom: 9px;
 }
 .divReturn{
-    width: 100%;
-    margin-bottom: 6rem;
+    /* width: 100%;
+    margin-bottom: 6rem; */
 }
 .myFriends{
     width: 65%;
@@ -231,24 +245,25 @@ button:hover, button:focus{
     margin-right: 50px;
 }
 .searchFriend{
-    margin-top: 6rem;
+    margin-top: 3rem;
 }
 .buttonClose{
-    background-color: #5e2235;
+    /* background-color: #5e2235;
     font-family: vinque;
     border-radius: 15px;
     border: 2px solid #e3c99e;
     color: white;
-    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px;
+    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px; */
 }
 
 /*Board*/
 .board{
-    background-image: url(../images/woodBackground.jpg);
+    background-image: url(../images/woodBackground4.jpg);
     background-repeat: no-repeat;
-    width: 1365px;
-    height: 656px;
-    max-width: 1347px;
+    width: 1366px;
+    height: 768px;
+    max-width: 1370px;
+    max-height: 770px;
 }
 .container-cards{
     /*max-width: 1360px;*/
@@ -285,10 +300,6 @@ button:hover, button:focus{
     margin-left: 25px;
     color: wheat;
     margin-top: 20px;
-}
-.exit-board{
-    width: 90px;
-    color: wheat;
 }
 
 .div-player-3{
@@ -353,14 +364,14 @@ button:hover, button:focus{
 .div-player-1{
     position: absolute;
     top: 380px;
-    left: 240px;
-    width: 350px;
-    margin-left: 80px;
-    padding-bottom: 95px;
+    left: 250px;
+    width: 505px;
+    /* margin-left: 80px; */
+    /* padding-bottom: 95px; */
 }
 .div-player-1 > div{
     display: block;
-    width: 350px;
+    width: 505px;
     height: 47px;
     margin-bottom: 10px;
 }
@@ -438,63 +449,19 @@ button:hover, button:focus{
     position: absolute;
     transform: rotate(-7deg);
 }
-/*.col4{
-    width: 200px;
-    height: 150px;
-}
-.div-tercero{
-    padding-bottom: 55px;
-}
-.card-jugador-4{
-    position: relative;
-    top: 42px;
-    left: 150px;
-    display: inline-block;
-    width: 100px;
-}
-.card-jugador-4 > img{
-    transform: rotate(27deg);
-}
-.card-jugador-5{
-    position: relative;
-    top: 50px;
-    left: 140px;
-    width: 350px;
-    display: inline-block;
-    text-align: center;
-    margin-left: 80px;
-    padding-bottom: 95px;
-}
-.card-jugador-6{
-    position: relative;
-    display: inline-block;
-    top: 35px;
-    left: 214px;
-    padding-bottom: 95px;
-}
-.card-jugador-6 > img{
-    transform: rotate(328deg);
-}
-.tablero-datos{
-    width: 280px;
-    height: 600px;
-    position: absolute;
-    left: 1050px;
-    top: 20px;
-}*/
 
 /* PERFIL */
 .title-profile{
     display: inline-block;
     float: right;
-    margin-right: 260px;
-    font-size: 3.5rem;
+    margin-right: 250px;
+    font-size: 2.9rem;
 }
 .div-king{
     float: right;
 }
 .div-king > img{
-    width: 370px;
+    width: 280px;
 }
 
 /*PANTALLA DE CARGA*/
@@ -512,4 +479,34 @@ button:hover, button:focus{
 .pantalla-carga span{
     color: white;
     font-size: 40px;
+}
+
+.container-cards > div > div > img{
+    border-radius: 10px;
+}
+.container-cards > div > div > img:hover{
+    border: wheat solid 3px;
+    cursor: pointer;
+}
+.myCards > img{
+    border-radius: 10px;
+}
+.myCards > img:hover, .myCards > img:focus{
+    border: wheat solid 3px;
+    cursor: pointer;
+    width: 300px;
+    height: 200px;
+}
+.board_buttons{
+    position: absolute;
+    top: 10px;
+    left: 1170px;
+}
+.board_buttons > button{
+    width: 35px;
+    border-radius: 12px;
+}
+.end_board:hover{
+    background-color: black;
+    color: red;
 }

@@ -16,13 +16,13 @@
 <!--            </div>-->
 <!--        </nav>-->
 <!--    </div>-->
-    <div class="board container" v-if="ruta == 'http://127.0.0.1:8000/board'">
-        <router-view></router-view>
+    <!-- <div class="board container" v-if="ruta == 'http://127.0.0.1:8000/board'">
+        <router-view></router-view><img style="width: 35px" src="../images/shield_yes.png">
     </div>
-    <div v-else>
-    <div class="container background bg-image1" v-if="isLoggedin">
-        <div class="marker">
-            <div id="markerContent" style="display: none">
+    <div v-else> -->
+    <div class="container background" v-if="isLoggedin">
+        <div v-if="ruta != 'http://127.0.0.1:8000/board'" class="marker" v-on:mouseover="mouseOver">
+            <div id="markerContent" v-on:mouseover="mouseOver" style="display: none">
                 <div class="text-center">
                     <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield_yes.png"></button>
+                            <button class="shield d-inline px-3" type="submit"><div class="shield_yes"></div></button>                            
                         </form>
                         <form class="d-inline mx-2" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline px-3" type="submit"><img style="width: 35px" src="../images/shield_no.png"></button>
@@ -48,7 +48,7 @@
     <div class="container background" v-if="isLoggedin == false">
         <router-view></router-view>
     </div>
-    </div>
+    <!-- </div> -->
 </template>
 <script>
 import Echo from 'laravel-echo';
@@ -64,7 +64,8 @@ export default {
             requestAlias: "",
             requestId: "",
             solicitud: "",
-            ruta: ""
+            ruta: "",
+            active: false,
         }
     },
     created() {
@@ -72,8 +73,8 @@ export default {
             this.isLoggedin =true;
         }
     },
-    mounted(){
-        //this.ruta = this.$route.path
+    mounted(){       
+        //this.ruta = this.$route.path      http://127.0.0.1:8000/games/join
         this.ruta = window.location.href
 
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -96,6 +97,14 @@ export default {
 
     },
     methods: {
+        mouseOver: function() {
+        this.active = !this.active;
+        if(this.active == true){
+            document.getElementById('markerContent').style.display = 'block';
+        }else{
+            document.getElementById('markerContent').style.display = 'none';
+        }
+        },
         logout(e) {
             e.preventDefault()
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
