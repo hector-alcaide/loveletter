@@ -118,8 +118,9 @@
 }
 
 .auth-background {
-    width: 860px;
-    height: 700px;
+    /*background-color: red;*/
+    width: 740px;
+    height: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -128,12 +129,12 @@
 
 .auth-formdiv{
     /*background-color: blue;*/
-    /*opacity: 50%;*/
-    width: 365px;
+    /*opacity: 80%;*/
+    width: 330px;
     height: 200px;
     position: relative;
-    top: 199px;
-    left: -123px;
+    top: 135px;
+    left: -115px;
 }
 
 .auth-formdiv input{
@@ -152,7 +153,11 @@
 }
 
 #login-div{
-    background-image: url("../images/login_page.png");
+    background-image: url("../images/login_background.png");
+}
+
+#register-div{
+    background-image: url("../images/register_background.png");
 }
 
 .fondo{

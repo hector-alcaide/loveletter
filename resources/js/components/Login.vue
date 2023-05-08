@@ -3,7 +3,7 @@
         <div class="auth-background" id="login-div">
             <div class="auth-formdiv">
                 <form class="auth-form">
-                    <div class="row ps-5 pe-4 pt-2 mb-3">
+                    <div class="row ps-5 pe-4 pt-2 mb-2">
                         <div class="col-md-12 ps-5 pe-3">
                             <input id="alias" type="text" class="form-control" v-model="alias" required autofocus autocomplete="off" placeholder="Alias">
                         </div>
@@ -13,13 +13,13 @@
                             <input id="password" type="password" class="form-control" v-model="password" required autocomplete="off" placeholder="Contraseña">
                         </div>
                     </div>
-                    <div class="row mt-3 pe-4">
-                        <div class="col-md-8">
+                    <div class="row mt-3 pt-1 ps-1 pe-4">
+                        <div class="col-md-5">
                             <button type="submit" class="button_form mx-auto" @click="doLogin">
                                 Iniciar sesión
                             </button>
                         </div>
-                        <div class="col-md-4 ps-1">
+                        <div class="col-md-5">
                             <button type="button" class="button_form button_secondary" @click="$router.push('/register')">
                                 Registrarse
                             </button>
