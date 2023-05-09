@@ -1,8 +1,8 @@
 <template>
     <div class="auth-div">
         <div class="auth-background" id="login-div">
-            <div class="auth-formdiv">
-                <form class="auth-form">
+            <div class="login-formdiv">
+                <form>
                     <div class="row ps-5 pe-4 pt-2 mb-2">
                         <div class="col-md-12 ps-5 pe-3">
                             <input id="alias" type="text" class="form-control" v-model="alias" required autofocus autocomplete="off" placeholder="Alias">
