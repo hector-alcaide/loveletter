@@ -123,17 +123,12 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
-                    <span v-if="hand">
                         <span v-for="idCard in hand">
-
-                        <p>{{idCard}}</p>
-                        <p>{{game.deckReference[idCard]}}</p>
                             <img class="mx-2" :src="game.deckReference[idCard].image" style="width: 90px">
                             <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
                                 Jugar carta
                             </button>
                         </span>
-                    </span>
                     <div>
                         <label class="text-2">{{players[0].alias}}</label>
                     </div>
