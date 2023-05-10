@@ -60,25 +60,41 @@ body{
     color: #e3c99e;
     cursor: pointer;
 }
+.logout:hover, logout:focus{
+    text-shadow: 2px -1px 20px black;
+    text-decoration: underline;
+}
 .requestFriend > div > label{
     color: #e3c99e;
 }
 .shield{
     background: transparent;
     border: none;
-    box-shadow: none;  
+    box-shadow: none;
+    width: 45px; 
 }
 .shield:hover, shield:focus{
     box-shadow: none; 
 }
 .shield_yes{
-    background-image: url("../images/shield7.png");
+    background-image: url("../images/shield_yes_1.png");
+    background-repeat: no-repeat;
     width: 35px;
-    height: 44px;
+    height: 45px;
     cursor: pointer;
 }
 .shield_yes:hover{
-    background-image: url("../images/shield3.png");
+    background-image: url("../images/shield_yes_2.png");
+}
+.shield_no{
+    background-image: url("../images/shield_no_1.png");
+    background-repeat: no-repeat;
+    width: 35px;
+    height: 45px;
+    cursor: pointer;
+}
+.shield_no:hover{
+    background-image: url("../images/shield_no_2.png");
 }
 .markerLabel{
     position: relative;
@@ -288,7 +304,7 @@ button:hover, button:focus{
     margin-left: 25px;
     text-shadow: 2px -1px 3px black;
     float: right;
-    margin-top: 50px;
+    margin-top: 55px;
     margin-right: 15px;
     /* background-color: #191313;
     border-radius: 20px; */
@@ -364,16 +380,19 @@ button:hover, button:focus{
 .div-player-1{
     position: absolute;
     top: 380px;
-    left: 250px;
-    width: 505px;
+    /* left: 250px;
+    width: 505px; */
+    left: 208px;
+    width: 590px;
     /* margin-left: 80px; */
     /* padding-bottom: 95px; */
 }
 .div-player-1 > div{
     display: block;
-    width: 505px;
+    /* width: 505px; */
+    width: 590px;
     height: 47px;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 .div-player-1 > div > div{
     display: inline-block;
@@ -488,14 +507,22 @@ button:hover, button:focus{
     border: wheat solid 3px;
     cursor: pointer;
 }
+/* .myCards{
+    height: 240px;
+} */
 .myCards > img{
     border-radius: 10px;
+    width: 150px;
+    margin-top: 50px;
 }
 .myCards > img:hover, .myCards > img:focus{
     border: wheat solid 3px;
     cursor: pointer;
-    width: 300px;
-    height: 200px;
+    /* width: 300px;
+    height: 200px; */
+    margin-top: 0px;    
+    /* width: 240px;     */
+    z-index: 2 !important;
 }
 .board_buttons{
     position: absolute;

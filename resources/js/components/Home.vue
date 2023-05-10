@@ -16,7 +16,6 @@
             <div class="d-inline-block ms-lg-5">
                 <img class="guardia" src="../../images/right_guard.png">
             </div>
-            <div class="shield_yes"></div>
         </div>
     </div>
 

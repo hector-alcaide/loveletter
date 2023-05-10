@@ -6,7 +6,7 @@
                     <label class="text-2">{{alias_3}}</label>
                 </div>
                 <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
                 <div class="div-extras-down">
                     <div id="protection-3" style="display: none">
                         <img class="" src="../../images/protection.png">
@@ -78,8 +78,8 @@
                         <img class="" src="../../images/spy.png">
                     </div>
                 </div>
-                <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
-                <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
+                <img class="mx-2" src="../../images/cards/card2.jpg" style="width: 90px">
+                <img class="mx-2" src="../../images/cards/card3.jpg" style="width: 90px">
                 <div>
                     <label class="text-2">{{alias_1}}</label>
                 </div>
