@@ -1,47 +1,47 @@
 <template>
-    <div class="marker" v-on:mouseover="mouseOver">
-        <div id="markerContent" v-on:mouseover="mouseOver" style="display: none">
-            <div class="text-center">
-                <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+    <div class="container">
+        <div class="marker" v-on:mouseover="mouseOver">
+            <div id="markerContent" v-on:mouseover="mouseOver" style="display: none">
+                <div class="text-center">
+                    <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+                </div>
+                <div class="requestFriend" v-if="requestAlias !== ''">
+                    <div class="text-center my-lg-3" v-for="item in arrayRequests">
+                        <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                        <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
+                        </form>
+                        <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="requestFriend" v-if="requestAlias !== ''">
-                <div class="text-center my-lg-3" v-for="item in arrayRequests">
-                    <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
-                    <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                        <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
-                    </form>
-                    <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
-                        <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
-                    </form>
+            <div class="markerLabel">
+                <img @click="marker" src="../../images/marker.png">
+                <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
+            </div>
+        </div>    
+        <div class="bg-image1">
+            <div class="text-center">
+                <img class="logo" src="../../images/logo.png">
+            </div>
+            <div class="text-center mt-lg-4">
+                <div class="d-inline-block me-lg-5" style="padding-bottom: 8rem;">
+                    <img class="guardia" src="../../images/left_guard.png">
+                </div>
+                <div class="d-inline-block align-middle text-center mt-lg-3 pb-lg-5 mx-lg-5">
+                    <button class="button_jugar d-block mx-auto mt-lg-5" @click="$router.push('/games')">Jugar</button>
+                    <button class="button_menu d-block mx-auto mt-lg-5 mb -lg-4" @click="$router.push('/profile')">Perfil</button>
+                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/friends')">Amigos</button>
+                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/board')">Ranking</button>
+                </div>
+                <div class="d-inline-block ms-lg-5">
+                    <img class="guardia" src="../../images/right_guard.png">
                 </div>
             </div>
         </div>
-        <div class="markerLabel">
-            <img @click="marker" src="../../images/marker.png">
-            <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
-        </div>
     </div>
-    <div class="bg-image1">    
-        <div class="text-center mt-lg-2">
-            <img class="logo" src="../../images/logo.png">
-        </div>
-        <div class="text-center mt-lg-4">
-            <div class="d-inline-block me-lg-5" style="padding-bottom: 8rem;">
-                <img class="guardia" src="../../images/left_guard.png">
-            </div>
-            <div class="d-inline-block align-middle text-center mt-lg-3 pb-lg-5 mx-lg-5">
-                <button class="button_jugar d-block mx-auto mt-lg-5" @click="$router.push('/games')">Jugar</button>
-                <button class="button_menu d-block mx-auto mt-lg-5 mb -lg-4" @click="$router.push('/profile')">Perfil</button>
-                <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/friends')">Amigos</button>
-                <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/board')">Ranking</button>
-            </div>
-            <div class="d-inline-block ms-lg-5">
-                <img class="guardia" src="../../images/right_guard.png">
-            </div>
-        </div>
-    </div>
-
-
 </template>
 
 <script>
