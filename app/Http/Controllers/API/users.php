@@ -41,6 +41,8 @@ class users extends Controller
             $user->alias = $request->alias;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->name = $request->name;
+            $user->surnames = $request->surnames;
             $user->save();
 
             $success = true;
