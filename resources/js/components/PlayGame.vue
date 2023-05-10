@@ -238,11 +238,16 @@ export default {
             }),
         }
     },
-    beforeMount(){
-        this.assignGameData();
-    },
+    // beforeMount(){
+    //     this.assignGameData();
+    // },
     mounted() {
-        this.echo.join('play.game.'+this.idGame)
+        this.assignGameData().then(() => {
+            Object.values(this.game.players).forEach(res => {
+                console.log(res);
+            });
+
+            this.echo.join('play.game.'+this.idGame)
             .here((users) => {
                 this.users = users;
                 if(Object.keys(this.game.players).length == this.users.length){
@@ -280,7 +285,7 @@ export default {
         //     .listen('PrivateActionUser',(data)=>{
         //         console.log(data);
         //     });
-
+        });
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
