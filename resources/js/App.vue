@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-color1" v-if="isLoggedin">        
+    <div class="bg-color1" v-if="isLoggedin">
         <router-view></router-view>
     </div>
     <div class="bg-color2" v-if="isLoggedin == false">
@@ -21,7 +21,7 @@ export default {
             this.isLoggedin =true;
         }
     },       
-        
+       
     mounted(){
         //this.ruta = this.$route.path      http://127.0.0.1:8000/games/join
         //this.ruta = window.location.href        
