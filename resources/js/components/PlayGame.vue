@@ -191,9 +191,6 @@
                     <label class="text-2 fs-4">Puntos para victoria: 5</label>
                 </div>
             </div>
-            <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-                Robar carta
-            </button>
         </div>
     </div>
 </template>

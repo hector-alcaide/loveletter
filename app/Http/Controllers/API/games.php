@@ -209,7 +209,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-//       shuffle($deck);
+       shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
