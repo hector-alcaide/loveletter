@@ -56,7 +56,8 @@ class games extends Controller
                 'alias' => $player->alias,
                 'hand' => [],
                 'activePlayer' => true,
-                'playerNum' => ($key + 1)
+                'playerNum' => ($key + 1),
+                'roundWins' => 0,
             ];
 
             $idsPlayersByTurnNum += [
@@ -154,6 +155,24 @@ class games extends Controller
 //        return json_encode($deck);
 //    }
 
+    public function getCardsByLevel(){
+
+        $cards = [
+            0 => new Card(0, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
+            1 => new Card(1, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            2 => new Card(2, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
+            3 => new Card(3, 3, 'Barón', 'http://[::1]:5173/resources/images/cards/card3.jpg'),
+            4 => new Card(4, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
+            5 => new Card(5, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
+            6 => new Card(6, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
+            7 => new Card(7, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
+            8 => new Card(8, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
+            9 => new Card(9, 9, 'Princesa', 'http://[::1]:5173/resources/images/cards/card9.jpg'),
+        ];
+
+        return $cards;
+    }
+
     public function getAllCards(){
 
         //array de cards, deck por defecto ordenado por level, donde idCard es la key
@@ -188,7 +207,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-        shuffle($deck);
+       shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
@@ -231,9 +250,6 @@ class games extends Controller
     }
 
     public function resolvePlay(Request $request){
-
-
-
         $changeTurn = true;
 
         $game = $request->game;
@@ -255,7 +271,7 @@ class games extends Controller
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Espía.';
                 break;
             case 'Guardia':
-                if($request->cardToGuess == $rival_card){
+                if($request->levelCardToGuess == $game['deckReference'][$rival_card]['level']){
                     $player_to_remove = $request->idRival;
                     $discarded_card = $players[$player_to_remove]['hand'];
 
@@ -264,8 +280,10 @@ class games extends Controller
                     $message_result = 'Carta no adivinada.';
                 }
 
+                $cardsByLevel = $this->getCardsByLevel();
+
                 $status = 'success';
-                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Guardia sobre el jugador '.$players[$request->idRival]['alias'].'. Adivina la carta '.$game['deckReference'][$request->cardToGuess]['title'].'. ' .$message_result;
+                $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Guardia sobre el jugador '.$players[$request->idRival]['alias'].'. Adivina la carta '.$cardsByLevel[$request->levelCardToGuess]->title.'. ' .$message_result;
                 break;
             case 'Sacerdote':
                 //TODO: girar la card por js al player
@@ -326,10 +344,14 @@ class games extends Controller
                 break;
             case 'Rey':
                 //rival card
-                $players[$request->idRival]['hand'] = $player_card;
+                $players[$request->idRival]['hand'] = [
+                    $player_card
+                ];
 
                 //player card
-                $players[$idPlayer]['hand'] = $rival_card;
+                $players[$idPlayer]['hand'] = [
+                    $rival_card
+                ];
 
                 $status = 'success';
                 $message = 'El jugador '.$players[$idPlayer]['alias'].' ha jugado el rey, ha intercambiado mano con el jugador ' . $players[$request->idRival]['alias'] . '.';

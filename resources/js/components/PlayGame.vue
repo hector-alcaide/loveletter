@@ -1,286 +1,202 @@
 <template>
-    <div class="container-cards">
-        <div class="container-cards-row-1">
-            <div id="div-player-3" class="div-player-3 text-center">
-                <div>
-                    <label class="text-2">{{alias_3}}</label>
-                </div>
-                <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
-                <div class="div-extras-down">
-                    <div id="protection-3" style="display: none">
-                        <img class="" src="../../images/protection.png">
-                    </div>
-                    <div id="spy-3" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-            </div>
-            <div id="div-player-2" class="div-player-2 text-center">
-                <div>
-                    <label class="text-2">{{alias_2}}</label>
-                </div>
-                <img src="../../images/back-card.jpg" style="width: 90px">
-                <div class="div-extras-down">
-                    <div id="protection-2" style="display: none">
-                        <img class="" src="../../images/protection.png">
-                    </div>
-                    <div id="spy-2" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-            </div>
-            <div id="div-player-4" class="div-player-4 text-center">
-                <div>
-                    <label class="text-2">{{alias_4}}</label>
-                </div>
-                <img src="../../images/back-card.jpg" style="width: 90px">
-                <div class="div-extras-down">
-                    <div id="protection-4" style="display: none">
-                        <img class="" src="../../images/protection.png">
-                    </div>
-                    <div id="spy-4" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-            </div>
+    <div class="board">
+        <div v-if="loadingData" class="pantalla-carga">
+            <span><p>Cargando...</p></span>
         </div>
-        <div class="container-cards-row-2">
-            <div id="tiradas" class="thrown-cards">
-                <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
-            </div>
-            <div class="mallet-cards">
-                <img src="../../images/mallet_5.png" style="width: 90px">
-                <label class="text-1 fs-4">15</label>
-            </div>
-        </div>
-        <div class="container-cards-row-3">
-            <div id="div-player-5" class="div-player-5 text-center">
-                <div class="div-extras-up">
-                    <div id="protection-5" style="display: none">
-                        <img class="" src="../../images/protection.png">
+        <div v-if="game">
+            <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Escoge una carta</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form @submit.prevent="selectCardToGuess()">
+                            <div class="modal-body">
+                                <select id="cardToGuess" v-model="levelCardToGuess">
+                                    <option :value="card.level" v-for="card in cardsToGuess">{{card.title}}</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button class="mx-auto">
+                                    Escoger
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div id="spy-5" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-                <img src="../../images/back-card.jpg" style="width: 90px">
-                <div>
-                    <label class="text-2">{{alias_5}}</label>
-                </div>
-            </div>
-            <div id="div-player-1" class="div-player-1 text-center">
-                <div>
-                    <div id="protection-1" style="display: none">
-                        <img class="" src="../../images/protection.png">
-                    </div>
-                    <div id="spy-1" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-                <img class="mx-2" src="../../images/card2.jpg" style="width: 90px">
-                <img class="mx-2" src="../../images/card3.jpg" style="width: 90px">
-                <div>
-                    <label class="text-2">{{alias_1}}</label>
                 </div>
             </div>
-            <div id="div-player-6" class="div-player-6 text-center">
-                <div class="div-extras-up">
-                    <div id="protection-6" style="display: none">
-                        <img class="" src="../../images/protection.png">
-                    </div>
-                    <div id="spy-6" style="display: none">
-                        <img class="" src="../../images/spy.png">
-                    </div>
-                </div>
-                <img src="../../images/back-card.jpg" style="width: 90px">
-                <div>
-                    <label class="text-2">{{alias_6}}</label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-frame">
-        <div>
-            <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
-        </div>
-        <div>
-            <label class="text-2 fs-4">Última tirada:</label>
-            <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
-        </div>
-        <div >
-            <label class="text-2 d-block fs-4">Puntos:</label>
-            <label class="text-2 d-block fs-5">Jake 2</label>
-            <label class="text-2 d-block fs-5">Hector 2</label>
-            <label class="text-2 d-block fs-5">David 1</label>
-        </div> 
-        <div>
-            <label class="text-2 fs-4">Puntos para victoria: 5</label>
-        </div>
-        <div>
-            <button class="exit-board" @click="$router.push('/home')">Salir</button>
-        </div>      
-    </div>
-    <div v-if="loadingData" class="pantalla-carga">
-        <span><p>Cargando...</p></span>
-    </div>
-    <div v-if="game">
-        <div class="container-cards">
-            <div class="container-cards-row-1">
-                <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
-                    <div>
-                        <label class="text-2">{{players[2].alias}}</label>
-                    </div>
-                    <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                    <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
-                    <div class="div-extras-down">
-                        <div id="protection-3" style="display: none">
-                            <img class="" src="../../images/protection.png">
+            <div class="container-cards">
+                <div class="container-cards-row-1">
+                    <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
+                        <div>
+                            <label class="text-2">{{players[2].alias}}</label>
                         </div>
-                        <div id="spy-3" style="display: none">
-                            <img class="" src="../../images/spy.png">
+                        <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                        <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                        <div class="div-extras-down">
+                            <div id="protection-3" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-3" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
                         </div>
-                    </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
-                    </button>
-                </div>
-                <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
-                    <div>
-                        <label class="text-2">{{players[1].alias}}</label>
-                    </div>
-                    <img src="../../images/back-card.jpg" style="width: 90px">
-                    <div class="div-extras-down">
-                        <div id="protection-2" style="display: none">
-                            <img class="" src="../../images/protection.png">
-                        </div>
-                        <div id="spy-2" style="display: none">
-                            <img class="" src="../../images/spy.png">
-                        </div>
-                    </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
-                    </button>
-                </div>
-                <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
-                    <div>
-                        <label class="text-2">{{players[3].alias}}</label>
-                    </div>
-                    <img src="../../images/back-card.jpg" style="width: 90px">
-                    <div class="div-extras-down">
-                        <div id="protection-4" style="display: none">
-                            <img class="" src="../../images/protection.png">
-                        </div>
-                        <div id="spy-4" style="display: none">
-                            <img class="" src="../../images/spy.png">
-                        </div>
-                    </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
-                    </button>
-                </div>
-            </div>
-            <div class="container-cards-row-2">
-                <div id="tiradas" class="thrown-cards">
-                    <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
-                </div>
-                <div class="mallet-cards">
-                    <img src="../../images/mallet_5.png" style="width: 90px">
-                    <label class="text-1 fs-4">{{ game.deck.length }}</label>
-                    <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-                        Robar carta
-                    </button>
-                </div>
-            </div>
-            <div class="container-cards-row-3">
-                <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
-                    <div class="div-extras-up">
-                        <div id="protection-5" style="display: none">
-                            <img class="" src="../../images/protection.png">
-                        </div>
-                        <div id="spy-5" style="display: none">
-                            <img class="" src="../../images/spy.png">
-                        </div>
-                    </div>
-                    <img src="../../images/back-card.jpg" style="width: 90px">
-                    <div>
-                        <label class="text-2">{{players[4].alias}}</label>
-                    </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
-                    </button>
-                </div>
-                <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
-                    <div>
-                        <div id="protection-1" style="display: none">
-                            <img class="" src="../../images/protection.png">
-                        </div>
-                        <div id="spy-1" style="display: none">
-                            <img class="" src="../../images/spy.png">
-                        </div>
-                    </div>
-                    <span v-for="idCard in game.players[idUser].hand">
-                        <span v-if="idCard">
-                        <img class="mx-2" :src="game.deckReference[idCard].image" style="width: 90px">
-                        <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
-                            Jugar carta
+                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
                         </button>
-                            </span>
-                    </span>
-                    <div>
-                        <label class="text-2">{{players[0].alias}}</label>
+                    </div>
+                    <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
+                        <div>
+                            <label class="text-2">{{players[1].alias}}</label>
+                        </div>
+                        <img v-if="players[1].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
+                        <div class="div-extras-down">
+                            <div id="protection-2" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-2" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
+                        </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
+                        </button>
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
+                            Elegir este jugador
+                        </button>
+                    </div>
+                    <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
+                        <div>
+                            <label class="text-2">{{players[3].alias}}</label>
+                        </div>
+                        <img src="../../images/back-card.jpg" style="width: 90px">
+                        <div class="div-extras-down">
+                            <div id="protection-4" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-4" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
+                        </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
+                        </button>
                     </div>
                 </div>
-                <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
-                    <div class="div-extras-up">
-                        <div id="protection-6" style="display: none">
-                            <img class="" src="../../images/protection.png">
-                        </div>
-                        <div id="spy-6" style="display: none">
-                            <img class="" src="../../images/spy.png">
-                        </div>
+                <div class="container-cards-row-2">
+                    <div id="tiradas" class="thrown-cards">
+                        <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
                     </div>
-                    <img src="../../images/back-card.jpg" style="width: 90px">
-                    <div>
-                        <label class="text-2">{{players[5].alias}}</label>
+                    <div class="mallet-cards">
+                        <img v-if="game.deck.length >= 15" src="../../images/mallet_5.png" style="width: 90px">
+                        <img v-if="game.deck.length < 15 && game.deck.length >= 12" src="../../images/mallet_4.png" style="width: 90px">
+                        <img v-if="game.deck.length < 12 && game.deck.length >= 8" src="../../images/mallet_3.png" style="width: 90px">
+                        <img v-if="game.deck.length < 8 && game.deck.length >= 4" src="../../images/mallet_2.png" style="width: 90px">
+                        <img v-if="game.deck.length < 4" src="../../images/mallet_1.png" style="width: 90px">
+                        <label class="text-1 fs-4">{{ game.deck.length }}</label>
+                        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
+                            Robar carta
+                        </button>
                     </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
+                </div>
+                <div class="container-cards-row-3">
+                    <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
+                        <div class="div-extras-up">
+                            <div id="protection-5" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-5" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
+                        </div>
+                        <img v-if="players[4].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
+                        <div :style="players[4].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[4].alias}}</label>
+                        </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
+                        </button>
+                    </div>
+                    <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
+                        <div>
+                            <div id="protection-1" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-1" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
+                        </div>
+                            <div v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
+                                <img class="mx-2" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                                <!-- <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
+                                    Jugar carta
+                                </button> -->
+                            </div>
+                        <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[0].alias}}</label>
+                        </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[0].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
+                        </button>
+                    </div>
+                    <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
+                        <div class="div-extras-up">
+                            <div id="protection-6" style="display: none">
+                                <img class="" src="../../images/protection.png">
+                            </div>
+                            <div id="spy-6" style="display: none">
+                                <img class="" src="../../images/spy.png">
+                            </div>
+                        </div>
+                        <img v-if="players[5].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
+                        <div :style="players[5].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[5].alias}}</label>
+                        </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
+                            Elegir este jugador
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="board_buttons">
+                <button class="mx-lg-3" onclick="window.open('https://www.baobablibros.es/archivos/love-letter-reglas-del-juego.pdf')">?</button>
+                <button class="mx-lg-3 end_board" @click="$router.push('/home')">X</button>
+            </div>
+            <div class="container-frame">
+                <div>
+                    <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
+                </div>
+                <div>
+                    <label class="text-2 fs-4">Última tirada:</label>
+                    <label class="text-2">{{ message }}</label>
+                </div>
+                <div>
+                    <label class="text-2 d-block fs-4">Puntos:</label>
+                    <div v-for="item in game.players">
+                        <label class="text-2 d-block fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                    </div>
+                    <!-- <label class="text-2 d-block fs-4">Puntos:</label>
+                    <label class="text-2 d-block fs-5">Jake 2</label>
+                    <label class="text-2 d-block fs-5">Hector 2</label>
+                    <label class="text-2 d-block fs-5">David 1</label> -->
+                </div>
+                <div>
+                    <label class="text-2 fs-4">Puntos para victoria: 5</label>
+                </div>
+            </div>
+            <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
+                Robar carta
+            </button>
+
+                <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">
+                    <button class="mx-auto" @click="stealCard(this.idGame)">
+                        Robar card
                     </button>
                 </div>
-            </div>
-        </div>
-        <div class="container-frame">
-            <div>
-                <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
-            </div>
-            <div>
-                <label class="text-2 fs-4">Última tirada:</label>
-                <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
-            </div>
-            <div>
-                <label class="text-2 d-block fs-4">Puntos:</label>
-                <label class="text-2 d-block fs-5">Jake 2</label>
-                <label class="text-2 d-block fs-5">Hector 2</label>
-                <label class="text-2 d-block fs-5">David 1</label>
-            </div>
-            <div>
-                <label class="text-2 fs-4">Puntos para victoria: 5</label>
-            </div>
-            <div>
-                <button class="exit-board" @click="$router.push('/home')">Salir</button>
-            </div>
-        </div>
-        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-            Robar carta
-        </button>
 
-            <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">
-                   <button class="mx-auto" @click="stealCard(this.idGame)">
-                       Robar card
-                   </button>
-            </div>
-
+        </div>
     </div>
 </template>
 
@@ -295,28 +211,35 @@ export default {
             idUser: window.Laravel.user.idUser,
             game: null,
             players: [],
+            hand: null,
             users: [],
             allowSteal: false,
             allowPlayCard: false,
             // cardOnPlayer: false,
             playedCard: null,
+            message: "",
+            turn: "",
             typesCardResolution : {
                 'direct': 'default',
                 'onPlayer': false,
-                'onPlayerOnCard': false,
+                'onRival': false,
+                'onRivalOnCard': false,            
             },
             cardsResolution: {
                 '0': 'direct',
-                '1': 'onPlayerOnCard',
-                '2': 'onPlayer',
-                '3': 'onPlayer',
+                '1': 'onRivalOnCard',
+                '2': 'onRival',
+                '3': 'onRival',
                 '4': 'direct',
                 '5': 'onPlayer',
                 '6': 'direct',
-                '7': 'onPlayer',
+                '7': 'onRival',
                 '8': 'direct',
                 '9': 'direct',
             },
+            cardsToGuess: [],
+            idRival_GuessCard: null,
+            levelCardToGuess: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -328,11 +251,17 @@ export default {
             }),
         }
     },
-    beforeMount(){
-        this.assignGameData();
-    },
+    // beforeMount(){
+    //     this.assignGameData();
+    // },
     mounted() {
-        this.echo.join('play.game.'+this.idGame)
+        this.assignGameData().then(() => {
+            console.log("Mirando muerte.")
+            Object.values(this.game.players).forEach(res => {
+                console.log(res.activePlayer);
+            });
+
+            this.echo.join('play.game.'+this.idGame)
             .here((users) => {
                 this.users = users;
                 if(Object.keys(this.game.players).length == this.users.length){
@@ -362,6 +291,7 @@ export default {
             .listen('PublicActionUser',(data)=>{
                 console.log(data);
                 this.assignGameData().then(() => {
+                    this.message = data.message;                    
                     this.playTurn();
                 });
             });
@@ -370,7 +300,7 @@ export default {
         //     .listen('PrivateActionUser',(data)=>{
         //         console.log(data);
         //     });
-
+        });
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
@@ -387,44 +317,7 @@ export default {
 
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
-
-                    /*
-                    
-let playerUser = 3;
-let arrayPosicones = [4,2,1,3,5];
-let jugadores = [1,2,3,4];
-let players = [];
-
-players[0] = playerUser;
-let a = 1;
-let b = 0;
-let d = 0;
-let z = 0;
-
-for (let i = 0; i < (jugadores.length -1); i++) {
-  b = playerUser + a
-  if(b > jugadores.length){
-    d++;
-    b = d;    
-  }  
-  for(let j = z; j < arrayPosicones.length; j++){  
-    if((jugadores.length-1) >= arrayPosicones[j]){
-      players[arrayPosicones[j]] = b;
-      z = j+1;
-      break;
-    }    
-  }                     
-  a++;
-}
-
-console.log(players[0])
-console.log(players[1])
-console.log(players[2])
-console.log(players[3])
-console.log(players[4])
-console.log(players[5])   
-
-                    */
+                    this.hand = this.game.players[this.idUser].hand;
 
                     let arrayPositions = [4,2,1,3,5];
                     let playersLength = Object.keys(this.game.players).length;
@@ -455,6 +348,18 @@ console.log(players[5])
                     a++;
                     }
 
+                    this.cardsToGuess = [
+                        {level: '0', title: 'Espía'},
+                        {level: '2', title: 'Sacerdote'},
+                        {level: '3', title: 'Barón'},
+                        {level: '4', title: 'Doncella'},
+                        {level: '5', title: 'Príncipe'},
+                        {level: '6', title: 'Canciller'},
+                        {level: '7', title: 'Rey'},
+                        {level: '8', title: 'Condesa'},
+                        {level: '9', title: 'Princesa'},
+                    ];
+
                     this.loadingData = false;
 
                     resolve();
@@ -471,6 +376,9 @@ console.log(players[5])
             let playerTurn = this.game.turnPlayerNum;
             let playerNum = this.game.players[this.idUser].playerNum;
 
+            let turnName= Object.values(this.game.players).find(({playerNum}) => playerNum === this.game.turnPlayerNum)
+            this.turn = turnName.alias;
+            
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
         },
         stealCard(){
@@ -499,7 +407,7 @@ console.log(players[5])
                 this.typesCardResolution[cardResolution] = true;
             }
         },
-        resolvePlayedCard({idCard, idRival = null, idCardToGuess = null, setFalseOnTypeRes = false}){
+        resolvePlayedCard({idCard, idRival = null, levelCardToGuess = null, setFalseOnTypeRes = false}){
             setFalseOnTypeRes === true ? this.typesCardResolution[this.cardsResolution[this.playedCard.level]] = false : '';
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
@@ -515,8 +423,8 @@ console.log(players[5])
                 idPlayer: this.idUser,
                 idCard: idCard,
                 idRival: idRival,
-                idCardToGuess: idCardToGuess,
-            }).then(response => {
+                levelCardToGuess: levelCardToGuess,
+            }).then(response => {                
                 console.log(response)
             }).catch(e => {
                 console.log(e)
@@ -536,6 +444,12 @@ console.log(players[5])
                 console.log(response)
             });
         },
+        selectCardToGuess(){
+            if (this.levelCardToGuess){
+                this.resolvePlayedCard({idCard: this.playedCard.idCard, idRival: this.idRival_GuessCard, levelCardToGuess: this.levelCardToGuess, setFalseOnTypeRes: true});
+            }else{
+                console.log('escoger carta')
+            }}
     }
 }
 </script>
