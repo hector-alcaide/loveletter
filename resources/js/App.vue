@@ -79,7 +79,7 @@ export default {
         this.active = !this.active;
         if(this.active == true){
             document.getElementById('markerContent').style.display = 'block';
-        }else{
+        }else{  
             document.getElementById('markerContent').style.display = 'none';
         }
         },

@@ -133,11 +133,14 @@
                             <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
                                 Jugar carta
                             </button>
+                            <button class="mx-auto" v-if="chooseCardToKeep" @click="resolveChancellor({idCard: idCard})">
+                                Conservar esta carta
+                            </button>
                         </span>
                     <div>
                         <label class="text-2">{{players[0].alias}}</label>
                     </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
+                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[0].idPlayer, setFalseOnTypeRes: true})">
                         Elegir este jugador
                     </button>
                 </div>
@@ -184,13 +187,6 @@
         <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
             Robar carta
         </button>
-
-            <div v-if="this.game.turnPlayerNum == this.game.players[this.idUser].playerNum">
-                   <button class="mx-auto" @click="stealCard(this.idGame)">
-                       Robar card
-                   </button>
-            </div>
-
     </div>
 </template>
 
@@ -232,6 +228,7 @@ export default {
             cardsToGuess: [],
             idRival_GuessCard: null,
             levelCardToGuess: null,
+            chooseCardToKeep: false,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -282,7 +279,14 @@ export default {
             .listen('PublicActionUser',(data)=>{
                 console.log(data);
                 this.assignGameData().then(() => {
-                    this.playTurn();
+                    // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+
+                    if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
+                        this.chooseCardToKeep = true;
+                    }
+                    if(data.changeTurn === true){
+                        this.playTurn();
+                    }
                 });
             });
 
@@ -401,7 +405,6 @@ export default {
             const cardKeyDelete = arrayHand.indexOf(idCard);
 
             this.game.players[this.idUser].hand.splice(cardKeyDelete, 1);
-            console.log( this.game.players[this.idUser].hand);
 
             this.$axios.post('/api/playcard', {
                 game: this.game,
@@ -416,15 +419,21 @@ export default {
             });
         },
         resolveChancellor({idCard}){
-            const arrayHand = Object.values(this.game.players[this.idUser].hand);
-            const cardKeyDelete = arrayHand.indexOf(idCard);
+            this.chooseCardToKeep = false;
 
-            delete this.game.players[this.idUser].hand[cardKeyDelete];
+            const arrayHand = Object.values(this.hand);
+            const cardKeyToKeep = arrayHand.indexOf(idCard);
+
+            arrayHand.splice(cardKeyToKeep, 1);
+
+            this.game.players[this.idUser].hand = [
+                this.hand[cardKeyToKeep]
+            ];
 
             this.$axios.post('/api/resolvechancellor', {
                 game: this.game,
                 idPlayer: this.idUser,
-                idCard: idCard,
+                idCards: arrayHand,
             }).then(response => {
                 console.log(response)
             });
