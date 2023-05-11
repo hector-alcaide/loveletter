@@ -42,7 +42,7 @@
     top: 0px;
     left: 950px;
 }
-#markerContent{
+.markerContent{
     width: 280px;
     border: #e3c99e solid 2px;
     border-end-end-radius: 20px;
@@ -50,6 +50,10 @@
     border-top: none;
     background: linear-gradient(180deg, #6b2d35, transparent);
     text-shadow: 2px -1px 3px black;
+    display: none;
+}
+.marker:hover .markerContent{
+    display: block;
 }
 .marker > div > img{
     width: 50px;

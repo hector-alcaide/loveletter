@@ -1,36 +1,38 @@
 <template>
-    <div class="bg-image1">
-        <div class="text-center mt-lg-2">
-            <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
-        </div>
-        <div class="divReturn">
-            <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
-            <h1 class="text-1 title-profile">Partidas</h1>
-        </div>
-        <div class="mx-5 text-center mx-auto" style="width: 85%">
-            <button class="button_jugar mt-lg-5" @click="$router.push('/games/create')" style="margin-left: 315px">Crear partida</button>
-        </div>
-        <div class="text-center" style="width: 80%; margin-left: 100px; padding-bottom: 4rem;">
-            <!-- <div class="text-center mb-5 d-inline-block" v-for="item in listGames" style="width: 250px">
-                <label class="text-2 fs-4">Partida número {{item.idGame}}</label>
-                <img class="my-2" src="../../images/imagen-partida-peq.jpg" style="width: 200px">
-                <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idGame)">Unirse a partida</button>
-            </div> -->
-            <carousel :items-to-show="1">
-                <slide v-for="item in listGames" :key="item.idGame">
-                    <div class="text-center mb-5 d-inline-block mx-2" v-for="item in listGames" style="width: 250px">
-                        <label class="text-2 fs-4">Partida número {{item.idGame}}</label>
-                        <img class="my-2" src="../../images/imagen-partida-peq.jpg" style="width: 200px">
-                        <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idGame)">Unirse a partida</button>
-                    </div>
-                </slide>
+    <div class="container">
+        <div class="bg-image1">
+            <div class="text-center mt-lg-2">
+                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+            </div>
+            <div class="divReturn">
+                <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
+                <h1 class="text-1 title-profile">Partidas</h1>
+            </div>
+            <div class="mx-5 text-center mx-auto" style="width: 85%">
+                <button class="button_jugar mt-lg-5" @click="$router.push('/games/create')" style="margin-left: 315px">Crear partida</button>
+            </div>
+            <div class="text-center" style="width: 80%; margin-left: 100px; padding-bottom: 4rem;">
+                <!-- <div class="text-center mb-5 d-inline-block" v-for="item in listGames" style="width: 250px">
+                    <label class="text-2 fs-4">Partida número {{item.idGame}}</label>
+                    <img class="my-2" src="../../images/imagen-partida-peq.jpg" style="width: 200px">
+                    <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idGame)">Unirse a partida</button>
+                </div> -->
+                <carousel :items-to-show="1">
+                    <slide v-for="item in listGames" :key="item.idGame">
+                        <div class="text-center mb-5 d-inline-block mx-2" style="width: 250px">
+                            <label class="text-2 fs-4">Partida número {{item.idGame}}</label>
+                            <img class="my-2" src="../../images/imagen-partida-peq.jpg" style="width: 200px">
+                            <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idGame)">Unirse a partida</button>
+                        </div>
+                    </slide>
 
-                <template #addons>
-                <navigation />
-                <pagination />
-                </template>
-            </carousel>
-            
+                    <template #addons>
+                    <navigation />
+                    <pagination />
+                    </template>
+                </carousel>
+                
+            </div>
         </div>
     </div>
     <!--    <form>-->

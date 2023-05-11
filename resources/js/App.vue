@@ -24,7 +24,16 @@ export default {
        
     mounted(){
         //this.ruta = this.$route.path      http://127.0.0.1:8000/games/join
-        //this.ruta = window.location.href        
+        //this.ruta = window.location.href    
+        // v-on:mouseover="mouseOver"
+        // mouseOver: function() {
+        // this.active = !this.active;
+        //     if(this.active == true){
+        //         document.getElementById('markerContent').style.display = 'block';
+        //     }else{
+        //         document.getElementById('markerContent').style.display = 'none';
+        //     }
+        // },    
 
     },
     methods: {         

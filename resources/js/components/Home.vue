@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="marker" v-on:mouseover="mouseOver">
-            <div id="markerContent" v-on:mouseover="mouseOver" style="display: none">
+        <div class="marker" >
+            <div id="markerContent" class="markerContent" >
                 <div class="text-center">
                     <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
@@ -50,14 +50,12 @@ import Pusher from 'pusher-js';
 export default {
     name: "Home",
     data() {
-        this.cont = 0,
         this.contador = 0
         return {
             arrayRequests: [],
             requestAlias: "",
             requestId: "",
-            solicitud: "",
-            active: false
+            solicitud: ""
         }
     },
     created() {
@@ -81,24 +79,7 @@ export default {
                 });
         });
     },
-    methods: {
-        mouseOver: function() {
-        this.active = !this.active;
-        if(this.active == true){
-            document.getElementById('markerContent').style.display = 'block';
-        }else{
-            document.getElementById('markerContent').style.display = 'none';
-        }
-        },
-        marker(){
-            if (this.cont == 0){
-                document.getElementById('markerContent').style.display = 'block';
-                this.cont = 1
-            }else{
-                document.getElementById('markerContent').style.display = 'none';
-                this.cont = 0
-            }
-        },
+    methods: {        
         acceptInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('api/acceptRequestInvitation', {
