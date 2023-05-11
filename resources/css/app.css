@@ -557,3 +557,17 @@ button:hover, button:focus{
     background-color: black;
     color: red;
 }
+
+
+/*MODAL*/
+.card-guess{
+    height: 139px;
+    width: 100px;
+    /*float: left;*/
+    /*margin: 10px;*/
+    border-radius: 10px;
+}
+.modal-lg {
+    max-width: 650px;
+}
+

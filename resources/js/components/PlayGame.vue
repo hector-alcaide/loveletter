@@ -4,7 +4,7 @@
     </div>
     <div v-if="game">
         <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Escoge una carta</h1>
@@ -12,6 +12,11 @@
                     </div>
                     <form @submit.prevent="selectCardToGuess()">
                         <div class="modal-body">
+                            <div class="row">
+                                <div class="col-3" v-for="card in cardsToGuess">
+                                    <img class="card-guess" :src="card.image" :alt="card.title">
+                                </div>
+                            </div>
                             <select id="cardToGuess" v-model="levelCardToGuess">
                                 <option :value="card.level" v-for="card in cardsToGuess">{{card.title}}</option>
                             </select>
@@ -334,15 +339,15 @@ export default {
                     }
 
                     this.cardsToGuess = [
-                        {level: '0', title: 'Espía'},
-                        {level: '2', title: 'Sacerdote'},
-                        {level: '3', title: 'Barón'},
-                        {level: '4', title: 'Doncella'},
-                        {level: '5', title: 'Príncipe'},
-                        {level: '6', title: 'Canciller'},
-                        {level: '7', title: 'Rey'},
-                        {level: '8', title: 'Condesa'},
-                        {level: '9', title: 'Princesa'},
+                        {level: '0', title: 'Espía', image: 'http://[::1]:5173/resources/images/cards/card0.jpg'},
+                        {level: '2', title: 'Sacerdote', image: 'http://[::1]:5173/resources/images/cards/card2.jpg'},
+                        {level: '3', title: 'Barón', image: 'http://[::1]:5173/resources/images/cards/card3.jpg'},
+                        {level: '4', title: 'Doncella', image: 'http://[::1]:5173/resources/images/cards/card4.jpg'},
+                        {level: '5', title: 'Príncipe', image: 'http://[::1]:5173/resources/images/cards/card5.jpg'},
+                        {level: '6', title: 'Canciller', image: 'http://[::1]:5173/resources/images/cards/card6.jpg'},
+                        {level: '7', title: 'Rey', image: 'http://[::1]:5173/resources/images/cards/card7.jpg'},
+                        {level: '8', title: 'Condesa', image: 'http://[::1]:5173/resources/images/cards/card8.jpg'},
+                        {level: '9', title: 'Princesa', image: 'http://[::1]:5173/resources/images/cards/card9.jpg'},
                     ];
 
                     this.loadingData = false;
