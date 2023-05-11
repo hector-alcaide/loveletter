@@ -558,16 +558,15 @@ button:hover, button:focus{
     color: red;
 }
 
-
 /*MODAL*/
-.card-guess{
-    height: 139px;
-    width: 100px;
-    /*float: left;*/
-    /*margin: 10px;*/
-    border-radius: 10px;
-}
 .modal-lg {
     max-width: 650px;
 }
-
+.card-guess{
+    width: 100px;
+    border-radius: 10px;
+}
+.card-guess-selected{
+    border: #6b2d35 solid 3px;
+    cursor: pointer;
+}

@@ -10,19 +10,15 @@
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Escoge una carta</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form @submit.prevent="selectCardToGuess()">
+                    <form @submit.prevent="guessCard()">
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="col-3" v-for="card in cardsToGuess">
-                                    <img class="card-guess" :src="card.image" :alt="card.title">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-2 mx-2 mb-3 d-flex justify-content-center" v-for="card in cardsToGuess">
+                                    <img class="card-guess" :src="card.image" :alt="card.title" @click="selectCardToGuess(card.level, $event)">
                                 </div>
                             </div>
-                            <select id="cardToGuess" v-model="levelCardToGuess">
-                                <option :value="card.level" v-for="card in cardsToGuess">{{card.title}}</option>
-                            </select>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button class="mx-auto">
                                 Escoger
                             </button>
@@ -173,9 +169,7 @@
             </div>
             <div>
                 <label class="text-2 d-block fs-4">Puntos:</label>
-                <label class="text-2 d-block fs-5">Jake 2</label>
-                <label class="text-2 d-block fs-5">Hector 2</label>
-                <label class="text-2 d-block fs-5">David 1</label>
+                <label class="text-2 d-block fs-5" v-for="p in game.players">{{p.alias}}</label>
             </div>
             <div>
                 <label class="text-2 fs-4">Puntos para victoria: 5</label>
@@ -283,6 +277,7 @@ export default {
 
                     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
                         this.chooseCardToKeep = true;
+                        this.playedCard = false;
                     }
                     if(data.changeTurn === true){
                         this.playTurn();
@@ -438,12 +433,24 @@ export default {
                 console.log(response)
             });
         },
-        selectCardToGuess(){
+        selectCardToGuess(levelCardToGuess, ev){
+            this.levelCardToGuess = levelCardToGuess;
+            let el_cards_guess_selected = document.getElementsByClassName("card-guess");
+            for (let el of el_cards_guess_selected) {
+                el.classList.remove("card-guess-selected");
+            }
+            ev.target.classList.add("card-guess-selected");
+        },
+        guessCard(){
             if (this.levelCardToGuess){
+                let myModalEl = document.getElementById('showCardsToGuess');
+                let modal = bootstrap.Modal.getInstance(myModalEl)
+                modal.hide();
                 this.resolvePlayedCard({idCard: this.playedCard.idCard, idRival: this.idRival_GuessCard, levelCardToGuess: this.levelCardToGuess, setFalseOnTypeRes: true});
             }else{
                 console.log('escoger carta')
-            }}
+            }
+        },
     }
 }
 </script>
