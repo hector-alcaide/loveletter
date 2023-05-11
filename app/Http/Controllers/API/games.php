@@ -58,7 +58,8 @@ class games extends Controller
                 'activePlayer' => true,
                 'playerNum' => ($key + 1),
                 'spy' => false,
-                'maid' => false
+                'maid' => false,
+                'roundWins' => 0,
             ];
 
             $idsPlayersByTurnNum += [
@@ -179,8 +180,6 @@ class games extends Controller
         //array de cards, deck por defecto ordenado por level, donde idCard es la key
         $cards = [
             1 => new Card(1, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-            17 => new Card(17, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
-            18 => new Card(18, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
             2 => new Card(2, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
             3 => new Card(3, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
             4 => new Card(4, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
@@ -196,6 +195,8 @@ class games extends Controller
             14 => new Card(14, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
             15 => new Card(15, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
             16 => new Card(16, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
+            17 => new Card(17, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
+            18 => new Card(18, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
             19 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
             20 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
             21 => new Card(21, 9, 'Princesa', 'http://[::1]:5173/resources/images/cards/card9.jpg'),

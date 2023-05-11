@@ -7,7 +7,7 @@
                         <label class="text-2">{{alias_3}}</label>
                     </div>
                     <img id="card3-down" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
-                    <img id="card3-up" class="" src="../../images/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
+                    <img id="card3-up" class="" src="../../images/cards/card2.jpg" style="width: 90px; display: none;" @click="rotateCard">
 
                     <div class="div-extras-down">
                         <div id="protection-3" style="display: none">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="mallet-cards">
                     <img src="../../images/mallet_5.png" style="width: 90px">
-                    <label class="text-1 fs-4">z</label>
+                    <label class="text-1 fs-4">15</label>
                 </div>
             </div>
             <div class="container-cards-row-3">
@@ -80,13 +80,14 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
-                    <div class="myCards" style="height: 100%;">
-                        <img class="mx-2" src="../../images/cards/card2.jpg" style="width: 150px">
-                        <img class="mx-2" src="../../images/cards/card3.jpg" style="width: 150px">
+                    <div class="myCards" style="height: 250px;">
+                        <img class="mx-2" src="../../images/cards/card2.jpg">
+                        <img class="mx-2" src="../../images/cards/card3.jpg">
+                        <!-- <img class="mx-2" src="../../images/cards/card3.jpg"> -->
                         <!-- <img class="mx-2" src="../../images/cards/card5.jpg" style="width: 150px"> -->
                     </div>                    
                     <div>
-                        <label class="text-2">{{alias_1}}</label>
+                        <label id="myName" class="text-2" style="margin-top: 30px">{{alias_1}}</label>
                     </div>
                 </div>
                 <div id="div-player-6" class="div-player-6 text-center">
@@ -111,17 +112,17 @@
         </div>
         <div class="container-frame">
             <div>
-                <label class="text-2 fs-4 mt-lg-3">Turno de David</label>
+                <label class="text-2 fs-4 mt-lg-3">Turno de Jake</label>
             </div>
             <div>
-                <label class="text-2 fs-4">Última tirada:</label>
-                <label class="text-2">Jake ha usado barón. Ha comparado carta con Hector y ha ganado. Hector ha pedido con Príncipe</label>
+                <label class="text-2 fs-4"><u>Última tirada:</u></label>
+                <label class="text-2 fs-5">Míriam ha usado barón. Ha comparado carta con Hector y han empatado. Ninguno pierde</label>
             </div>
             <div >
                 <label class="text-2 d-block fs-4">Puntos:</label>
-                <label class="text-2 d-block fs-5">Jake 2</label>
-                <label class="text-2 d-block fs-5">Hector 2</label>
-                <label class="text-2 d-block fs-5">David 1</label>
+                <label class="text-2 d-inline-block fs-5 ms-lg-3 me-lg-2">Jake 2</label>
+                <label class="text-2 d-inline-block fs-5 ms-lg-3 me-lg-2">Hector 2</label>
+                <label class="text-2 d-inline-block fs-5 ms-lg-3 me-lg-2">David 1</label>
             </div>
             <div>
                 <label class="text-2 fs-4">Puntos para victoria: 5</label>
@@ -146,6 +147,8 @@ export default {
         }
     },
     mounted(){
+        this.$emit('inMarker',false);
+        
         this.turnCard = 0,
         this.positionPlayers();
 
@@ -175,7 +178,7 @@ export default {
             let div = document.getElementById('tiradas');
             this.cartas.forEach(res =>{
                 div.innerHTML +=
-                    `<img class="carta${res}" src="http://[::1]:5173/resources/images/card${res}.jpg" style="width: 100px">`;
+                    `<img class="carta${res}" src="http://[::1]:5173/resources/images/cards/card${res}.jpg" style="width: 100px">`;
             });
 
 
