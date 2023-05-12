@@ -178,38 +178,14 @@ class games extends Controller
     public function getAllCards(){
 
         //array de cards, deck por defecto ordenado por level, donde idCard es la key
-//        $cards = [
-//            1 => new Card(1, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-//            2 => new Card(2, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-//            3 => new Card(3, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            4 => new Card(4, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            5 => new Card(5, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            6 => new Card(6, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            7 => new Card(7, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            8 => new Card(8, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-//            9 => new Card(9, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
-//            10 => new Card(10, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
-//            11 => new Card(11, 3, 'Barón', 'http://[::1]:5173/resources/images/cards/card3.jpg'),
-//            12 => new Card(12, 3, 'Barón', 'http://[::1]:5173/resources/images/cards/card3.jpg'),
-//            13 => new Card(13, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
-//            14 => new Card(14, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
-//            15 => new Card(15, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
-//            16 => new Card(16, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
-//            17 => new Card(17, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
-//            18 => new Card(18, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
-//            19 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
-//            20 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
-//            21 => new Card(21, 9, 'Princesa', 'http://[::1]:5173/resources/images/cards/card9.jpg'),
-//        ];
-
         $cards = [
-            1 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
-            2 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
-            3 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
-            4 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
-            5 => new Card(15, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
-            6 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
-            7 => new Card(15, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
+            1 => new Card(1, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
+            2 => new Card(2, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
+            3 => new Card(3, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            4 => new Card(4, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            5 => new Card(5, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            6 => new Card(6, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            7 => new Card(7, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
             8 => new Card(8, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
             9 => new Card(9, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
             10 => new Card(10, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
@@ -233,7 +209,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-//       shuffle($deck);
+       shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
@@ -263,7 +239,7 @@ class games extends Controller
 
         $message = 'El jugador ' .  $game['players'][$request->idUser]['alias'] . ' ha robado carta.';
 
-        broadcast(new PublicActionUser($game['idGame'], $message, false, true));
+        broadcast(new PublicActionUser($game['idGame'], $message, false));
 
         $response = [
             'status' => 'success',
