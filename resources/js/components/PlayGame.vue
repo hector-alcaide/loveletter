@@ -34,7 +34,7 @@
                         <div>
                             <label class="text-2">{{players[2].alias}}</label>
                         </div>
-                        <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                        <img v-if="players[2].activePlayer" id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
                         <div class="div-extras-down">
                             <div id="protection-3" v-if="players[2].maid === true">
                                 <img class="" src="../../images/protection.png">
@@ -43,7 +43,7 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
                             Elegir este jugador
                         </button>
                         <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
@@ -56,10 +56,10 @@
                         </div>
                         <img v-if="players[1].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
-                            <div id="protection-2" style="display: none">
+                            <div id="protection-2" v-if="players[1].maid === true">
                                 <img class="" src="../../images/protection.png">
                             </div>
-                            <div id="spy-2" style="display: none">
+                            <div id="spy-2" v-if="players[1].spy === true">
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div>
                             <label class="text-2">{{players[3].alias}}</label>
                         </div>
-                        <img src="../../images/back-card.jpg" style="width: 90px">
+                        <img v-if="players[3].activePlayer" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
                             <div id="protection-4" v-if="players[3].maid === true">
                                 <img class="" src="../../images/protection.png">
@@ -96,15 +96,9 @@
                         <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
                     </div>
                     <div class="mallet-cards">
-                        <img v-if="game.deck.length >= 15" src="../../images/mallet_5.png" style="width: 90px">
-                        <img v-if="game.deck.length < 15 && game.deck.length >= 12" src="../../images/mallet_4.png" style="width: 90px">
-                        <img v-if="game.deck.length < 12 && game.deck.length >= 8" src="../../images/mallet_3.png" style="width: 90px">
-                        <img v-if="game.deck.length < 8 && game.deck.length >= 4" src="../../images/mallet_2.png" style="width: 90px">
-                        <img v-if="game.deck.length < 4" src="../../images/mallet_1.png" style="width: 90px">
+                        <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
+                        <img v-else :src="deckRouteImg" style="width: 90px">
                         <label class="text-1 fs-4">{{ game.deck.length }}</label>
-                        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-                            Robar carta
-                        </button>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -135,8 +129,9 @@
                         </div>
                     </div>
                     <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
-                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
-                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image">
+                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep && (!forceThrowCountess)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                        <img class="mx-2 myCards-play" v-else-if="allowPlayCard && !chooseCardToKeep && (forceThrowCountess && game.deckReference[idCard].level == 8)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep || (forceThrowCountess && game.deckReference[idCard].level != 8)" :src="game.deckReference[idCard].image">
                         <img class="mx-2 myCards-play" v-if="chooseCardToKeep" :src="game.deckReference[idCard].image" @click="resolveChancellor({idCard: idCard})">
                     </span>
                     <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
@@ -232,6 +227,8 @@ export default {
             idRival_GuessCard: null,
             levelCardToGuess: null,
             chooseCardToKeep: false,
+            deckRouteImg: false,
+            forceThrowCountess: false,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -284,6 +281,7 @@ export default {
                 console.log(data);
                 this.assignGameData().then(() => {
                     // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                    this.message = data.message;
 
                     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
                         this.chooseCardToKeep = true;
@@ -292,8 +290,18 @@ export default {
                     if(data.changeTurn === true){
                         this.playTurn();
                     }
-                    this.message = data.message;
-                    this.playTurn();
+
+                    if(this.allowPlayCard === true){
+                        if(this.hand.some(idCard => idCard === 20)){
+                            let otherCard = this.hand.filter(idCard => idCard != 20);
+                            if(otherCard){
+                                let levelOtherCard = this.game.deckReference[otherCard].level;
+                                if(levelOtherCard == 5 || levelOtherCard == 7){
+                                    this.forceThrowCountess = true;
+                                }
+                            }
+                        }
+                    }
                 });
             });
 
@@ -319,6 +327,18 @@ export default {
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
                     this.hand = this.game.players[this.idUser].hand;
+
+                    if(this.game.deck.length >= 15){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_5.png";
+                    }else if(this.game.deck.length < 15 && this.game.deck.length >= 12){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_4.png";
+                    }else if(this.game.deck.length < 12 && this.game.deck.length >= 8){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_3.png";
+                    }else if(this.game.deck.length < 8 && this.game.deck.length >= 4){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.png";
+                    }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.png";
+                    }
 
                     let arrayPositions = [4,2,1,3,5];
                     let playersLength = Object.keys(this.game.players).length;
@@ -397,6 +417,7 @@ export default {
         checkTypeCardResolve: function (idCard) {
             //TODO: solo tiene un espia, mostrar mensaje se descarta el espia
             this.allowPlayCard = false;
+            this.forceThrowCountess = false;
 
             this.playedCard = this.game.deckReference[idCard];
 
@@ -464,6 +485,10 @@ export default {
                 let myModalEl = document.getElementById('showCardsToGuess');
                 let modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
+                let el_cards_guess_selected = document.getElementsByClassName("card-guess");
+                for (let el of el_cards_guess_selected) {
+                    el.classList.remove("card-guess-selected");
+                }
                 this.resolvePlayedCard({idCard: this.playedCard.idCard, idRival: this.idRival_GuessCard, levelCardToGuess: this.levelCardToGuess, setFalseOnTypeRes: true});
             }else{
                 console.log('escoger carta')

@@ -407,6 +407,10 @@ button:hover, button:focus{
     position: absolute;
     left: 600px;
 }
+.deck-steal:hover{
+    border: wheat solid 3px;
+    cursor: pointer;
+}
 .mallet-cards > label{
     position: absolute;
     top: 50%;
@@ -554,10 +558,10 @@ button:hover, button:focus{
 .container-cards > div > div > img{
     border-radius: 10px;
 }
-.container-cards > div > div > img:hover{
-    border: wheat solid 3px;
-    cursor: pointer;
-}
+/*.container-cards > div > div > img:hover{*/
+/*    border: wheat solid 3px;*/
+/*    cursor: pointer;*/
+/*}*/
 /* .myCards{
     height: 240px;
 } */

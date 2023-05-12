@@ -237,9 +237,7 @@ class games extends Controller
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
-        $message = [
-            'El jugador ' .  $game['players'][$request->idUser]['alias'] . ' ha robado carta.'
-        ];
+        $message = 'El jugador ' .  $game['players'][$request->idUser]['alias'] . ' ha robado carta.';
 
         broadcast(new PublicActionUser($game['idGame'], $message, false));
 
@@ -329,7 +327,7 @@ class games extends Controller
                         array_shift($game['deck'])
                     ];
 
-                    $message_result = 'El jugador' . $players[$request->idRival]['alias'] . ' ha descartado su mano y ha robado una nueva carta';
+                    $message_result = 'El jugador ' . $players[$request->idRival]['alias'] . ' ha descartado su mano y ha robado una nueva carta.';
                 }
 
                 $status = 'success';
@@ -379,7 +377,12 @@ class games extends Controller
 
         isset($discarded_card) && $discarded_card ? array_push($game['thrownCards'], $discarded_card) : '';
 
-        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
+//        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
+
+        if(isset($changeTurn) && $changeTurn === true){
+            $game = $this->skipTurn($game);
+        }
+
         $game['players'] = $players;
 
         $gameObj = Game::find($game['idGame']);
@@ -404,7 +407,8 @@ class games extends Controller
         array_push($game['deck'], $request->idCards[0]);
         array_push($game['deck'], $request->idCards[1]);
 
-        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+//        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+        $game = $this->skipTurn($game);
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
@@ -419,6 +423,21 @@ class games extends Controller
         ];
 
         return $response;
+    }
+
+    public function skipTurn($game){
+        if($game['turnPlayerNum'] == count($game['players'])){
+            $game['turnPlayerNum'] = 1;
+        }else{
+            $game['turnPlayerNum']++;
+            foreach ($game['players'] as $p){
+                if($p['playerNum'] === $game['turnPlayerNum'] && $p['activePlayer'] === false){
+                    $game['turnPlayerNum']++;
+                }
+            }
+        }
+
+        return $game;
     }
 
 }
