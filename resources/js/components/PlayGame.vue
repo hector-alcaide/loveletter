@@ -134,15 +134,11 @@
                             <img class="" src="../../images/spy.png">
                         </div>
                     </div>
-                    <div v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
-                        <img class="mx-2" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
-                        <button class="mx-auto" v-if="allowPlayCard" @click="checkTypeCardResolve(idCard)">
-                            Jugar carta
-                        </button>
-                        <button class="mx-auto" v-if="chooseCardToKeep" @click="resolveChancellor({idCard: idCard})">
-                            Conservar esta carta
-                        </button>
-                    </div>
+                    <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
+                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image">
+                        <img class="mx-2 myCards-play" v-if="chooseCardToKeep" :src="game.deckReference[idCard].image" @click="resolveChancellor({idCard: idCard})">
+                    </span>
                     <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
                         <label class="text-2">{{players[0].alias}}</label>
                     </div>
@@ -413,6 +409,9 @@ export default {
             }
         },
         resolvePlayedCard({idCard, idRival = null, levelCardToGuess = null, setFalseOnTypeRes = false}){
+            console.log('players:')
+            console.log(this.players)
+            console.log(idRival)
             setFalseOnTypeRes === true ? this.typesCardResolution[this.cardsResolution[this.playedCard.level]] = false : '';
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
