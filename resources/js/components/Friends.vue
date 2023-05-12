@@ -118,7 +118,7 @@ export default {
                 });
         });
     },
-    methods: {        
+    methods: {
         searchFriend(e){
             //e.preventDefault()
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -141,7 +141,7 @@ export default {
             e.preventDefault()
             console.log(this.idFriend)
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                this.$axios.post('api/addFriend', {                    
+                this.$axios.post('api/addFriend', {
                     newFriend: this.idFriend
                 })
                     .then(response => {

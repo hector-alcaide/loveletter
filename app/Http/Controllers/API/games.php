@@ -57,6 +57,8 @@ class games extends Controller
                 'hand' => [],
                 'activePlayer' => true,
                 'playerNum' => ($key + 1),
+                'spy' => false,
+                'maid' => false,
                 'roundWins' => 0,
             ];
 
@@ -239,7 +241,7 @@ class games extends Controller
             'El jugador ' .  $game['players'][$request->idUser]['alias'] . ' ha robado carta.'
         ];
 
-        broadcast(new PublicActionUser($game['idGame'], $message));
+        broadcast(new PublicActionUser($game['idGame'], $message, false));
 
         $response = [
             'status' => 'success',
@@ -260,8 +262,8 @@ class games extends Controller
         $player_card = reset($players[$idPlayer]['hand']);
         $rival_card = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
 
-        //unset maid
-        unset($players[$idPlayer]['maid']);
+        //reset maid condition
+        $players[$idPlayer]['maid'] = false;
 
         switch ($game['deckReference'][$thrown_card]['title']){
             case 'Espía':
@@ -318,7 +320,7 @@ class games extends Controller
                 break;
             case 'Príncipe':
 
-                if($game['deckReference'][$player_card]['level'] == 9){
+                if($game['deckReference'][$rival_card]['level'] == 9){
                     $player_to_remove = $request->idRival;
                     $message_result = 'El jugador '. $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
@@ -335,7 +337,7 @@ class games extends Controller
                 break;
             case 'Canciller':
 
-                $players[$idPlayer]['hand'] += array_slice($game['deck'], 0, 2);
+                $players[$idPlayer]['hand'] = array_merge($players[$idPlayer]['hand'], array_slice($game['deck'], 0, 2));
                 $game['deck'] = array_slice($game['deck'], 2);
 
                 $changeTurn = false;
@@ -386,7 +388,7 @@ class games extends Controller
         if(!empty($request->idRival) && isset($privateMessage)){
             broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage));
         }
-        broadcast(new PublicActionUser($game['idGame'], $message));
+        broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn));
 
         $response=[
             'status' => $status,
@@ -399,20 +401,17 @@ class games extends Controller
     public function resolveChancellor(Request $request){
         $game = $request->game;
 
-        $hand = $game['players'][$request->idPlayer]['hand'];
-        array_push($game['deck'], $hand[0]);
-        array_push($game['deck'], $hand[1]);
-
-        $game['players'][$request->idPlayer]['hand'] = $request->idCard;
+        array_push($game['deck'], $request->idCards[0]);
+        array_push($game['deck'], $request->idCards[1]);
 
         $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
-        $message = 'El jugador'. $game['players'][$request->idPlayer]['alias'] .'ha conservado una de sus cartas y ha descartado las demás.';
+        $message = 'El jugador '. $game['players'][$request->idPlayer]['alias'] .' ha conservado una de sus cartas y ha descartado las demás.';
 
-        broadcast(new PublicActionUser($game['idGame'], $message));
+        broadcast(new PublicActionUser($game['idGame'], $message, true));
 
         $response=[
             'status' => 'success',
