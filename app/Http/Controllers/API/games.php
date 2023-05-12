@@ -320,7 +320,7 @@ class games extends Controller
                 break;
             case 'Príncipe':
 
-                if($game['deckReference'][$player_card]['level'] == 9){
+                if($game['deckReference'][$rival_card]['level'] == 9){
                     $player_to_remove = $request->idRival;
                     $message_result = 'El jugador '. $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
