@@ -179,12 +179,12 @@ class games extends Controller
 
         //array de cards, deck por defecto ordenado por level, donde idCard es la key
         $cards = [
-            1 => new Card(1, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-            2 => new Card(2, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-            3 => new Card(3, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            4 => new Card(4, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            5 => new Card(5, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            6 => new Card(6, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
+            1 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
+            2 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
+            3 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
+            4 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
+            5 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
+            6 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
             7 => new Card(7, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
             8 => new Card(8, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
             9 => new Card(9, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
@@ -209,7 +209,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-       shuffle($deck);
+//       shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
@@ -377,7 +377,12 @@ class games extends Controller
 
         isset($discarded_card) && $discarded_card ? array_push($game['thrownCards'], $discarded_card) : '';
 
-        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
+//        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
+
+        if(isset($changeTurn) && $changeTurn === true){
+            $game = $this->skipTurn($game);
+        }
+
         $game['players'] = $players;
 
         $gameObj = Game::find($game['idGame']);
@@ -402,7 +407,8 @@ class games extends Controller
         array_push($game['deck'], $request->idCards[0]);
         array_push($game['deck'], $request->idCards[1]);
 
-        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+//        $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++;
+        $game = $this->skipTurn($game);
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
@@ -417,6 +423,21 @@ class games extends Controller
         ];
 
         return $response;
+    }
+
+    public function skipTurn($game){
+        if($game['turnPlayerNum'] == count($game['players'])){
+            $game['turnPlayerNum'] = 1;
+        }else{
+            $game['turnPlayerNum']++;
+            foreach ($game['players'] as $p){
+                if($p['playerNum'] === $game['turnPlayerNum'] && $p['activePlayer'] === false){
+                    $game['turnPlayerNum']++;
+                }
+            }
+        }
+
+        return $game;
     }
 
 }

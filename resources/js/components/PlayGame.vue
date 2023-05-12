@@ -34,7 +34,7 @@
                         <div>
                             <label class="text-2">{{players[2].alias}}</label>
                         </div>
-                        <img id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
+                        <img v-if="players[2].activePlayer" id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
                         <div class="div-extras-down">
                             <div id="protection-3" v-if="players[2].maid === true">
                                 <img class="" src="../../images/protection.png">
@@ -74,7 +74,7 @@
                         <div>
                             <label class="text-2">{{players[3].alias}}</label>
                         </div>
-                        <img src="../../images/back-card.jpg" style="width: 90px">
+                        <img v-if="players[3].activePlayer" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
                             <div id="protection-4" v-if="players[3].maid === true">
                                 <img class="" src="../../images/protection.png">
@@ -129,8 +129,13 @@
                         </div>
                     </div>
                     <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
-                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
-                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep" :src="game.deckReference[idCard].image">
+                        {{allowPlayCard}}
+                        {{chooseCardToKeep}}
+                        {{forceThrowCountess}}
+                        {{game.deckReference[idCard].level}}
+                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep && (!forceThrowCountess)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                        <img class="mx-2 myCards-play" v-else-if="allowPlayCard && !chooseCardToKeep && (forceThrowCountess && game.deckReference[idCard].level == 8)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep || (forceThrowCountess && game.deckReference[idCard].level != 8)" :src="game.deckReference[idCard].image">
                         <img class="mx-2 myCards-play" v-if="chooseCardToKeep" :src="game.deckReference[idCard].image" @click="resolveChancellor({idCard: idCard})">
                     </span>
                     <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
@@ -227,6 +232,7 @@ export default {
             levelCardToGuess: null,
             chooseCardToKeep: false,
             deckRouteImg: false,
+            forceThrowCountess: false,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -291,15 +297,12 @@ export default {
 
                     if(this.allowPlayCard === true){
                         if(this.hand.some(idCard => idCard === 20)){
-                            // let otherCard = this.hand.map(idCard => idCard != 20);
                             let otherCard = this.hand.filter(idCard => idCard != 20);
-                            console.log('test condesa')
-                            console.log(otherCard)
-                            console.log(this.game.deckReference[otherCard])
-                            if(this.game.deckReference[otherCard].level == ('5' || '7')){
-                                console.log('tiene rey o principe')
-                            }else{
-                                console.log('no tiene')
+                            if(otherCard){
+                                let levelOtherCard = this.game.deckReference[otherCard].level;
+                                if(levelOtherCard == 5 || levelOtherCard == 7){
+                                    this.forceThrowCountess = true;
+                                }
                             }
                         }
                     }
@@ -418,6 +421,7 @@ export default {
         checkTypeCardResolve: function (idCard) {
             //TODO: solo tiene un espia, mostrar mensaje se descarta el espia
             this.allowPlayCard = false;
+            this.forceThrowCountess = false;
 
             this.playedCard = this.game.deckReference[idCard];
 
@@ -485,6 +489,7 @@ export default {
                 let myModalEl = document.getElementById('showCardsToGuess');
                 let modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
+                this.levelCardToGuess = null;
                 this.resolvePlayedCard({idCard: this.playedCard.idCard, idRival: this.idRival_GuessCard, levelCardToGuess: this.levelCardToGuess, setFalseOnTypeRes: true});
             }else{
                 console.log('escoger carta')
