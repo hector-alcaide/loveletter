@@ -43,7 +43,7 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
                             Elegir este jugador
                         </button>
                         <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
@@ -56,10 +56,10 @@
                         </div>
                         <img v-if="players[1].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
-                            <div id="protection-2" style="display: none">
+                            <div id="protection-2" v-if="players[1].maid === true">
                                 <img class="" src="../../images/protection.png">
                             </div>
-                            <div id="spy-2" style="display: none">
+                            <div id="spy-2" v-if="players[1].spy === true">
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
@@ -96,15 +96,9 @@
                         <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
                     </div>
                     <div class="mallet-cards">
-                        <img v-if="game.deck.length >= 15" src="../../images/mallet_5.png" style="width: 90px">
-                        <img v-if="game.deck.length < 15 && game.deck.length >= 12" src="../../images/mallet_4.png" style="width: 90px">
-                        <img v-if="game.deck.length < 12 && game.deck.length >= 8" src="../../images/mallet_3.png" style="width: 90px">
-                        <img v-if="game.deck.length < 8 && game.deck.length >= 4" src="../../images/mallet_2.png" style="width: 90px">
-                        <img v-if="game.deck.length < 4" src="../../images/mallet_1.png" style="width: 90px">
+                        <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
+                        <img v-else :src="deckRouteImg" style="width: 90px">
                         <label class="text-1 fs-4">{{ game.deck.length }}</label>
-                        <button class="mx-auto" v-if="allowSteal" @click="stealCard()">
-                            Robar carta
-                        </button>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -232,6 +226,7 @@ export default {
             idRival_GuessCard: null,
             levelCardToGuess: null,
             chooseCardToKeep: false,
+            deckRouteImg: false,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -284,6 +279,7 @@ export default {
                 console.log(data);
                 this.assignGameData().then(() => {
                     // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                    this.message = data.message;
 
                     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
                         this.chooseCardToKeep = true;
@@ -292,8 +288,21 @@ export default {
                     if(data.changeTurn === true){
                         this.playTurn();
                     }
-                    this.message = data.message;
-                    this.playTurn();
+
+                    if(this.allowPlayCard === true){
+                        if(this.hand.some(idCard => idCard === 20)){
+                            // let otherCard = this.hand.map(idCard => idCard != 20);
+                            let otherCard = this.hand.filter(idCard => idCard != 20);
+                            console.log('test condesa')
+                            console.log(otherCard)
+                            console.log(this.game.deckReference[otherCard])
+                            if(this.game.deckReference[otherCard].level == ('5' || '7')){
+                                console.log('tiene rey o principe')
+                            }else{
+                                console.log('no tiene')
+                            }
+                        }
+                    }
                 });
             });
 
@@ -319,6 +328,18 @@ export default {
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
                     this.hand = this.game.players[this.idUser].hand;
+
+                    if(this.game.deck.length >= 15){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_5.png";
+                    }else if(this.game.deck.length < 15 && this.game.deck.length >= 12){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_4.png";
+                    }else if(this.game.deck.length < 12 && this.game.deck.length >= 8){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_3.png";
+                    }else if(this.game.deck.length < 8 && this.game.deck.length >= 4){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.png";
+                    }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
+                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.png";
+                    }
 
                     let arrayPositions = [4,2,1,3,5];
                     let playersLength = Object.keys(this.game.players).length;
