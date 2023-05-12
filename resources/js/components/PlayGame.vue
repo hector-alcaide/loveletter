@@ -129,10 +129,6 @@
                         </div>
                     </div>
                     <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
-                        {{allowPlayCard}}
-                        {{chooseCardToKeep}}
-                        {{forceThrowCountess}}
-                        {{game.deckReference[idCard].level}}
                         <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep && (!forceThrowCountess)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
                         <img class="mx-2 myCards-play" v-else-if="allowPlayCard && !chooseCardToKeep && (forceThrowCountess && game.deckReference[idCard].level == 8)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
                         <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep || (forceThrowCountess && game.deckReference[idCard].level != 8)" :src="game.deckReference[idCard].image">
@@ -489,7 +485,10 @@ export default {
                 let myModalEl = document.getElementById('showCardsToGuess');
                 let modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
-                this.levelCardToGuess = null;
+                let el_cards_guess_selected = document.getElementsByClassName("card-guess");
+                for (let el of el_cards_guess_selected) {
+                    el.classList.remove("card-guess-selected");
+                }
                 this.resolvePlayedCard({idCard: this.playedCard.idCard, idRival: this.idRival_GuessCard, levelCardToGuess: this.levelCardToGuess, setFalseOnTypeRes: true});
             }else{
                 console.log('escoger carta')
