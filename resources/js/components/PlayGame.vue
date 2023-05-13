@@ -53,7 +53,7 @@
             </div>
             <div class="container-cards">
                 <div class="container-cards-row-1">
-                    <h2 id="title-play" class="message-title-play fade">Test ha jugado el Canciller</h2>
+                    <h2 id="title-play" class="message-title-play fade">{{ titleMessage }}</h2>
                     <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
                         <div>
                             <label class="text-2">{{players[2].alias}}</label>
@@ -263,6 +263,7 @@ export default {
                 'rival': null,
                 'cardRival': null
             },
+            titleMessage: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -288,20 +289,14 @@ export default {
             .here((users) => {
                 this.users = users;
                 if(Object.keys(this.game.players).length == this.users.length){
-                    console.log('empezar game')
                     this.playTurn();
-                }else{
-                    console.log('faltan players por unirse')
                 }
             })
             .joining((user) => {
                 this.users.push(user);
                 // console.log(this.users)
                 if(Object.keys(this.game.players).length == this.users.length){
-                    console.log('empezar game')
                     this.playTurn();
-                }else{
-                    console.log('faltan players por unirse')
                 }
             })
             .leaving((user) => {
@@ -315,9 +310,6 @@ export default {
                 console.log(data);
                 this.assignGameData().then(() => {
                     // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
-                    const title = document.getElementById('title-play')
-                    title.classList.add('show')
-                    setTimeout(function() {title.classList.remove('show');}, 2000);
 
                     this.message = data.message;
 
@@ -350,11 +342,12 @@ export default {
         });
 
         const deckLength = document.getElementById("deck-length");
-        deckLength.addEventListener('onMouse'){}
+        // deckLength.addEventListener('onMouse'){}
         console.log(deckLength)
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
+        this.echo.leave('play.game.'+this.idGame+'player.'+this.idUser);
     },
     methods: {
         assignGameData(){
@@ -441,6 +434,8 @@ export default {
 
             let turnName = Object.values(this.game.players).find(({playerNum}) => playerNum === this.game.turnPlayerNum)
             this.turn = turnName.alias;
+
+            this.showTitleMessage('Turno de ' + this.turn);
 
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
         },
@@ -546,6 +541,14 @@ export default {
                 console.log('escoger carta')
             }
         },
+        showTitleMessage(message){
+            this.titleMessage = message;
+            const title = document.getElementById('title-play')
+            title.classList.add('show', 'show-title')
+            setTimeout(function() {
+                title.classList.remove('show', 'show-title');
+            }, 1850);
+        }
     }
 }
 </script>

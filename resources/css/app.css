@@ -657,14 +657,30 @@ button:hover, button:focus{
 }
 
 .message-title-play{
-    position: relative;
+    position: absolute;
     /*background-color: red;*/
     width: 900px;
-    top: 170px;
-    left: 80px;
+    margin-left: 50px;
+    top: 175px;
+    text-align: center;
     font-family: vinque;
     font-size: 4.5rem;
     color: black;
     text-shadow: 1px 1px #301a1a, -1px -1px #eeeeee;
-    z-index: 99999;
+    z-index: 1000;
+}
+
+.show-title{
+    animation-name: slide-down;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slide-down {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
 }
