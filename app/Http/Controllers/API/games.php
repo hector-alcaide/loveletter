@@ -59,7 +59,7 @@ class games extends Controller
                 'playerNum' => ($key + 1),
                 'spy' => false,
                 'maid' => false,
-                'roundWins' => 0,
+                'roundWins' => 0,                
             ];
 
             $idsPlayersByTurnNum += [
@@ -75,7 +75,8 @@ class games extends Controller
             'roundNum' => null,
             'turnPlayerNum' => 1,
             'idsPlayersByTurnNum' => $idsPlayersByTurnNum,
-            'thrownCards' => []
+            'thrownCards' => [],
+            'numMaxWins' => $gameObj->numMaxWins,
         ];
 
         $game = $this->newRound($game);
@@ -215,6 +216,9 @@ class games extends Controller
             $game['players'][$player['idPlayer']]['hand'] = [
                 array_shift($deck)
             ];
+            $game['players'][$player['idPlayer']]['activePlayer'] = true;
+            $game['players'][$player['idPlayer']]['spy'] = false;
+            $game['players'][$player['idPlayer']]['maid'] = false;
         }
 
         $game['deck'] = $deck;
@@ -273,7 +277,7 @@ class games extends Controller
             case 'Guardia':
                 if($request->levelCardToGuess == $game['deckReference'][$rival_card]['level']){
                     $player_to_remove = $request->idRival;
-                    $discarded_card = $players[$player_to_remove]['hand'];
+                    $discarded_card = intval($players[$player_to_remove]['hand']);
 
                     $message_result = 'Carta adivinada, jugador eliminado.';
                 }else{
@@ -304,7 +308,7 @@ class games extends Controller
                 if($player_card_level == $rival_card_level){
                     $message_result = 'Empate, el nivel de las cartas es el mismo.';
                 }else{
-                    $discarded_card = $players[$player_to_remove]['hand'];
+                    $discarded_card = intval($players[$player_to_remove]['hand']);
                     $message_result = 'El jugador '.$players[$player_to_remove]['alias'].' ha sido eliminado.';
                 }
 
@@ -322,7 +326,7 @@ class games extends Controller
                     $player_to_remove = $request->idRival;
                     $message_result = 'El jugador '. $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
-                    $discarded_card = $players[$request->idRival]['hand'];
+                    $discarded_card = intval($players[$request->idRival]['hand']);
                     $players[$request->idRival]['hand'] = [
                         array_shift($game['deck'])
                     ];
@@ -393,6 +397,45 @@ class games extends Controller
         }
         broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn));
 
+        $totalActivePlayer = 0;
+        $idActivePlayer = 0;
+        foreach ($players as $player) {
+            if($player['activePlayer']){
+                $totalActivePlayer++;
+                $idActivePlayer = $player['idPlayer'];
+            }
+        }        
+        if($totalActivePlayer == 1){
+            $game['players'][$idActivePlayer]['roundWins'] = $game['players'][$idActivePlayer]['roundWins'] + 1;
+            $gameObj = (object)$game;
+            //$this->newRound($gameObj);
+            $this->newRound($game);
+            //$game = $this->newRound($game);
+        }
+
+        if(sizeof($game['deck']) == 0){
+            $arrayCardsLevel = [];
+            foreach ($players as $key => $player) {
+                $arrayCardsLevel[$key] = $player['hand'][0];
+            }
+            rsort($arrayCardsLevel);            
+            foreach ($players as $player) {
+                if($player['hand'][0] = $arrayCardsLevel[0]){
+                    $winPlayerFinalCards1 = $player['idPlayer'];
+                }else if($player['hand'][0] = $arrayCardsLevel[1]){
+                    $winPlayerFinalCards2 = $player['idPlayer'];
+                }
+            }
+            $game['players'][$winPlayerFinalCards1]['roundWins'] = $game['players'][$winPlayerFinalCards1]['roundWins'] + 1;
+
+            if($game['deckReference'][$arrayCardsLevel[0]]['level'] == $game['deckReference'][$arrayCardsLevel[1]]['level']){
+                $game['players'][$winPlayerFinalCards2]['roundWins'] = $game['players'][$winPlayerFinalCards2]['roundWins'] + 1;
+            }
+            //newRound($game);
+            $game = $this->newRound($game);
+            
+        }        
+
         $response=[
             'status' => $status,
             'message' => $message,
@@ -436,6 +479,20 @@ class games extends Controller
                 }
             }
         }
+
+        return $game;
+    }
+
+    public function updateRound($request){
+        $game = $request->game;
+        $message = "Nueva Ronda";
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
+
+        broadcast(new PublicActionUser($game['idGame'], $message, true));
+
+        newRound($game);
 
         return $game;
     }

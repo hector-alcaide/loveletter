@@ -92,13 +92,19 @@
                     </div>
                 </div>
                 <div class="container-cards-row-2">
-                    <div id="tiradas" class="thrown-cards">
+                    <div id="thrownCards" class="thrown-cards">
                         <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
                     </div>
                     <div class="mallet-cards">
-                        <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
-                        <img v-else :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4">{{ game.deck.length }}</label>
+                        <!-- <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
+                        <img v-else :src="deckRouteImg" style="width: 90px"> -->
+
+                        <img class="deck-steal" v-if="game.deck.length >= 15" src="../../images/mallet_5.png" style="width: 90px" @click="stealCard()">
+                        <img class="deck-steal" v-if="game.deck.length < 15 && game.deck.length >= 12" src="../../images/mallet_4.png" style="width: 90px" @click="stealCard()">
+                        <img class="deck-steal" v-if="game.deck.length < 12 && game.deck.length >= 8" src="../../images/mallet_3.png" style="width: 90px" @click="stealCard()">
+                        <img class="deck-steal" v-if="game.deck.length < 8 && game.deck.length >= 4" src="../../images/mallet_2.png" style="width: 90px" @click="stealCard()">
+                        <img class="deck-steal" v-if="game.deck.length < 4 && game.deck.length >= 1" src="../../images/mallet_1.png" style="width: 90px" @click="stealCard()">
+                        <label v-if="game.deck.length > 0" class="text-1 fs-4">{{ game.deck.length }}</label>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -179,7 +185,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="text-2 fs-4">Puntos para victoria: 5</label>
+                    <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
                 </div>
             </div>
         </div>
@@ -244,11 +250,7 @@ export default {
     //     this.assignGameData();
     // },
     mounted() {
-        this.assignGameData().then(() => {
-            console.log("Mirando muerte.")
-            Object.values(this.game.players).forEach(res => {
-                console.log(res.activePlayer);
-            });
+        this.assignGameData().then(() => { 
 
             this.echo.join('play.game.'+this.idGame)
             .here((users) => {
@@ -324,6 +326,7 @@ export default {
                         window.location.href = "/games";
                     }
 
+                    
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
                     this.hand = this.game.players[this.idUser].hand;
@@ -338,8 +341,12 @@ export default {
                         this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.png";
                     }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
                         this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.png";
-                    }
+                    }          
+                    
+                    
+                    
 
+                    //Posicionar a los jugadores en sus posiciones
                     let arrayPositions = [4,2,1,3,5];
                     let playersLength = Object.keys(this.game.players).length;
 
@@ -394,6 +401,22 @@ export default {
             this.users.splice(array_pos, 1);
         },
         playTurn(){
+            //Poner las cartas lanzadas
+            let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
+                console.log("cartas tiradas");
+                console.log(this.game.thrownCards);
+                let div = document.getElementById('thrownCards');
+                div.innerHTML = '';
+                let count = 0;
+                this.game.thrownCards.forEach(res =>{
+                    div.innerHTML +=
+                        `<img class="carta${random[count]}" src="http://[::1]:5173/resources/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 100px">`;
+                    count++;
+                    if(count == 5){
+                        count = 0;
+                    }
+                });
+                
             let playerTurn = this.game.turnPlayerNum;
             let playerNum = this.game.players[this.idUser].playerNum;
 
@@ -448,6 +471,50 @@ export default {
                 levelCardToGuess: levelCardToGuess,
             }).then(response => {
                 console.log(response)
+
+                
+
+                //this.game = JSON.parse(response.data.game);
+                console.log("muertos");
+                //Comprobar si sólo queda un jugador vivo
+                let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
+                console.log(totalActivePlayer);
+                console.log(this.game.players);
+            
+                if(totalActivePlayer == 1){
+                    let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
+                    this.winRound(winPlayer);
+                }
+
+                //Cuando no hay más cartas posicionar a los jugadores por sus cartas
+                console.log("mazo");
+                console.log(this.game.players[this.idUser].hand);
+                if(this.game.deck.length == 0){
+                    console.log("No hay más cartas");
+                    let arrayCardsLevel = [];
+                    console.log(this.game.players);
+
+                    Object.values(this.game.players).forEach(function callback(value, index) {
+                        arrayCardsLevel[index] = parseInt(value.hand[0]);
+                    });
+                    arrayCardsLevel.sort(function (a, b){
+                        return (b - a)
+                    });
+                    if(this.game.deckReference[arrayCardsLevel[0]] == this.game.deckReference[arrayCardsLevel[1]]){
+                        //Hay dos ganadores
+                        let winPlayerFinalCards1 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                        let winPlayerFinalCards2 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[1]);
+                        this.winRound(winPlayerFinalCards1,winPlayerFinalCards2);
+                    }else{
+                        let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                        this.winRound(winPlayerFinalCards);
+                    }
+                }                    
+
+                // let playedCardWinner = this.game.deckReference[arrayCardsLevel[0]];
+                // console.log(playedCardWinner.level);
+
+
             }).catch(e => {
                 console.log(e)
             });
@@ -494,6 +561,43 @@ export default {
                 console.log('escoger carta')
             }
         },
+        winRound(winPlayer1, winPlayer2 = null){
+            console.log(winPlayer1.idPlayer);
+            console.log("Actualizar");
+            // let update_obj = Object.values(this.game.players).findIndex((obj => obj.id == winPlayer.idPlayer));
+            // console.log(update_obj);
+            this.game.players[winPlayer1.idPlayer].roundWins = winPlayer1.roundWins + 1;
+
+            if(winPlayer2 != null){
+                this.game.players[winPlayer2.idPlayer].roundWins = winPlayer2.roundWins + 1;
+            }
+
+            //Puntos por el espía
+            let totalSpyPlayer = Object.values(this.game.players).filter(({spy}) => spy === true).length;            
+            if(totalSpyPlayer == 1){
+                let spyPlayer = Object.values(this.game.players).find(({spy}) => spy === true);
+                this.game.players[spyPlayer.idPlayer].roundWins = spyPlayer.roundWins + 1;
+            }
+            
+
+            console.log(this.game);
+
+            if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
+                //Finalizar la partida
+            }else if(winPlayer2 != null){
+                if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
+
+                }
+            }else{
+                //Siguiente ronda
+                this.$axios.post('/api/updateround', {
+                    game: this.game,
+                }).then(response => {
+                    console.log(response);
+                });
+            }
+
+        }
     }
 }
 </script>
