@@ -4,23 +4,46 @@
             <span><p>Cargando...</p></span>
         </div>
         <div v-if="game">
+            <div class="modal fade" id="showRivalCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showRivalCard" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pe-1">
+                            <div class="modal-div-title">
+                                <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta del jugador {{priestResponseObj.rival.alias}}</h2>
+                            </div>
+                            <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        </div>
+                        <div class="modal-body pb-3">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-2 mx-2 mb-3 d-flex justify-content-center">
+                                    <img class="rival-card" v-if="priestResponseObj.cardRival" :src="priestResponseObj.cardRival.image" :alt="priestResponseObj.cardRival.title">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pb-3 pt-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Escoge una carta</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-header border-0 pe-1">
+                            <div class="modal-div-title">
+                                <h2 class="modal-title" id="staticBackdropLabel">Escoge una carta</h2>
+                            </div>
+                            <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
                         </div>
                         <form @submit.prevent="guessCard()">
-                            <div class="modal-body">
+                            <div class="modal-body pb-3">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-2 mx-2 mb-3 d-flex justify-content-center" v-for="card in cardsToGuess">
                                         <img class="card-guess" :src="card.image" :alt="card.title" @click="selectCardToGuess(card.level, $event)">
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button class="mx-auto">
+                            <div class="modal-footer border-0 pb-4 pt-1">
+                                <button class="mx-auto mb-2 modal-button">
                                     Escoger
                                 </button>
                             </div>
@@ -30,6 +53,7 @@
             </div>
             <div class="container-cards">
                 <div class="container-cards-row-1">
+                    <h2 id="title-play" class="message-title-play fade">{{ titleMessage }}</h2>
                     <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
                         <div>
                             <label class="text-2">{{players[2].alias}}</label>
@@ -43,10 +67,10 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
                             Elegir este jugador
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
                             Elegir este jugador
                         </button>
                     </div>
@@ -63,10 +87,10 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                        <button class="mx-auto" v-if="players[1].maid === false && typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
                             Elegir este jugador
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
                             Elegir este jugador
                         </button>
                     </div>
@@ -86,7 +110,7 @@
                         <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
                             Elegir este jugador
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[3].idPlayer">
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[3].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[3].idPlayer">
                             Elegir este jugador
                         </button>
                     </div>
@@ -97,8 +121,8 @@
                     </div>
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
-                        <img v-else :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4">{{ game.deck.length }}</label>
+                        <img id="deck" v-else :src="deckRouteImg" style="width: 90px">
+                        <label class="text-1 fs-4" id="deck-length" @click="stealCard()">{{ game.deck.length }}</label>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -116,6 +140,9 @@
                         <label class="text-2">{{players[4].alias}}</label>
                     </div>
                     <button class="mx-auto" v-if="players[4].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
+                        Elegir este jugador
+                    </button>
+                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[4].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[4].idPlayer">
                         Elegir este jugador
                     </button>
                 </div>
@@ -157,6 +184,9 @@
                     <button class="mx-auto" v-if="players[5].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
                         Elegir este jugador
                     </button>
+                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[5].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[5].idPlayer">
+                        Elegir este jugador
+                    </button>
                 </div>
             </div>
         </div>
@@ -169,7 +199,7 @@
                     <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
                 </div>
                 <div>
-                    <label class="text-2 fs-4">Última tirada:</label>
+                    <label class="text-2 fs-4">Última jugada:</label>
                     <label class="text-2">{{ message }}</label>
                 </div>
                 <div>
@@ -229,6 +259,11 @@ export default {
             chooseCardToKeep: false,
             deckRouteImg: false,
             forceThrowCountess: false,
+            priestResponseObj: {
+                'rival': null,
+                'cardRival': null
+            },
+            titleMessage: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -254,20 +289,14 @@ export default {
             .here((users) => {
                 this.users = users;
                 if(Object.keys(this.game.players).length == this.users.length){
-                    console.log('empezar game')
                     this.playTurn();
-                }else{
-                    console.log('faltan players por unirse')
                 }
             })
             .joining((user) => {
                 this.users.push(user);
                 // console.log(this.users)
                 if(Object.keys(this.game.players).length == this.users.length){
-                    console.log('empezar game')
                     this.playTurn();
-                }else{
-                    console.log('faltan players por unirse')
                 }
             })
             .leaving((user) => {
@@ -281,6 +310,7 @@ export default {
                 console.log(data);
                 this.assignGameData().then(() => {
                     // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+
                     this.message = data.message;
 
                     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -305,14 +335,15 @@ export default {
                 });
             });
 
-        // this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
-        //     .listen('PrivateActionUser',(data)=>{
-        //         console.log(data);
-        //     });
+        this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
+            .listen('PrivateActionUser',(data)=>{
+                console.log(data);
+            });
         });
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
+        this.echo.leave('play.game.'+this.idGame+'player.'+this.idUser);
     },
     methods: {
         assignGameData(){
@@ -400,7 +431,12 @@ export default {
             let turnName = Object.values(this.game.players).find(({playerNum}) => playerNum === this.game.turnPlayerNum)
             this.turn = turnName.alias;
 
+            this.showTitleMessage('Turno de ' + this.turn);
+
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
+
+            const deck_length = document.getElementById('deck-length');
+            this.allowSteal === true ? deck_length.classList.add('cursor-pointer') : deck_length.classList.remove('cursor-pointer');
         },
         stealCard(){
             this.allowSteal = false;
@@ -448,6 +484,16 @@ export default {
                 levelCardToGuess: levelCardToGuess,
             }).then(response => {
                 console.log(response)
+                //priest
+                if(this.game.deckReference[idCard].level == 2){
+                    const rivalCard = this.game.players[idRival].hand[0];
+                    this.priestResponseObj.rival = this.game.players[idRival];
+                    this.priestResponseObj.cardRival = this.game.deckReference[rivalCard];
+
+                    const myModal = new bootstrap.Modal(document.getElementById("showRivalCard"), {});
+                    myModal.show();
+                    setTimeout(function() {myModal.hide();}, 3500);
+                }
             }).catch(e => {
                 console.log(e)
             });
@@ -494,6 +540,14 @@ export default {
                 console.log('escoger carta')
             }
         },
+        showTitleMessage(message){
+            this.titleMessage = message;
+            const title = document.getElementById('title-play')
+            title.classList.add('show', 'show-title')
+            setTimeout(function() {
+                title.classList.remove('show', 'show-title');
+            }, 1850);
+        }
     }
 }
 </script>
