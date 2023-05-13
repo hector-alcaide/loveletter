@@ -418,9 +418,6 @@ button:hover, button:focus{
     transform: translate(-50%, -50%);
     color: #e3c99e;
 }
-#deck-length{
-    /*cursor: pointer;*/
-}
 .container-cards-row-2{
     height: 150px;
 }
@@ -675,7 +672,6 @@ button:hover, button:focus{
     animation-duration: 0.75s;
     animation-fill-mode: forwards;
 }
-
 @keyframes slide-down {
     0% {
         transform: translateY(-100%);
@@ -683,4 +679,7 @@ button:hover, button:focus{
     100% {
         transform: translateY(0%);
     }
+}
+.cursor-pointer{
+    cursor: pointer;
 }

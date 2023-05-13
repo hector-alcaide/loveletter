@@ -121,8 +121,8 @@
                     </div>
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
-                        <img v-else :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4" id="deck-length">{{ game.deck.length }}</label>
+                        <img id="deck" v-else :src="deckRouteImg" style="width: 90px">
+                        <label class="text-1 fs-4" id="deck-length" @click="stealCard()">{{ game.deck.length }}</label>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -340,10 +340,6 @@ export default {
                 console.log(data);
             });
         });
-
-        const deckLength = document.getElementById("deck-length");
-        // deckLength.addEventListener('onMouse'){}
-        console.log(deckLength)
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
@@ -438,6 +434,9 @@ export default {
             this.showTitleMessage('Turno de ' + this.turn);
 
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
+
+            const deck_length = document.getElementById('deck-length');
+            this.allowSteal === true ? deck_length.classList.add('cursor-pointer') : deck_length.classList.remove('cursor-pointer');
         },
         stealCard(){
             this.allowSteal = false;
