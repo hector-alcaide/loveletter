@@ -17,15 +17,17 @@ class PublicActionUser implements ShouldBroadcast
     public $idGame;
     public $message;
     public $changeTurn;
+    public $newRound;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idGame, $message, $changeTurn)
+    public function __construct($idGame, $message, $changeTurn, $newRound = false)
     {
         $this->idGame = $idGame;
         $this->message = $message;
         $this->changeTurn = $changeTurn;
+        $this->newRound = $newRound;
     }
 
     public function broadcastWith()
@@ -33,7 +35,8 @@ class PublicActionUser implements ShouldBroadcast
         return [
             'idGame' => $this->idGame,
             'message' => $this->message,
-            'changeTurn' => $this->changeTurn
+            'changeTurn' => $this->changeTurn,
+            'newRound' => $this->newRound
         ];
     }
 

@@ -18,6 +18,10 @@ Broadcast::channel('play.game.{idGame}', function ($user) {
     return $user;
 });
 
+Broadcast::channel('play.game.{idGame}.player.{idPlayer}', function ($user) {
+    return $user;
+});
+
 Broadcast::channel('games.list', function () {
     return true;
 });

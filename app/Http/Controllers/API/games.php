@@ -387,15 +387,8 @@ class games extends Controller
             $game = $this->skipTurn($game);
         }
 
-        $game['players'] = $players;
-
-        $gameObj = Game::find($game['idGame']);
-        $gameObj->update(['game' => $game]);
-
-        if(!empty($request->idRival) && isset($privateMessage)){
-            broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage));
-        }
-        broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn));
+        $newRound = false;
+        $game['players'] = $players;        
 
         $totalActivePlayer = 0;
         $idActivePlayer = 0;
@@ -406,12 +399,19 @@ class games extends Controller
             }
         }        
         if($totalActivePlayer == 1){
-            $game['players'][$idActivePlayer]['roundWins'] = $game['players'][$idActivePlayer]['roundWins'] + 1;
-            $gameObj = (object)$game;
-            //$this->newRound($gameObj);
-            $this->newRound($game);
-            //$game = $this->newRound($game);
+            //$game['players'][$idActivePlayer]['roundWins'] = $game['players'][$idActivePlayer]['roundWins'] + 1;            
+            $privateMessage = "Has ganado";
+            broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));          
+            
         }
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
+
+        if(!empty($request->idRival) && isset($privateMessage)){
+            broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage, $newRound));
+        }
+        broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn, $newRound));
 
         if(sizeof($game['deck']) == 0){
             $arrayCardsLevel = [];
@@ -432,7 +432,7 @@ class games extends Controller
                 $game['players'][$winPlayerFinalCards2]['roundWins'] = $game['players'][$winPlayerFinalCards2]['roundWins'] + 1;
             }
             //newRound($game);
-            $game = $this->newRound($game);
+            //$game = $this->newRound($game);
             
         }        
 
@@ -483,17 +483,19 @@ class games extends Controller
         return $game;
     }
 
-    public function updateRound($request){
+    public function updateRound(Request $request){
         $game = $request->game;
         $message = "Nueva Ronda";
+
+        $game['players'][$request->idPlayer]['roundWins'] = $game['players'][$request->idPlayer]['roundWins'] + 1;
+
+        $game = $this->newRound($game);
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
-        broadcast(new PublicActionUser($game['idGame'], $message, true));
-
-        newRound($game);
-
+        broadcast(new PublicActionUser($game['idGame'], $message, true, true));
+        
         return $game;
     }
 

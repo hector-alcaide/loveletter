@@ -250,7 +250,9 @@ export default {
     //     this.assignGameData();
     // },
     mounted() {
-        this.assignGameData().then(() => { 
+        this.assignGameData().then(() => {
+
+
 
             this.echo.join('play.game.'+this.idGame)
             .here((users) => {
@@ -281,36 +283,75 @@ export default {
             })
             .listen('PublicActionUser',(data)=>{
                 console.log(data);
-                this.assignGameData().then(() => {
-                    // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
-                    this.message = data.message;
+                if(data.newRound === true){
+                    console.log("Entra al principio");
+                    
+                    setTimeout(function() {
+                        console.log("setTimeout");
+                        // let div = document.getElementById('thrownCards');
+                        // div.innerHTML = '';
+                        // this.assignGameData().then(() => {
+                        //     this.message = data.message;
 
-                    if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
-                        this.chooseCardToKeep = true;
-                        this.playedCard = false;
-                    }
-                    if(data.changeTurn === true){
-                        this.playTurn();
-                    }
+                        //     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
+                        //         this.chooseCardToKeep = true;
+                        //         this.playedCard = false;
+                        //     }
+                        //     if(data.changeTurn === true){
+                        //         this.playTurn();
+                        //     }
 
-                    if(this.allowPlayCard === true){
-                        if(this.hand.some(idCard => idCard === 20)){
-                            let otherCard = this.hand.filter(idCard => idCard != 20);
-                            if(otherCard){
-                                let levelOtherCard = this.game.deckReference[otherCard].level;
-                                if(levelOtherCard == 5 || levelOtherCard == 7){
-                                    this.forceThrowCountess = true;
+                        //     if(this.allowPlayCard === true){
+                        //         if(this.hand.some(idCard => idCard === 20)){
+                        //             let otherCard = this.hand.filter(idCard => idCard != 20);
+                        //             if(otherCard){
+                        //                 let levelOtherCard = this.game.deckReference[otherCard].level;
+                        //                 if(levelOtherCard == 5 || levelOtherCard == 7){
+                        //                     this.forceThrowCountess = true;
+                        //                 }
+                        //             }
+                        //         }
+                        //     }
+                        // });
+                    }, 7000);                        
+                }else{  
+                    console.log("else newRound");             
+                    this.assignGameData().then(() => {
+
+                        // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                        this.message = data.message;
+
+                        if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
+                            this.chooseCardToKeep = true;
+                            this.playedCard = false;
+                        }
+                        if(data.changeTurn === true){
+                            this.playTurn();
+                        }
+
+                        if(this.allowPlayCard === true){
+                            if(this.hand.some(idCard => idCard === 20)){
+                                let otherCard = this.hand.filter(idCard => idCard != 20);
+                                if(otherCard){
+                                    let levelOtherCard = this.game.deckReference[otherCard].level;
+                                    if(levelOtherCard == 5 || levelOtherCard == 7){
+                                        this.forceThrowCountess = true;
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
             });
 
-        // this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
-        //     .listen('PrivateActionUser',(data)=>{
-        //         console.log(data);
-        //     });
+        this.echo.join('play.game.'+this.idGame+'.player.'+this.idUser)
+            .listen('PrivateActionUser',(data)=>{
+                console.log("Mensaje privado");
+                console.log(data);
+                if(data.newRound == true){
+                    this.newRound();
+                }
+            });
         });
     },
     beforeUnmount(){
@@ -416,7 +457,7 @@ export default {
                         count = 0;
                     }
                 });
-                
+
             let playerTurn = this.game.turnPlayerNum;
             let playerNum = this.game.players[this.idUser].playerNum;
 
@@ -475,41 +516,41 @@ export default {
                 
 
                 //this.game = JSON.parse(response.data.game);
-                console.log("muertos");
+                // console.log("muertos");
                 //Comprobar si sólo queda un jugador vivo
-                let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
-                console.log(totalActivePlayer);
-                console.log(this.game.players);
+                // let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
+                // console.log(totalActivePlayer);
+                // console.log(this.game.players);
             
-                if(totalActivePlayer == 1){
-                    let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
-                    this.winRound(winPlayer);
-                }
+                // if(totalActivePlayer == 1){
+                //     let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
+                //     this.winRound(winPlayer);
+                // }
 
                 //Cuando no hay más cartas posicionar a los jugadores por sus cartas
-                console.log("mazo");
-                console.log(this.game.players[this.idUser].hand);
-                if(this.game.deck.length == 0){
-                    console.log("No hay más cartas");
-                    let arrayCardsLevel = [];
-                    console.log(this.game.players);
+                // console.log("mazo");
+                // console.log(this.game.players[this.idUser].hand);
+                // if(this.game.deck.length == 0){
+                //     console.log("No hay más cartas");
+                //     let arrayCardsLevel = [];
+                //     console.log(this.game.players);
 
-                    Object.values(this.game.players).forEach(function callback(value, index) {
-                        arrayCardsLevel[index] = parseInt(value.hand[0]);
-                    });
-                    arrayCardsLevel.sort(function (a, b){
-                        return (b - a)
-                    });
-                    if(this.game.deckReference[arrayCardsLevel[0]] == this.game.deckReference[arrayCardsLevel[1]]){
-                        //Hay dos ganadores
-                        let winPlayerFinalCards1 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
-                        let winPlayerFinalCards2 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[1]);
-                        this.winRound(winPlayerFinalCards1,winPlayerFinalCards2);
-                    }else{
-                        let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
-                        this.winRound(winPlayerFinalCards);
-                    }
-                }                    
+                //     Object.values(this.game.players).forEach(function callback(value, index) {
+                //         arrayCardsLevel[index] = parseInt(value.hand[0]);
+                //     });
+                //     arrayCardsLevel.sort(function (a, b){
+                //         return (b - a)
+                //     });
+                //     if(this.game.deckReference[arrayCardsLevel[0]] == this.game.deckReference[arrayCardsLevel[1]]){
+                //         //Hay dos ganadores
+                //         let winPlayerFinalCards1 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         let winPlayerFinalCards2 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[1]);
+                //         this.winRound(winPlayerFinalCards1,winPlayerFinalCards2);
+                //     }else{
+                //         let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         this.winRound(winPlayerFinalCards);
+                //     }
+                // }                    
 
                 // let playedCardWinner = this.game.deckReference[arrayCardsLevel[0]];
                 // console.log(playedCardWinner.level);
@@ -597,6 +638,14 @@ export default {
                 });
             }
 
+        },
+        newRound(){
+            this.$axios.post('/api/updateround', {
+                game: this.game,
+                idPlayer: this.idUser
+            }).then(response => {
+                console.log(response);
+            });
         }
     }
 }
