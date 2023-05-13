@@ -252,8 +252,6 @@ export default {
     mounted() {
         this.assignGameData().then(() => {
 
-
-
             this.echo.join('play.game.'+this.idGame)
             .here((users) => {
                 this.users = users;
@@ -285,37 +283,37 @@ export default {
                 console.log(data);
                 if(data.newRound === true){
                     console.log("Entra al principio");
-                    
-                    setTimeout(function() {
+
+                    setTimeout(() => {
                         console.log("setTimeout");
-                        // let div = document.getElementById('thrownCards');
-                        // div.innerHTML = '';
-                        // this.assignGameData().then(() => {
-                        //     this.message = data.message;
+                        this.assignGameData().then(() => {
 
-                        //     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
-                        //         this.chooseCardToKeep = true;
-                        //         this.playedCard = false;
-                        //     }
-                        //     if(data.changeTurn === true){
-                        //         this.playTurn();
-                        //     }
+                            // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                            this.message = data.message;
 
-                        //     if(this.allowPlayCard === true){
-                        //         if(this.hand.some(idCard => idCard === 20)){
-                        //             let otherCard = this.hand.filter(idCard => idCard != 20);
-                        //             if(otherCard){
-                        //                 let levelOtherCard = this.game.deckReference[otherCard].level;
-                        //                 if(levelOtherCard == 5 || levelOtherCard == 7){
-                        //                     this.forceThrowCountess = true;
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // });
-                    }, 7000);                        
-                }else{  
-                    console.log("else newRound");             
+                            if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
+                                this.chooseCardToKeep = true;
+                                this.playedCard = false;
+                            }
+                            if(data.changeTurn === true){
+                                this.playTurn();
+                            }
+
+                            if(this.allowPlayCard === true){
+                                if(this.hand.some(idCard => idCard === 20)){
+                                    let otherCard = this.hand.filter(idCard => idCard != 20);
+                                    if(otherCard){
+                                        let levelOtherCard = this.game.deckReference[otherCard].level;
+                                        if(levelOtherCard == 5 || levelOtherCard == 7){
+                                            this.forceThrowCountess = true;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }, 5000);
+                }else{
+                    console.log("else newRound");
                     this.assignGameData().then(() => {
 
                         // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
@@ -349,6 +347,7 @@ export default {
                 console.log("Mensaje privado");
                 console.log(data);
                 if(data.newRound == true){
+                    console.log('nueva ronda. msg privado')
                     this.newRound();
                 }
             });
@@ -367,7 +366,7 @@ export default {
                         window.location.href = "/games";
                     }
 
-                    
+
                     this.game = JSON.parse(response.data.game);
                     console.log(this.game);
                     this.hand = this.game.players[this.idUser].hand;
@@ -382,10 +381,7 @@ export default {
                         this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.png";
                     }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
                         this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.png";
-                    }          
-                    
-                    
-                    
+                    }
 
                     //Posicionar a los jugadores en sus posiciones
                     let arrayPositions = [4,2,1,3,5];
@@ -513,15 +509,13 @@ export default {
             }).then(response => {
                 console.log(response)
 
-                
-
                 //this.game = JSON.parse(response.data.game);
                 // console.log("muertos");
                 //Comprobar si sólo queda un jugador vivo
                 // let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
                 // console.log(totalActivePlayer);
                 // console.log(this.game.players);
-            
+
                 // if(totalActivePlayer == 1){
                 //     let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
                 //     this.winRound(winPlayer);
@@ -550,11 +544,10 @@ export default {
                 //         let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
                 //         this.winRound(winPlayerFinalCards);
                 //     }
-                // }                    
+                // }
 
                 // let playedCardWinner = this.game.deckReference[arrayCardsLevel[0]];
                 // console.log(playedCardWinner.level);
-
 
             }).catch(e => {
                 console.log(e)
@@ -602,43 +595,43 @@ export default {
                 console.log('escoger carta')
             }
         },
-        winRound(winPlayer1, winPlayer2 = null){
-            console.log(winPlayer1.idPlayer);
-            console.log("Actualizar");
-            // let update_obj = Object.values(this.game.players).findIndex((obj => obj.id == winPlayer.idPlayer));
-            // console.log(update_obj);
-            this.game.players[winPlayer1.idPlayer].roundWins = winPlayer1.roundWins + 1;
-
-            if(winPlayer2 != null){
-                this.game.players[winPlayer2.idPlayer].roundWins = winPlayer2.roundWins + 1;
-            }
-
-            //Puntos por el espía
-            let totalSpyPlayer = Object.values(this.game.players).filter(({spy}) => spy === true).length;            
-            if(totalSpyPlayer == 1){
-                let spyPlayer = Object.values(this.game.players).find(({spy}) => spy === true);
-                this.game.players[spyPlayer.idPlayer].roundWins = spyPlayer.roundWins + 1;
-            }
-            
-
-            console.log(this.game);
-
-            if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
-                //Finalizar la partida
-            }else if(winPlayer2 != null){
-                if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
-
-                }
-            }else{
-                //Siguiente ronda
-                this.$axios.post('/api/updateround', {
-                    game: this.game,
-                }).then(response => {
-                    console.log(response);
-                });
-            }
-
-        },
+        // winRound(winPlayer1, winPlayer2 = null){
+        //     console.log(winPlayer1.idPlayer);
+        //     console.log("Actualizar");
+        //     // let update_obj = Object.values(this.game.players).findIndex((obj => obj.id == winPlayer.idPlayer));
+        //     // console.log(update_obj);
+        //     this.game.players[winPlayer1.idPlayer].roundWins = winPlayer1.roundWins + 1;
+        //
+        //     if(winPlayer2 != null){
+        //         this.game.players[winPlayer2.idPlayer].roundWins = winPlayer2.roundWins + 1;
+        //     }
+        //
+        //     //Puntos por el espía
+        //     let totalSpyPlayer = Object.values(this.game.players).filter(({spy}) => spy === true).length;
+        //     if(totalSpyPlayer == 1){
+        //         let spyPlayer = Object.values(this.game.players).find(({spy}) => spy === true);
+        //         this.game.players[spyPlayer.idPlayer].roundWins = spyPlayer.roundWins + 1;
+        //     }
+        //
+        //
+        //     console.log(this.game);
+        //
+        //     if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
+        //         //Finalizar la partida
+        //     }else if(winPlayer2 != null){
+        //         if(this.game.players[winPlayer1.idPlayer].roundWins >= this.game.numMaxWins){
+        //
+        //         }
+        //     }else{
+        //         //Siguiente ronda
+        //         this.$axios.post('/api/updateround', {
+        //             game: this.game,
+        //         }).then(response => {
+        //             console.log(response);
+        //         });
+        //     }
+        //
+        // },
         newRound(){
             this.$axios.post('/api/updateround', {
                 game: this.game,
