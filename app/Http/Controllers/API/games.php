@@ -397,43 +397,48 @@ class games extends Controller
                 $idActivePlayer = $player['idPlayer'];
             }
         }
+        $checkManySpy = 0;
+        $idSpyPlayer = 0;
+        foreach ($players as $player) {
+            if($player['spy']){
+                $checkManySpy++;
+                $idSpyPlayer = $player['idPlayer'];
+            }
+        }
+        $checkSpy = false;
+        if($checkManySpy == 1){
+            $checkSpy = true;
+        }
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
-//        if(!empty($request->idRival) && isset($privateMessage)){
-//            broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage, $newRound));
-//        }
         broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn, false));
 
         if($totalActivePlayer == 1){
-            //$game['players'][$idActivePlayer]['roundWins'] = $game['players'][$idActivePlayer]['roundWins'] + 1;
             $privateMessage = "Has ganado";
-            broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
-
+            if($checkSpy == false){
+                broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
+            }else{
+                broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true, $idSpyPlayer));
+            }
         }
-//        if(sizeof($game['deck']) == 0){
-//            $arrayCardsLevel = [];
-//            foreach ($players as $key => $player) {
-//                $arrayCardsLevel[$key] = $player['hand'][0];
-//            }
-//            rsort($arrayCardsLevel);
-//            foreach ($players as $player) {
-//                if($player['hand'][0] = $arrayCardsLevel[0]){
-//                    $winPlayerFinalCards1 = $player['idPlayer'];
-//                }else if($player['hand'][0] = $arrayCardsLevel[1]){
-//                    $winPlayerFinalCards2 = $player['idPlayer'];
-//                }
-//            }
-//            $game['players'][$winPlayerFinalCards1]['roundWins'] = $game['players'][$winPlayerFinalCards1]['roundWins'] + 1;
-//
-//            if($game['deckReference'][$arrayCardsLevel[0]]['level'] == $game['deckReference'][$arrayCardsLevel[1]]['level']){
-//                $game['players'][$winPlayerFinalCards2]['roundWins'] = $game['players'][$winPlayerFinalCards2]['roundWins'] + 1;
-//            }
-//            //newRound($game);
-//            //$game = $this->newRound($game);
-//
-//        }
+
+       if(sizeof($game['deck']) == 0){
+           $arrayCardsLevel = [];
+           foreach ($players as $key => $player) {
+               $arrayCardsLevel[$key] = $player['hand'][0];
+           }
+           rsort($arrayCardsLevel);
+           foreach ($players as $player) {
+               if($player['hand'][0] = $arrayCardsLevel[0]){
+                   $winPlayerFinalCards = $player['idPlayer'];
+               }
+           }
+           $privateMessage = "Has ganado";
+           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));          
+
+       }
 
         $response=[
             'status' => $status,
@@ -486,6 +491,10 @@ class games extends Controller
         $game = $request->game;
         $message = "Nueva Ronda";
 
+        if($request->idSpy != false){
+            $game['players'][$request->idSpy]['roundWins'] = $game['players'][$request->idSpy]['roundWins'] + 1;
+        }
+
         $game['players'][$request->idPlayer]['roundWins'] = $game['players'][$request->idPlayer]['roundWins'] + 1;
 
         $game = $this->newRound($game);
@@ -501,6 +510,15 @@ class games extends Controller
         ];
 
         return $response;
+    }
+
+    public function endGame(Request $request){
+        $result = Game::where('idGame', $request->idGame)
+            ->update([
+                'idWinner' => $request->idPlayer
+            ]);
+
+        return $result;
     }
 
 }

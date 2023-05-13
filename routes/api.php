@@ -29,6 +29,7 @@ Route::post('stealcard', [games::class, 'stealCard']);
 Route::post('playcard', [games::class, 'resolvePlay']);
 Route::post('resolvechancellor', [games::class, 'resolveChancellor']);
 Route::post('updateround', [games::class, 'updateRound']);
+Route::post('endgame', [games::class, 'endGame']);
 
 //friends
 Route::post('searchFriend', [\App\Http\Controllers\API\users::class, 'searchFriend']);

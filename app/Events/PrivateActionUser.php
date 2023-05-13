@@ -18,16 +18,18 @@ class PrivateActionUser implements ShouldBroadcast
     public $idPlayer;
     public $message;
     public $newRound;
+    public $spy;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idGame,$idPlayer, $message, $newRound = false)
+    public function __construct($idGame,$idPlayer, $message, $newRound = false, $spy = false)
     {
         $this->idGame = $idGame;
         $this->idPlayer = $idPlayer;
         $this->message = $message;
         $this->newRound = $newRound;
+        $this->spy = $spy;
     }
 
     public function broadcastWith()
@@ -36,7 +38,8 @@ class PrivateActionUser implements ShouldBroadcast
             'idGame' => $this->idGame,
             'idPlayer' => $this->idPlayer,
             'message' => $this->message,
-            'newRound' => $this->newRound
+            'newRound' => $this->newRound,
+            'spy' => $this->spy
         ];
     }
 

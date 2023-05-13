@@ -288,6 +288,16 @@ export default {
                         console.log("setTimeout");
                         this.assignGameData().then(() => {
 
+                            console.log(this.game);
+                            let playerWinner = Object.values(this.game.players).filter(({roundWins}) => roundWins >= this.game.numMaxWins);
+                            console.log(playerWinner);
+                            if(playerWinner.length != 0){
+                                //Finalizar la partida
+                                console.log("Finalizar partida");
+                                console.log(playerWinner[0].idPlayer);
+                                this.endGame(playerWinner[0].idPlayer);
+                            }
+
                             // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
                             this.message = data.message;
 
@@ -348,7 +358,8 @@ export default {
                 console.log(data);
                 if(data.newRound == true){
                     console.log('nueva ronda. msg privado')
-                    this.newRound();
+                    console.log(data.spy)
+                    this.newRound(data.spy);
                 }
             });
         });
@@ -632,11 +643,21 @@ export default {
         //     }
         //
         // },
-        newRound(){
-            this.$axios.post('/api/updateround', {
+        newRound(spy){
+            this.$axios.post('/api/updateround', {                
                 game: this.game,
-                idPlayer: this.idUser
+                idPlayer: this.idUser,
+                idSpy: spy
             }).then(response => {
+                console.log(response);
+            });
+        },
+        endGame(playerWinner){
+            this.$axios.post('/api/endgame', {      
+                idGame: this.game.idGame,
+                idPlayer: playerWinner
+            }).then(response => {
+                console.log("resp victoria");
                 console.log(response);
             });
         }
