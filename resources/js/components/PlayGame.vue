@@ -4,6 +4,27 @@
             <span><p>Cargando...</p></span>
         </div>
         <div v-if="game">
+            <div class="modal fade" id="showRivalCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showRivalCard" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header border-0 pe-1">
+                            <div class="modal-div-title">
+                                <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta del jugador {{priestResponseObj.rival.alias}}</h2>
+                            </div>
+                            <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        </div>
+                        <div class="modal-body pb-3">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-2 mx-2 mb-3 d-flex justify-content-center">
+                                    <img class="rival-card" v-if="priestResponseObj.cardRival" :src="priestResponseObj.cardRival.image" :alt="priestResponseObj.cardRival.title">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 pb-3 pt-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -32,6 +53,7 @@
             </div>
             <div class="container-cards">
                 <div class="container-cards-row-1">
+                    <h2 id="title-play" class="message-title-play fade">Test ha jugado el Canciller</h2>
                     <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
                         <div>
                             <label class="text-2">{{players[2].alias}}</label>
@@ -100,7 +122,7 @@
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
                         <img v-else :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4">{{ game.deck.length }}</label>
+                        <label class="text-1 fs-4" id="deck-length">{{ game.deck.length }}</label>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -177,7 +199,7 @@
                     <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
                 </div>
                 <div>
-                    <label class="text-2 fs-4">Última tirada:</label>
+                    <label class="text-2 fs-4">Última jugada:</label>
                     <label class="text-2">{{ message }}</label>
                 </div>
                 <div>
@@ -237,6 +259,10 @@ export default {
             chooseCardToKeep: false,
             deckRouteImg: false,
             forceThrowCountess: false,
+            priestResponseObj: {
+                'rival': null,
+                'cardRival': null
+            },
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -289,6 +315,10 @@ export default {
                 console.log(data);
                 this.assignGameData().then(() => {
                     // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                    const title = document.getElementById('title-play')
+                    title.classList.add('show')
+                    setTimeout(function() {title.classList.remove('show');}, 2000);
+
                     this.message = data.message;
 
                     if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -313,11 +343,15 @@ export default {
                 });
             });
 
-        // this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
-        //     .listen('PrivateActionUser',(data)=>{
-        //         console.log(data);
-        //     });
+        this.echo.join('play.game.'+this.idGame+'player.'+this.idUser)
+            .listen('PrivateActionUser',(data)=>{
+                console.log(data);
+            });
         });
+
+        const deckLength = document.getElementById("deck-length");
+        deckLength.addEventListener('onMouse'){}
+        console.log(deckLength)
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
@@ -456,6 +490,16 @@ export default {
                 levelCardToGuess: levelCardToGuess,
             }).then(response => {
                 console.log(response)
+                //priest
+                if(this.game.deckReference[idCard].level == 2){
+                    const rivalCard = this.game.players[idRival].hand[0];
+                    this.priestResponseObj.rival = this.game.players[idRival];
+                    this.priestResponseObj.cardRival = this.game.deckReference[rivalCard];
+
+                    const myModal = new bootstrap.Modal(document.getElementById("showRivalCard"), {});
+                    myModal.show();
+                    setTimeout(function() {myModal.hide();}, 3500);
+                }
             }).catch(e => {
                 console.log(e)
             });

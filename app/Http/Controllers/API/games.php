@@ -209,7 +209,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-       shuffle($deck);
+        shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
@@ -286,7 +286,6 @@ class games extends Controller
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Guardia sobre el jugador '.$players[$request->idRival]['alias'].'. Adivina la carta '.$cardsByLevel[$request->levelCardToGuess]->title.'. ' .$message_result;
                 break;
             case 'Sacerdote':
-                //TODO: girar la card por js al player
 
                 $status = 'success';
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Sacerdote.';

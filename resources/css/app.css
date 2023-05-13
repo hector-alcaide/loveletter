@@ -418,6 +418,9 @@ button:hover, button:focus{
     transform: translate(-50%, -50%);
     color: #e3c99e;
 }
+#deck-length{
+    /*cursor: pointer;*/
+}
 .container-cards-row-2{
     height: 150px;
 }
@@ -569,6 +572,7 @@ button:hover, button:focus{
     border-radius: 10px;
     width: 150px;
     margin-top: 50px;
+    box-shadow: #301a1a 0 0 8px 0.3px;
 }
 .myCards-play:hover, .myCards-play:focus{
     border: wheat solid 3px;
@@ -617,17 +621,6 @@ button:hover, button:focus{
     font-size: 3rem;
     font-family: blackchancery;
 }
-.card-guess{
-    width: 100px;
-    border-radius: 10px;
-}
-.card-guess:hover{
-    cursor: pointer;
-}
-.card-guess-selected{
-    border: #6b2d35 solid 3px;
-    box-shadow: #301a1a 0 0 10px 7px;
-}
 .close-modal{
     width: 35px;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 6px;
@@ -642,4 +635,36 @@ button:hover, button:focus{
     width: 120px;
     height: 40px;
     font-size: 1.2rem
+}
+
+/*priest card rival*/
+.rival-card{
+    width: 150px;
+    border-radius: 10px;
+    box-shadow: #301a1a 0 0 8px 0.3px;
+}
+/*modal guess*/
+.card-guess{
+    width: 100px;
+    border-radius: 10px;
+}
+.card-guess:hover{
+    cursor: pointer;
+}
+.card-guess-selected{
+    border: #6b2d35 solid 3px;
+    box-shadow: #301a1a 0 0 10px 7px;
+}
+
+.message-title-play{
+    position: relative;
+    /*background-color: red;*/
+    width: 900px;
+    top: 170px;
+    left: 80px;
+    font-family: vinque;
+    font-size: 4.5rem;
+    color: black;
+    text-shadow: 1px 1px #301a1a, -1px -1px #eeeeee;
+    z-index: 99999;
 }
