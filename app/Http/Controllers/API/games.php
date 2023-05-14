@@ -515,10 +515,15 @@ class games extends Controller
     public function endGame(Request $request){
         $result = Game::where('idGame', $request->idGame)
             ->update([
-                'idWinner' => $request->idPlayer
+                'idWinner' => $request->idPlayer,
+                'started' => 2
             ]);
 
-        return $result;
+            $response = [
+                'status' => 'success'
+            ];
+    
+            return $response;
     }
 
 }

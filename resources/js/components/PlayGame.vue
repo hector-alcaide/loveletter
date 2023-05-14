@@ -295,7 +295,8 @@ export default {
                                 //Finalizar la partida
                                 console.log("Finalizar partida");
                                 console.log(playerWinner[0].idPlayer);
-                                this.endGame(playerWinner[0].idPlayer);
+                                let finalGame = this.endGame(playerWinner[0].idPlayer);
+                                console.log(finalGame);
                             }
 
                             // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
@@ -366,6 +367,7 @@ export default {
     },
     beforeUnmount(){
         this.echo.leave('play.game.'+this.idGame);
+        this.echo.leave('play.game.'+this.idGame+'.player.'+this.idUser);
     },
     methods: {
         assignGameData(){
@@ -657,8 +659,13 @@ export default {
                 idGame: this.game.idGame,
                 idPlayer: playerWinner
             }).then(response => {
-                console.log("resp victoria");
-                console.log(response);
+                if(response.data.status == "success"){
+                    console.log("Entra en leave");
+                    this.echo.leave('play.game.'+this.idGame);
+                    this.echo.leave('play.game.'+this.idGame+'.player.'+this.idUser);
+                    // this.$router.go('/');
+                    window.location.href = "/home";
+                }
             });
         }
     }
