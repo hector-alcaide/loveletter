@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div v-if="players[1].activePlayer === true">
-                            <button class="mx-auto" v-if="players[1].maid === false && typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                            <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
                                 Elegir este jugador
                             </button>
                             <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
@@ -122,8 +122,13 @@
                     </div>
                 </div>
                 <div class="container-cards-row-2">
-                    <div id="tiradas" class="thrown-cards">
+                    <div id="thrownCards" class="thrown-cards">
                         <!-- <img src="../../images/card1.jpg" style="width: 90px"> -->
+                    </div>
+                    <div class="discard-card" v-if="allowDiscardCard">
+                        <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
+                            Descartar carta
+                        </button>
                     </div>
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
@@ -274,6 +279,7 @@ export default {
                 'cardRival': null
             },
             titleMessage: null,
+            allowDiscardCard: false,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -435,6 +441,19 @@ export default {
             this.users.splice(array_pos, 1);
         },
         playTurn(){
+            let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
+            let div = document.getElementById('thrownCards');
+            div.innerHTML = '';
+            let count = 0;
+            this.game.thrownCards.forEach(res =>{
+                div.innerHTML +=
+                    `<img class="carta${random[count]}" src="http://[::1]:5173/resources/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 100px">`;
+                count++;
+                if(count == 5){
+                    count = 0;
+                }
+            });
+
             let playerTurn = this.game.turnPlayerNum;
             let playerNum = this.game.players[this.idUser].playerNum;
 
@@ -471,14 +490,31 @@ export default {
 
             if (this.typesCardResolution[cardResolution] === 'default') {
                 this.resolvePlayedCard({idCard: idCard});
-            } else {
+            }else if(cardResolution === 'onPlayer'){
                 this.typesCardResolution[cardResolution] = true;
+            } else {
+                //comprobar que si todos los jugadores estan protegidos permita descartar carta
+                const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
+                numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
             }
         },
+        discardCard(idCard){
+            this.allowDiscardCard = false;
+
+            const arrayHand = Object.values(this.game.players[this.idUser].hand);
+            const cardKeyDelete = arrayHand.indexOf(idCard);
+
+            this.game.players[this.idUser].hand.splice(cardKeyDelete, 1);
+
+            this.$axios.post('/api/discardCard', {
+                game: this.game,
+                idPlayer: this.idUser,
+                idCard: idCard,
+            }).then(response => {
+                console.log(response)
+            })
+        },
         resolvePlayedCard({idCard, idRival = null, levelCardToGuess = null, setFalseOnTypeRes = false}){
-            console.log('players:')
-            console.log(this.players)
-            console.log(idRival)
             setFalseOnTypeRes === true ? this.typesCardResolution[this.cardsResolution[this.playedCard.level]] = false : '';
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);

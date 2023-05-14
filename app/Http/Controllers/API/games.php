@@ -375,4 +375,26 @@ class games extends Controller
         return $game;
     }
 
+    public function discardCard(Request $request){
+        $game = $request->game;
+
+        array_push($game['thrownCards'], $request->idCard);
+
+        $game = $this->skipTurn($game);
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
+
+        $message = $game['players'][$request->idPlayer]['alias'].' ha descartado la carta '. $game['deckReference'][$request->idCard]['title'] .' al estar todos los jugadores protegidos';
+
+        broadcast(new PublicActionUser($game['idGame'], $message, true));
+
+        $response=[
+            'status' => true,
+            'message' => $message,
+        ];
+
+        return $response;
+    }
+
 }
