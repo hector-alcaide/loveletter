@@ -26,12 +26,16 @@
             <div class="text-center">
                 <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
-            <div class="divReturn">
-                <button class="d-inline return button_secondary" @click="$router.push('/home')">Volver</button>
-                <h1 class="text-1 title-profile">Partidas</h1>
+            <div class="w-100 float-left d-flex">
+                <div class="w-50 float-left">
+                    <button class="return button_secondary" @click="$router.push('/')">Volver</button>
+                </div>
+                <div class="w-50 float-left ps-5">
+                    <h1 class="ps-5 ms-2 title-page">Partidas</h1>
+                </div>
             </div>
-            <div class="d-flex justify-content-center w-100">
-                <button class="button_jugar mt-lg-4" @click="$router.push('/games/create')">Crear partida</button>
+            <div class="d-flex flex-row-reverse w-75">
+                <button class="button_jugar mt-lg-3 mb-3" @click="$router.push('/games/create')">Crear partida</button>
             </div>
             <div class="w-100">
                 <div class="mx-auto w-75">

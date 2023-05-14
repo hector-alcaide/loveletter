@@ -26,11 +26,15 @@
             <div class="text-center">
                 <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
-            <div class="divReturn">
-                <button class="d-inline return button_secondary" @click="$router.push('/games')" style="width: 175px;">Lista de partidas</button>
-                <h1 class="text-1 title-profile">Crear Partida</h1>
+            <div class="w-100 float-left d-flex">
+                <div class="w-50 float-left">
+                    <button class="return button_secondary" @click="$router.push('/games')" style="width: 175px">Lista de partidas</button>
+                </div>
+                <div class="w-50 float-left ps-5">
+                    <h1 class="ps-5 ms-2 title-page">Crear partida</h1>
+                </div>
             </div>
-            <div class="mx-auto mt-lg-5 text-center" style="width: 65%;">
+            <div class="mx-auto mt-lg-1 text-center" style="width: 70%;">
                 <div class="d-inline-block me-lg-5">
                     <img class="" src="../../images/espia_fondo.png" style="width: 250px;">
                 </div>

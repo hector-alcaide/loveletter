@@ -26,7 +26,7 @@
             <div class="text-center">
                 <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
-            <div class="divReturn">
+            <div class="divReturn pb-2">
                 <button class="d-inline return button_secondary" @click="$router.push('/home')">Volver</button>
                 <h1 class="text-1 title-profile">Perfil</h1>
             </div>
