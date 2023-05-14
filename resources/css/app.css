@@ -20,6 +20,10 @@
     font-family: 'blackchancery';
 }
 
+.title-page{
+    font-family: blackchancery;
+    font-size: 4.5rem;
+}
 /**background principal**/
 /*body{
     background-color: #6b2d35;
@@ -120,6 +124,7 @@
     background-image: url("../images/parchment3.png");
     background-repeat: no-repeat;
     width: 100%;
+    height: 640px;
 }
 
 .bg-color1{
@@ -253,6 +258,12 @@ button:hover, button:focus{
 .button_secondary{
     background-color: #5e2235;
 }
+.button-long{
+    width: 170px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 1.2rem;
+}
 
 /* FORMS */
 .button_form{
@@ -277,7 +288,11 @@ button:hover, button:focus{
     padding-bottom: 7px;
 }
 .titleFriend{
-    font-size: 2.2rem;
+    display: inline-block;
+    float: right;
+    margin-right: 210px;
+    font-size: 4.5rem;
+    font-family: blackchancery;
 }
 .styleInput{
     width: 200px;
@@ -302,10 +317,6 @@ button:hover, button:focus{
     padding-top: 9px;
     padding-bottom: 9px;
 }
-.divReturn{
-    /* width: 100%;
-    margin-bottom: 6rem; */
-}
 .myFriends{
     width: 65%;
     float: right;
@@ -314,15 +325,6 @@ button:hover, button:focus{
 .searchFriend{
     margin-top: 3rem;
 }
-.buttonClose{
-    /* background-color: #5e2235;
-    font-family: vinque;
-    border-radius: 15px;
-    border: 2px solid #e3c99e;
-    color: white;
-    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px; */
-}
-
 /*Board*/
 .board{
     background-image: url(../images/woodBackground4.jpg);
@@ -529,7 +531,8 @@ button:hover, button:focus{
     display: inline-block;
     float: right;
     margin-right: 250px;
-    font-size: 2.9rem;
+    font-size: 4.5rem;
+    font-family: blackchancery;
 }
 .div-king{
     float: right;
@@ -682,4 +685,44 @@ button:hover, button:focus{
 }
 .cursor-pointer{
     cursor: pointer;
+}
+.lead{
+    font-size: 1.5rem;
+}
+.icon-host{
+    width: 25px;
+    height: 25px;
+}
+
+.parent-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+.child-container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.invite{
+    padding: 0px;
+    background-color: unset;
+    box-shadow: none;
+    border-radius: 0px;
+    border: none;
+    width: 45px;
+    height: 45px;
+    background-image: url("../images/invite_icon.svg");
+}
+.invite:hover, .invite:focus{
+    box-shadow: none;
+    background-image: url("../images/invite_icon_hover.svg");
+}
+
+.invite-add{
+    width: 45px;
 }

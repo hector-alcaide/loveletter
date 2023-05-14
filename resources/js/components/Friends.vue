@@ -9,7 +9,7 @@
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                         </form>
                         <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
@@ -24,19 +24,17 @@
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
-            <div class="divReturn">
-                <button class="d-block return buttonClose" @click="$router.push('/home')">Volver</button>
+            <div class="divReturn pb-2">
+                <button class="d-inline return button_secondary" @click="$router.push('/home')">Volver</button>
+                <h1 class="text-1 titleFriend">Mis amigos</h1>
             </div>
             <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 7rem;">
                 <div class="d-inline">
                     <img class="guardia" style="padding-top: 3rem;" src="../../images/prince.png">
                 </div>
                 <div class="myFriends d-inline">
-                    <div class="d-block text-center">
-                        <label class="text-1 titleFriend">Mis Amigos</label>
-                    </div>
                     <div class="text-1 fs-4 mx-lg-4 d-inline" v-for="item in arrayFriends">
                         <label class="text-1 mt-lg-1 mx-lg-5">{{item.friend_id}}</label>
                     </div>
