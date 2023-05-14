@@ -405,6 +405,12 @@ button:hover, button:focus{
     margin-left: 315px;
     /* margin-right: 150px; */
 }
+.discard-card{
+    position: absolute;
+    margin-left: 300px;
+    margin-top: 160px;
+    z-index: 100;
+}
 .mallet-cards{
     position: absolute;
     left: 600px;
