@@ -32,7 +32,7 @@ Route::post('updateround', [games::class, 'updateRound']);
 Route::post('endgame', [games::class, 'endGame']);
 
 //friends
-Route::post('searchFriend', [\App\Http\Controllers\API\users::class, 'searchFriend']);
+Route::post('searchFriend', [\App\Http\Controllers\API\friends::class, 'searchFriend']);
 Route::post('addFriend', [\App\Http\Controllers\API\friends::class, 'addFriend']);
 Route::post('requestFriend', [\App\Http\Controllers\API\friends::class, 'requestFriend']);
 Route::post('acceptRequestInvitation', [\App\Http\Controllers\API\friends::class, 'acceptRequestInvitation']);
@@ -43,3 +43,6 @@ Route::post('yourFriends', [\App\Http\Controllers\API\friends::class, 'yourFrien
 Route::post('yourProfile', [\App\Http\Controllers\API\profiles::class, 'yourProfile']);
 Route::post('findAlias', [\App\Http\Controllers\API\profiles::class, 'findAlias']);
 Route::post('updateProfile', [\App\Http\Controllers\API\profiles::class, 'updateProfile']);
+
+//Ranking
+Route::post('topwinners', [\App\Http\Controllers\API\rankings::class, 'topWinners']);

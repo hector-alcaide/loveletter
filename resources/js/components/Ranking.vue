@@ -30,16 +30,25 @@
                 <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
                 <h1 class="text-1 title-profile">Ranking</h1>
             </div>
-            <div class="text-center mt-lg-4">
-                
-                <div class="d-inline-block align-middle text-center mt-lg-3 pb-lg-5 mx-lg-5">
-                    <button class="button_jugar d-block mx-auto mt-lg-5" @click="$router.push('/games')">Jugar</button>
-                    <button class="button_menu d-block mx-auto mt-lg-5 mb -lg-4" @click="$router.push('/profile')">Perfil</button>
-                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/friends')">Amigos</button>
-                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/board')">Ranking</button>
+            <div class="text-center mx-auto" style="width: 90%; margin-top: 2rem; height: 453px;">                
+                <div class="table-responsive d-inline-block">
+                    <table class="table" style="width: 550px;">
+                    <thead>
+                        <tr>                    
+                            <th class="text-center text-1 fs-3 px-3">Jugador</th>
+                            <th class="text-center text-1 fs-3 px-3">Victorias totales</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr v-for="item in rankingPlayer">
+                        <td class="text-center"><label class="text-1 fs-5 fw-bold color_b">{{ item.alias }}</label></td>
+                        <td class="text-center"><label class="text-1 fs-5 fw-bold color_b">{{ item.games }}</label></td>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
-                <div class="d-inline-block me-lg-5" style="padding-bottom: 8rem;">
-                    <img class="guardia" src="../../images/canciller.png">
+                <div class="d-inline-block">
+                    <img class="chanciller" src="../../images/canciller.png">
                 </div>
             </div>
         </div>
@@ -57,24 +66,20 @@ export default {
             arrayRequests: [],
             requestAlias: "",
             requestId: "",
-            solicitud: ""
+            solicitud: "",
+            rankingPlayer: []
         }
     },
     created() {
     },
     mounted(){
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-            this.$axios.post('/api/requestFriend', {
+            this.$axios.post('/api/topwinners', {
             })
                 .then(response => {
                     console.log(response)
-                    this.arrayRequests = response.data;
-                    this.contador = response.data.length;
-
-                    response.data.forEach(res =>{
-                        this.requestAlias = res.alias;
-                        this.requestId = res.id;
-                    });
+                    this.rankingPlayer = response.data;  
+                    console.log(response.data)                 
                 })
                 .catch(function (error) {
                     console.error(error);

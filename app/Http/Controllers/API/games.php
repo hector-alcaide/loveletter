@@ -77,6 +77,7 @@ class games extends Controller
             'idsPlayersByTurnNum' => $idsPlayersByTurnNum,
             'thrownCards' => [],
             'numMaxWins' => $gameObj->numMaxWins,
+            'passRound' => 0
         ];
 
         $game = $this->newRound($game);
@@ -210,7 +211,7 @@ class games extends Controller
 
         $deck = array_column($this->getAllCards(), 'idCard');
 
-       shuffle($deck);
+        shuffle($deck);
 
         foreach ($game['players'] as $key => $player) {
             $game['players'][$player['idPlayer']]['hand'] = [
@@ -260,6 +261,7 @@ class games extends Controller
         $players = $game['players'];
         $idPlayer = $request->idPlayer;
         $thrown_card = $request->idCard;
+        $game['passRound'] = 0;
 
         $player_card = reset($players[$idPlayer]['hand']);
         $rival_card = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
@@ -290,7 +292,6 @@ class games extends Controller
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Guardia sobre el jugador '.$players[$request->idRival]['alias'].'. Adivina la carta '.$cardsByLevel[$request->levelCardToGuess]->title.'. ' .$message_result;
                 break;
             case 'Sacerdote':
-                //TODO: girar la card por js al player
 
                 $status = 'success';
                 $message = 'El jugador '. $players[$idPlayer]['alias'] . ' ha jugado el Sacerdote.';
@@ -410,12 +411,17 @@ class games extends Controller
             $checkSpy = true;
         }
 
+        if($totalActivePlayer == 1){
+            $game['passRound'] = 1;
+        }
+
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
         broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn, false));
 
         if($totalActivePlayer == 1){
+            $game['passRound'] = 1;
             $privateMessage = "Has ganado";
             if($checkSpy == false){
                 broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
@@ -520,7 +526,8 @@ class games extends Controller
             ]);
 
             $response = [
-                'status' => 'success'
+                'status' => 'success',
+                'winner' => $request->idPlayer
             ];
     
             return $response;

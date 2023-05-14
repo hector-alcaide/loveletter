@@ -29,7 +29,7 @@
             <div class="divReturn">
                 <button class="d-block return buttonClose" @click="$router.push('/home')">Volver</button>
             </div>
-            <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 7rem;">
+            <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 3.3rem;">
                 <div class="d-inline">
                     <img class="guardia" style="padding-top: 3rem;" src="../../images/prince.png">
                 </div>

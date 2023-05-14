@@ -30,7 +30,7 @@
                 <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
                 <h1 class="text-1 title-profile">Perfil</h1>
             </div>
-            <div class="mx-auto mt-lg-5 text-center" style="width: 75%; padding-bottom: 6rem;">
+            <div class="mx-auto mt-lg-5 text-center" style="width: 75%; padding-bottom: 5.4rem;">
                 <div class="text-center d-inline-block">
                     <form @submit.prevent="findAlias()">
                         <div class="d-inline-block">

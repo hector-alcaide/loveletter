@@ -11,6 +11,18 @@ use Illuminate\Support\Facades\DB;
 
 class friends extends Controller
 {
+    public function searchFriend(Request $request){
+
+        $results = User::where('alias', $request->alias)->get();
+
+        // SELECT id FROM friend JOIN users a ON (friend.idUser1 = a.idUser)
+		// 					JOIN users b ON (friend.idUser2 = b.idUser)
+        //             	WHERE (idUser1 = 4 AND idUser2 = 1 OR idUser2 = 4 AND idUser1 = 1)
+        //             	AND estado = "aceptado"
+
+        return json_encode($results);
+    }
+    
     public function addFriend(Request $request){
 
         try{
