@@ -9,7 +9,7 @@
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                         </form>
                         <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
@@ -21,7 +21,7 @@
                 <img @click="marker" src="../../images/marker.png">
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
-        </div>    
+        </div>
         <div class="bg-image1">
             <div class="text-center">
                 <img class="logo" src="../../images/logo.png">
@@ -79,7 +79,7 @@ export default {
                 });
         });
     },
-    methods: {        
+    methods: {
         acceptInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('api/acceptRequestInvitation', {

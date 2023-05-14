@@ -9,7 +9,7 @@
                     <div class="modal-content">
                         <div class="modal-header border-0 pe-1">
                             <div class="modal-div-title">
-                                <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta del jugador {{priestResponseObj.rival.alias}}</h2>
+                                <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta de {{priestResponseObj.rival.alias}}</h2>
                             </div>
                             <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
                         </div>
@@ -61,17 +61,17 @@
                         <img v-if="players[2].activePlayer" id="card3-down" class="" src="../../images/back-card.jpg" style="width: 90px" @click="rotateCard">
                         <div class="div-extras-down">
                             <div id="protection-3" v-if="players[2].maid === true">
-                                <img class="" src="../../images/protection.png">
+                                <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
                             <div id="spy-3" v-if="players[2].spy === true">
-                                <img class="" src="../../images/spy.png">
+                                <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
                         <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                            Elegir este jugador
+                            Escoger {{ players[2].alias }}}
                         </button>
                         <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
-                            Elegir este jugador
+                            Escoger {{ players[2].alias }}
                         </button>
                     </div>
                     <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
@@ -81,10 +81,10 @@
                         <img v-if="players[1].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
                             <div id="protection-2" v-if="players[1].maid === true">
-                                <img class="" src="../../images/protection.png">
+                                <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
                             <div id="spy-2" v-if="players[1].spy === true">
-                                <img class="" src="../../images/spy.png">
+                                <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
                         <button class="mx-auto" v-if="players[1].maid === false && typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
@@ -101,10 +101,10 @@
                         <img v-if="players[3].activePlayer" src="../../images/back-card.jpg" style="width: 90px">
                         <div class="div-extras-down">
                             <div id="protection-4" v-if="players[3].maid === true">
-                                <img class="" src="../../images/protection.png">
+                                <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
                             <div id="spy-4" v-if="players[3].spy === true">
-                                <img class="" src="../../images/spy.png">
+                                <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
                         <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
@@ -129,10 +129,10 @@
                 <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
                     <div class="div-extras-up">
                         <div id="protection-5" v-if="players[4].maid === true">
-                            <img class="" src="../../images/protection.png">
+                            <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                         </div>
                         <div id="spy-5" v-if="players[4].spy === true">
-                            <img class="" src="../../images/spy.png">
+                            <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                         </div>
                     </div>
                     <img v-if="players[4].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
@@ -149,10 +149,10 @@
                 <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
                     <div>
                         <div id="protection-1" v-if="players[0].maid === true">
-                            <img class="" src="../../images/protection.png">
+                            <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                         </div>
                         <div id="spy-1" v-if="players[0].spy === true">
-                            <img class="" src="../../images/spy.png">
+                            <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                         </div>
                     </div>
                     <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
@@ -171,10 +171,10 @@
                 <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
                     <div class="div-extras-up">
                         <div id="protection-6" v-if="players[5].maid === true">
-                            <img class="" src="../../images/protection.png">
+                            <img class="" src="../../images/protection.png" alt="Imagen protección" title="Este jugador está protegido">
                         </div>
                         <div id="spy-6" v-if="players[5].spy === true">
-                            <img class="" src="../../images/spy.png">
+                            <img class="" src="../../images/spy.png" alt="Icono espía" title="Este jugador tiene el espía">
                         </div>
                     </div>
                     <img v-if="players[5].activePlayer == true" src="../../images/back-card.jpg" style="width: 90px">
