@@ -63,7 +63,7 @@
                         </form>
                     </div>
                     <div class="text-center mt-lg-4" v-if="requestSend == 1 ">
-                        <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">Amistad enviada a {{userFriend}}</label>
+                        <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">{{ message }}</label>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,8 @@ export default {
             arrayRequests: [],
             requestAlias: "",
             requestId: "",
-            solicitud: ""
+            solicitud: "",
+            message: ""
         }
     },
     mounted(){
@@ -104,7 +105,6 @@ export default {
             this.$axios.post('/api/requestFriend', {
             })
                 .then(response => {
-                    console.log(response)
                     this.arrayRequests = response.data;
                     this.contador = response.data.length;
 
@@ -120,21 +120,39 @@ export default {
     },
     methods: {
         searchFriend(e){
+            this.requestSend = 0;
             //e.preventDefault()
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('api/searchFriend', {
                     alias: this.alias
-                })
-                    .then(response => {
-                        response.data.forEach(res =>{
+                }).then(response => {
+                        
+                    this.$axios.post('api/searchNewFriend', {                            
+                        idUser: response.data[0].idUser                            
+                    }).then(response => {
+                        if(response.data == 0){
+                            this.requestSend = 1;
+                            this.message = `No puedes solicitar amistad contigo mismo.`;
+                        }else if(response.data == 1){
+                            this.requestSend = 1;
+                            this.message = `El usuario ${this.alias} ya es tu amigo.`;
+                        }else if(response.data == 2){
+                            this.requestSend = 1;
+                            this.message = `La amistad con ${this.alias} está pendiente de aprobar.`;
+                        }else{
                             this.requestSend = 0;
-                            this.userFriend = res.alias;
-                            this.idFriend = res.idUser;
-                        });
+                            this.message = "";
+                            this.userFriend = response.data[0].alias;
+                            this.idFriend = response.data[0].idUser;
+                        }
                     })
                     .catch(function (error) {
                         console.error(error);
                     });
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
             })
         },
         addFriend(e){
@@ -145,8 +163,8 @@ export default {
                     newFriend: this.idFriend
                 })
                     .then(response => {
-                        console.log(response)
                         this.requestSend = 1;
+                        this.message = `Amistad enviada a ${this.userFriend}.`;
                     })
                     .catch(function (error) {
                         console.error(error);
@@ -159,7 +177,6 @@ export default {
                     solicitud: requestId
                 })
                     .then(response => {
-                        console.log(response)
                         location.reload();
                     })
                     .catch(function (error) {
@@ -173,7 +190,6 @@ export default {
                     solicitud: requestId
                 })
                     .then(response => {
-                        console.log(response)
                         location.reload();
                     })
                     .catch(function (error) {

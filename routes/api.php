@@ -32,7 +32,8 @@ Route::post('updateround', [games::class, 'updateRound']);
 Route::post('endgame', [games::class, 'endGame']);
 
 //friends
-Route::post('searchFriend', [\App\Http\Controllers\API\friends::class, 'searchFriend']);
+Route::post('searchFriend', [\App\Http\Controllers\API\users::class, 'searchFriend']);
+Route::post('searchNewFriend', [\App\Http\Controllers\API\friends::class, 'searchNewFriend']);
 Route::post('addFriend', [\App\Http\Controllers\API\friends::class, 'addFriend']);
 Route::post('requestFriend', [\App\Http\Controllers\API\friends::class, 'requestFriend']);
 Route::post('acceptRequestInvitation', [\App\Http\Controllers\API\friends::class, 'acceptRequestInvitation']);

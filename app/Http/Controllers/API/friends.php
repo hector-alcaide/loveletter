@@ -10,19 +10,39 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class friends extends Controller
-{
-    public function searchFriend(Request $request){
+{  
+    public function searchNewFriend(Request $request){
+        $id = Auth::id();
+        if($request->idUser == $id){
+            $message = 0;
+            return $message;
+        }
+        $sql = 'SELECT friend.id FROM friend 
+                JOIN users f ON (f.idUser = friend.idUser1)
+                JOIN users b ON (b.idUser = friend.idUser2)
+                WHERE (idUser1 = '.$id.' AND b.idUser = '.$request->idUser.' OR idUser2 = '.$id.' AND f.idUser = '.$request->idUser.')
+                AND estado = "aceptado"';
+        $result = DB::select($sql);
 
-        $results = User::where('alias', $request->alias)->get();
+        if(sizeof($result)){
+            $message = 1;
+            return $message;
+        }
+        $sql = 'SELECT friend.id FROM friend 
+                JOIN users f ON (f.idUser = friend.idUser1)
+                JOIN users b ON (b.idUser = friend.idUser2)
+                WHERE (idUser1 = '.$id.' AND b.idUser = '.$request->idUser.' OR idUser2 = '.$id.' AND f.idUser = '.$request->idUser.')
+                AND estado = "solicitado"';
+        $result = DB::select($sql);
 
-        // SELECT id FROM friend JOIN users a ON (friend.idUser1 = a.idUser)
-		// 					JOIN users b ON (friend.idUser2 = b.idUser)
-        //             	WHERE (idUser1 = 4 AND idUser2 = 1 OR idUser2 = 4 AND idUser1 = 1)
-        //             	AND estado = "aceptado"
-
-        return json_encode($results);
+        if(sizeof($result)){
+            $message = 2;
+            return $message;
+        }
+        $result = User::where('idUser', $request->idUser)->get();
+        return json_encode($result);
     }
-    
+
     public function addFriend(Request $request){
 
         try{

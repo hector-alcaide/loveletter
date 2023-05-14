@@ -78,6 +78,13 @@ class users extends Controller
         ];
 
         return response()->json($response);
-    }    
+    } 
+    
+    public function searchFriend(Request $request){
+
+        $results = User::where('alias', $request->alias)->get();
+
+        return json_encode($results);
+    }
 
 }
