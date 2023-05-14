@@ -314,13 +314,11 @@ class games extends Controller
 
         isset($discarded_card) && $discarded_card ? array_push($game['thrownCards'], $discarded_card) : '';
 
-//        isset($changeTurn) && $changeTurn === true ? $game['turnPlayerNum'] == count($game['players']) ? $game['turnPlayerNum'] = 1 : $game['turnPlayerNum']++ : '';
+        $game['players'] = $players;
 
         if(isset($changeTurn) && $changeTurn === true){
             $game = $this->skipTurn($game);
         }
-
-        $game['players'] = $players;
 
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
