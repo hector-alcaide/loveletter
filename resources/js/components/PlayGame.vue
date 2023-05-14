@@ -67,11 +67,11 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                            Elegir este jugador
+                        <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer']) && players[2].activePlayer === true" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
+                            Escoger
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
-                            Elegir este jugador
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard'] && players[2].activePlayer === true" @click="this.idRival_GuessCard = players[2].idPlayer">
+                            Escoger
                         </button>
                     </div>
                     <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
@@ -87,11 +87,11 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[1].maid === false && typesCardResolution['onRival'] || typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
-                            Elegir este jugador
+                        <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer']) && players[1].activePlayer === true" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                            Escoger
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
-                            Elegir este jugador
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard'] && players[1].activePlayer === true" @click="this.idRival_GuessCard = players[1].idPlayer">
+                            Escoger
                         </button>
                     </div>
                     <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
@@ -107,11 +107,11 @@
                                 <img class="" src="../../images/spy.png">
                             </div>
                         </div>
-                        <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
-                            Elegir este jugador
+                        <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer']) && players[3].activePlayer === true" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
+                            Escoger
                         </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[3].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[3].idPlayer">
-                            Elegir este jugador
+                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[3].maid === false && typesCardResolution['onRivalOnCard'] && players[3].activePlayer === true" @click="this.idRival_GuessCard = players[3].idPlayer">
+                            Escoger
                         </button>
                     </div>
                 </div>
@@ -151,11 +151,11 @@
                     <div :style="players[4].activePlayer === false ? { 'margin-top': '135px' } : ''">
                         <label class="text-2">{{players[4].alias}}</label>
                     </div>
-                    <button class="mx-auto" v-if="players[4].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
+                    <button class="mx-auto" v-if="players[4].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer']) && players[4].activePlayer === true" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
+                        Escoger
                     </button>
-                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[4].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[4].idPlayer">
-                        Elegir este jugador
+                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[4].maid === false && typesCardResolution['onRivalOnCard'] && players[4].activePlayer === true" @click="this.idRival_GuessCard = players[4].idPlayer">
+                        Escoger
                     </button>
                 </div>
                 <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
@@ -177,7 +177,7 @@
                         <label class="text-2">{{players[0].alias}}</label>
                     </div>
                     <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[0].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
+                        Escoger
                     </button>
                 </div>
                 <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
@@ -193,11 +193,11 @@
                     <div :style="players[5].activePlayer === false ? { 'margin-top': '135px' } : ''">
                         <label class="text-2">{{players[5].alias}}</label>
                     </div>
-                    <button class="mx-auto" v-if="players[5].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
-                        Elegir este jugador
+                    <button class="mx-auto" v-if="players[5].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer']) && players[5].activePlayer === true" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
+                        Escoger
                     </button>
-                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[5].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[5].idPlayer">
-                        Elegir este jugador
+                    <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[5].maid === false && typesCardResolution['onRivalOnCard'] && players[5].activePlayer === true" @click="this.idRival_GuessCard = players[5].idPlayer">
+                        Escoger
                     </button>
                 </div>
             </div>

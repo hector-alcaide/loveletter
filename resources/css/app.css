@@ -378,12 +378,40 @@ button:hover, button:focus{
     margin-left: 126px;
     margin-right: 175px;
 }
+.div-player-3 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-3 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
 .div-player-2{
     position: absolute;
     left: 440px;
     width: 100px;
     height: 190px;
     top: 1px;
+}
+.div-player-2 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-2 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-player-4{
     transform: rotate(37deg);
@@ -394,6 +422,20 @@ button:hover, button:focus{
     width: 100px;
     height: 190px;
     margin-left: 175px;
+}
+.div-player-4 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-4 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .container-cards-row-1{
     height: 250px;
@@ -432,6 +474,20 @@ button:hover, button:focus{
     transform: rotate(36deg);
     margin-left: 145px;
 }
+.div-player-5 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-5 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
 .div-player-1{
     position: absolute;
     top: 400px;
@@ -441,6 +497,20 @@ button:hover, button:focus{
     width: 590px;
     /* margin-left: 80px; */
     /* padding-bottom: 95px; */
+}
+.div-player-1 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-1 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-player-1 > div{
     display: block;
@@ -462,6 +532,20 @@ button:hover, button:focus{
     left: 760px;
     width: 100px;
     height: 190px;
+}
+.div-player-6 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-6 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-extras-down{
     width: 100px;
