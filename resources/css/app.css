@@ -703,3 +703,21 @@ button:hover, button:focus{
     justify-content: center;
     align-items: center;
 }
+.invite{
+    padding: 0px;
+    background-color: unset;
+    box-shadow: none;
+    border-radius: 0px;
+    border: none;
+    width: 45px;
+    height: 45px;
+    background-image: url("../images/invite_icon.svg");
+}
+.invite:hover, .invite:focus{
+    box-shadow: none;
+    background-image: url("../images/invite_icon_hover.svg");
+}
+
+.invite-add{
+    width: 45px;
+}

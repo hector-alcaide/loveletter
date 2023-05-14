@@ -24,7 +24,7 @@
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
             <div class="divReturn">
                 <button class="d-inline return button_secondary" @click="$router.push('/home')">Volver</button>
@@ -40,7 +40,7 @@
                             <div class="text-center mb-5 d-inline-block mx-2" style="width: 250px">
                                 <label class="text-2 fs-4">Partida número {{item.idGame}}</label>
                                 <img class="my-2" src="../../images/imagen-partida-peq.jpg" style="width: 200px">
-                                <button type="submit" class="mx-auto" @click="$router.push('/games/join/'+item.idGame)">Unirse a partida</button>
+                                <button type="submit" class="mx-auto py-1 px-3" @click="$router.push('/games/join/'+item.idGame)">Unirse</button>
                             </div>
                         </slide>
 

@@ -1,35 +1,26 @@
 <template>
-    <div class="text-center mt-lg-3">
-        <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
-    </div>
-    <div class="divReturn">
-        <button class="d-block return buttonClose" @click="$router.push('/home')">Volver</button>
-    </div>
     <div class="modal fade" id="modalFriends" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Amigos</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pb-5">
+                <div class="modal-header border-0 pe-1">
+                    <div class="modal-div-title">
+                        <h2 class="modal-title" id="staticBackdropLabel">Invitar amigos</h2>
+                    </div>
+                    <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text">
-                        </div>
-                        <div class="col-md-6">
-                            <button v-if="this.game && this.game.idHost == this.idUser" type="button" class="mx-auto" @click="prepareGame(this.idGame)">Buscar</button>
+                <div class="modal-body pb-3">
+                    <div class="text-center px-3">
+                        <div class="text-1 fs-4 mx-lg-4 d-inline" v-for="item in friends">
+                            <label class="text-1 mt-lg-1 ms-lg-5 pb-4">{{item.friend_id}}</label>
+                            <button type="button" class="mx-lg-3 close-modal invite-add" @click="inviteGame(item.friend_id)">+</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                <div class="modal-footer border-0 pb-3 pt-1">
                 </div>
             </div>
         </div>
     </div>
-
     <div v-if="this.loadingData" class="pantalla-carga">
         <span><p>Cargando...</p></span>
     </div>
@@ -58,14 +49,14 @@
     </div>
     <div class="bg-image1">
         <div class="text-center">
-            <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+            <a href="/"><img class="logo" src="../../images/logo.png"></a>
         </div>
         <div class="w-100 float-left d-flex">
             <div class="w-50 float-left">
                 <button class="return button_secondary" @click="$router.push('/games')">Volver</button>
             </div>
             <div class="w-50 float-left ps-5">
-                <h1 class="ps-5 ms-2 title-page">Partida {{this.game.idGame}}</h1>
+                <h1 class="ps-5 ms-2 title-page">Partida {{this.game.idGame}} <button class="invite" type="button" data-bs-toggle="modal" data-bs-target="#modalFriends" title="Invitar amigos a la partida"></button> </h1>
             </div>
         </div>
         <div class="mx-auto mt-lg-1 text-center w-75 float-left d-flex">
@@ -118,6 +109,7 @@ export default {
     },
     beforeMount(){
         this.assignGameData();
+        this.listFriends();
     },
     mounted() {
         this.echo.join('join.game.'+this.idGame)
@@ -212,11 +204,21 @@ export default {
                     });
             })
         },
-        listFriends(){
-            this.$axios.get('/api/getfriends').then(response => {
-                console.log(response.data)
-                this.friends = response.data;
-            });
+        listFriends(e){
+            this.$axios.post('/api/yourFriends', {
+            })
+            .then(response => {
+                console.log('response')
+                console.log(response)
+                    this.friends = response.data;
+            })
+        },
+        inviteGame(aliasFriend){
+            this.$axios.post('/api/inviteFriendGame', {
+                alias: aliasFriend,
+            }).then(response => {
+                console.log(response)
+            })
         }
     }
 }

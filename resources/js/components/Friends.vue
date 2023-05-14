@@ -24,10 +24,10 @@
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
             <div class="divReturn">
-                <button class="d-block return buttonClose" @click="$router.push('/home')">Volver</button>
+                <button class="d-block return button_secondary" @click="$router.push('/home')">Volver</button>
             </div>
             <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 7rem;">
                 <div class="d-inline">

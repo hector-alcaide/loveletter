@@ -96,4 +96,7 @@ class friends extends Controller
 //            return $friends;
 //        }
 
+    public function inviteFriendGame(Request $request){
+
+    }
 }

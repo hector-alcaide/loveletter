@@ -36,6 +36,7 @@ Route::post('requestFriend', [\App\Http\Controllers\API\friends::class, 'request
 Route::post('acceptRequestInvitation', [\App\Http\Controllers\API\friends::class, 'acceptRequestInvitation']);
 Route::post('rejectRequestInvitation', [\App\Http\Controllers\API\friends::class, 'rejectRequestInvitation']);
 Route::post('yourFriends', [\App\Http\Controllers\API\friends::class, 'yourFriends']);
+Route::post('inviteFriendGame', [\App\Http\Controllers\API\friends::class, 'inviteFriendGame']);
 
 //profile
 Route::post('yourProfile', [\App\Http\Controllers\API\profiles::class, 'yourProfile']);

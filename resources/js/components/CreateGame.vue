@@ -24,7 +24,7 @@
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.png"></a>
             </div>
             <div class="divReturn">
                 <button class="d-inline return button_secondary" @click="$router.push('/games')" style="width: 175px;">Lista de partidas</button>
