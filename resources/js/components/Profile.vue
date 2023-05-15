@@ -56,7 +56,7 @@
                     </form>
                 </div>
                 <div class="d-inline-block div-king">
-                    <img class="" src="../../images/king1.png">
+                    <img class="" src="../../images/king.png">
                 </div>
             </div>
         </div>

@@ -48,7 +48,7 @@
                     </table>
                 </div>
                 <div class="d-inline-block">
-                    <img class="chanciller" src="../../images/canciller1.png">
+                    <img class="chanciller" src="../../images/canciller.png">
                 </div>
             </div>
         </div>

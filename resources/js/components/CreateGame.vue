@@ -10,7 +10,7 @@
             </div>
             <div class="mx-auto mt-lg-5 text-center" style="width: 65%; padding-bottom: 6rem;">
                 <div class="d-inline-block me-lg-5">
-                    <img class="" src="../../images/espia_fondo1.png" style="width: 250px;">
+                    <img class="" src="../../images/espia_fondo.png" style="width: 250px;">
                 </div>
                 <div class="text-center d-inline-block ms-lg-5" style="float: right;">
                     <form>
