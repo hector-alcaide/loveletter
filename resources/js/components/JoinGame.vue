@@ -14,6 +14,9 @@
                             <label class="text-2 mt-lg-1 ms-lg-5 pb-4">{{item.friend_id}}</label>
                             <button type="button" class="mx-lg-3 close-modal invite-add" @click="inviteGame(item.friend_id)">+</button>
                         </div>
+                        <div>
+                            <p class="text-1">{{ invitationMessage }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-0 pb-3 pt-1">
@@ -96,6 +99,7 @@ export default {
             requestId: "",
             solicitud: "",
             friends: [],
+            invitationMessage: null,
             echo: new Echo({
                 broadcaster: 'pusher',
                 key: 'local',
@@ -230,9 +234,11 @@ export default {
         },
         inviteGame(aliasFriend){
             this.$axios.post('/api/inviteFriendGame', {
-                alias: aliasFriend,
+                idSender: this.idUser,
+                aliasFriend: aliasFriend,
             }).then(response => {
                 console.log(response)
+                this.invitationMessage = response.data.message;
             })
         }
     }

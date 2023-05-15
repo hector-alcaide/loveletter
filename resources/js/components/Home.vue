@@ -124,7 +124,13 @@ export default {
                     });
             })
         },
-
+        listInvitations(){
+            this.$axios.post('/api/listInvitations', {
+                idReceptor: window.Laravel.user.idUser
+            }).then(response => {
+                console.log(response);
+            });
+        }
     }
 }
 </script>
