@@ -247,7 +247,7 @@ class games extends Controller
                 if($player_card_level == $rival_card_level){
                     $message_result = 'Empate, el nivel de las cartas es el mismo.';
                 }else{
-                    $discarded_card = intval($players[$player_to_remove]['hand']);                    
+                    $discarded_card = intval($players[$player_to_remove]['hand']);
                     $message_result = $players[$player_to_remove]['alias'].' ha sido eliminado.';
                 }
 
@@ -380,7 +380,7 @@ class games extends Controller
                }
            }
            $privateMessage = "Has ganado";
-           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));          
+           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
 
        }
 
@@ -490,7 +490,7 @@ class games extends Controller
                 'status' => 'success',
                 'winner' => $request->idPlayer
             ];
-    
+
             return $response;
     }
 }

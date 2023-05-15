@@ -685,6 +685,9 @@ button:hover, button:focus{
     width: 35px;
     border-radius: 12px;
 }
+.end_board{
+    padding-right: 10px;
+}
 .end_board:hover{
     background-color: black;
     color: red;
@@ -717,6 +720,7 @@ button:hover, button:focus{
 .close-modal{
     width: 35px;
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 6px;
+    padding-right: 11px;
 }
 .close-modal:hover{
     box-shadow: inset 0 0 10px 2px #301a1a;
@@ -794,7 +798,7 @@ thead, tbody tr {
 }
 thead {
     width: calc( 100% - 1em )
-} 
+}
 thead, tbody tr {
     display:table;
     table-layout:fixed;
@@ -852,4 +856,6 @@ thead, tbody tr {
 
 .invite-add{
     width: 45px;
+    font-family: vinque;
+    padding: 0px;
 }
