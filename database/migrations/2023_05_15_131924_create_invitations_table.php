@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('idInvitation');
             $table->foreignId('idSender')->references('idUser')->on('users');
             $table->foreignId('idReceptor')->references('idUser')->on('users');
+            $table->foreignId('idGame')->references('idGame')->on('games');
             $table->enum('status', ['open', 'close']);
             $table->timestamps();
         });

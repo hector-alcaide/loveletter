@@ -1,4 +1,30 @@
 <template>
+    <div class="modal fade" id="invitationsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content pb-5">
+                <div class="modal-header border-0 pe-1">
+                    <div class="modal-div-title">
+                        <h2 class="modal-title" id="staticBackdropLabel">Invitaciones</h2>
+                    </div>
+                    <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div class="text-center px-3">
+                        <div class="text-2 fs-4 mx-lg-4" v-for="inv in invitations">
+                            <label class="text-2 mt-lg-1 pb-2">- {{inv.sender.alias}} te invita a una partida</label>
+                            <div class="pb-4 mb-3">
+                                <button type="button" class="mx-lg-3 fs-5" @click="updateInvitation(inv.idInvitation, inv.idGame, 1)">Aceptar</button>
+                                <button type="button" class="mx-lg-3 fs-5 button_secondary" @click="updateInvitation(inv.idInvitation, inv.idGame, 0)">Rechazar</button>
+                            </div>
+                        </div>
+                        <div v-if="invitations.length == 0">
+                            <label class="text-2 mt-lg-1 pb-2 fs-4">No tienes invitaciones</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="marker">
             <div id="markerContent" class="markerContent" >
@@ -22,11 +48,16 @@
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
         </div>
+        <div>
+            <button class="invitation-button" type="button" data-bs-toggle="modal" data-bs-target="#invitationsModal" title="Abrir invitaciones" @click="listInvitations()">
+                Invitaciones
+            </button>
+        </div>
         <div class="bg-image1">
             <div class="text-center">
                 <a href="/"><img class="logo" src="../../images/logo.svg"></a>
             </div>
-            <div class="w-100 float-left d-flex">
+            <div class="w-100 float-left d-flex me-">
                 <div class="w-50 float-left">
                     <button class="return button_secondary" @click="$router.push('/')">Volver</button>
                 </div>
@@ -34,8 +65,8 @@
                     <h1 class="ps-5 ms-2 title-page">Partidas</h1>
                 </div>
             </div>
-            <div class="d-flex flex-row-reverse w-75">
-                <button class="button_jugar mt-lg-3 mb-3" @click="$router.push('/games/create')">Crear partida</button>
+            <div class="d-flex justify-content-center w-100 mx-auto">
+                <button class="button_jugar mt-lg-3 mb-4" @click="$router.push('/games/create')">Crear partida</button>
             </div>
             <div class="w-100">
                 <div class="mx-auto w-75">
@@ -79,8 +110,12 @@ export default {
             arrayRequests: [],
             requestAlias: "",
             requestId: "",
-            solicitud: ""
+            solicitud: "",
+            invitations: null
         }
+    },
+    beforeMount() {
+        this.listInvitations();
     },
     mounted() {
         this.$axios.get('/sanctum/csrf-cookie').then(response => {
@@ -174,6 +209,26 @@ export default {
                     });
             })
         },
+        listInvitations(){
+            this.$axios.post('/api/listInvitations', {
+                idReceptor: window.Laravel.user.idUser
+            }).then(response => {
+                console.log(response);
+                this.invitations = response.data.invitations ?? null;
+            });
+        },
+        updateInvitation(idInvitation, idGame, status){
+            this.$axios.post('/api/updateInvitation', {
+                idInvitation: idInvitation
+            }).then(response => {
+                console.log(response);
+                if (status == 1){
+                    window.location.href = "/games/join/1";
+                }else{
+                    this.listInvitations();
+                }
+            });
+        }
     }
 }
 </script>

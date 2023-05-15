@@ -17,5 +17,14 @@ class Invitation extends Model
         'idSender',
         'idReceptor',
         'status',
+        'idGame',
     ];
+
+    public function game(){
+        return $this->hasOne(Game::class, 'idGame', 'idGame');
+    }
+
+    public function sender(){
+        return $this->hasOne(User::class, 'idUser', 'idSender');
+    }
 }

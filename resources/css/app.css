@@ -859,3 +859,11 @@ thead, tbody tr {
     font-family: vinque;
     padding: 0px;
 }
+.invitation-button{
+    position: absolute;
+    transform: translate(1060px, -210px);
+    /*background-image: url("../images/invitation-icon.jpg");*/
+    font-size: 1.5rem;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
