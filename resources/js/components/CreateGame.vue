@@ -45,7 +45,7 @@
                             <select class="styleInput mx-lg-4" name="type" id="type" v-model="type" style="width: 140px;">
                                 <option value="" disabled>-</option>
                                 <option value="public">Pública</option>
-                                <option value="private">Privada</option>
+<!--                                <option value="private">Privada</option>-->
                             </select>
                         </div>
                         <div class="d-block my-lg-5">

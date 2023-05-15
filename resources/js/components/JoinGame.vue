@@ -236,6 +236,7 @@ export default {
             this.$axios.post('/api/inviteFriendGame', {
                 idSender: this.idUser,
                 aliasFriend: aliasFriend,
+                idGame: this.game.idGame
             }).then(response => {
                 console.log(response)
                 this.invitationMessage = response.data.message;

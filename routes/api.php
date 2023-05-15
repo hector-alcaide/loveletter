@@ -42,7 +42,9 @@ Route::post('rejectRequestInvitation', [\App\Http\Controllers\API\friends::class
 Route::post('yourFriends', [\App\Http\Controllers\API\friends::class, 'yourFriends']);
 
 //invitations
-Route::post('inviteFriendGame', [\App\Http\Controllers\API\friends::class, 'inviteFriendGame']);
+Route::post('inviteFriendGame', [\App\Http\Controllers\API\invitations::class, 'inviteFriendGame']);
+Route::post('listInvitations', [\App\Http\Controllers\API\invitations::class, 'listInvitations']);
+Route::post('updateInvitation', [\App\Http\Controllers\API\invitations::class, 'updateInvitation']);
 
 //profile
 Route::post('yourProfile', [\App\Http\Controllers\API\profiles::class, 'yourProfile']);

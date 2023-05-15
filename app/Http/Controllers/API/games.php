@@ -9,6 +9,7 @@ use App\Events\PrivateActionUser;
 use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Models\Game;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,8 @@ class games extends Controller
             'game' => json_encode($game),
             'started' => 1
         ]);
+
+        $thisGameInvitations = Invitation::where('idGame', $gameObj->idGame)->update(['status' => 'close']);
 
         broadcast(new PrepareGame($game['idGame']));
 

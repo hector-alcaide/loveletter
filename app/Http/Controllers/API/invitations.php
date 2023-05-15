@@ -14,11 +14,12 @@ class invitations extends Controller
 {
     public function inviteFriendGame(Request $request){
 
-        $idReceptor = User::select('idUser')->where('alias', $request->aliasFriend)->get();
+        $idReceptor = User::select('idUser')->where('alias', $request->aliasFriend)->first();
 
         $new_invitation = Invitation::create([
             'idSender' => $request->idSender,
-            'idReceptor' => $idReceptor
+            'idReceptor' => $idReceptor->idUser,
+            'idGame' => $request->idGame
         ]);
 
         $message = $new_invitation ? 'Se ha enviado una invitación a ' . $request->aliasFriend : 'Error';
@@ -26,6 +27,36 @@ class invitations extends Controller
         $response = [
           'status' => true,
           'message' => $message
+        ];
+
+        return $response;
+    }
+
+    public function listInvitations(Request $request){
+
+        $invitations = Invitation::where('idReceptor', $request->idReceptor)
+            ->where('status', 'open')
+            ->with(['game', 'sender'])
+            ->get();
+
+        $response = [
+            'invitations' => $invitations,
+            'status' => true,
+            'message' => 'Success'
+        ];
+
+        return $response;
+    }
+
+    public function updateInvitation(Request $request){
+
+        $invitation = Invitation::find($request->idInvitation);
+
+        $invitation->update(['status' => 'close']);
+
+        $response = [
+            'status' => true,
+            'message' => 'Success'
         ];
 
         return $response;
