@@ -3,11 +3,11 @@
         <div class="marker" >
             <div id="markerContent" class="markerContent" >
                 <div class="text-center">
-                    <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+                    <a class="text-2 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
                 <div class="requestFriend" v-if="requestAlias !== ''">
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
-                        <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                        <label class="text-2 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
                         </form>
@@ -28,7 +28,7 @@
             </div>
             <div class="divReturn">
                 <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
-                <h1 class="text-1 title-profile">Ranking</h1>
+                <h1 class="text-2 title-profile" style="margin-right: 150px">Clasificación</h1>
             </div>
             <div class="text-center mx-auto" style="width: 90%; margin-top: 2rem; height: 453px;">                
                 <div class="table-responsive d-inline-block">
