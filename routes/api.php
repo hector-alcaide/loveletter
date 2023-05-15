@@ -28,10 +28,13 @@ Route::post('preparegame', [games::class, 'prepareGame']);
 Route::post('stealcard', [games::class, 'stealCard']);
 Route::post('playcard', [games::class, 'resolvePlay']);
 Route::post('resolvechancellor', [games::class, 'resolveChancellor']);
+Route::post('updateround', [games::class, 'updateRound']);
+Route::post('endgame', [games::class, 'endGame']);
 Route::post('discardCard', [games::class, 'discardCard']);
 
 //friends
 Route::post('searchFriend', [\App\Http\Controllers\API\users::class, 'searchFriend']);
+Route::post('searchNewFriend', [\App\Http\Controllers\API\friends::class, 'searchNewFriend']);
 Route::post('addFriend', [\App\Http\Controllers\API\friends::class, 'addFriend']);
 Route::post('requestFriend', [\App\Http\Controllers\API\friends::class, 'requestFriend']);
 Route::post('acceptRequestInvitation', [\App\Http\Controllers\API\friends::class, 'acceptRequestInvitation']);
@@ -45,3 +48,6 @@ Route::post('inviteFriendGame', [\App\Http\Controllers\API\friends::class, 'invi
 Route::post('yourProfile', [\App\Http\Controllers\API\profiles::class, 'yourProfile']);
 Route::post('findAlias', [\App\Http\Controllers\API\profiles::class, 'findAlias']);
 Route::post('updateProfile', [\App\Http\Controllers\API\profiles::class, 'updateProfile']);
+
+//Ranking
+Route::post('topwinners', [\App\Http\Controllers\API\rankings::class, 'topWinners']);

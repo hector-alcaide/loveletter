@@ -9,7 +9,7 @@
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-2 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
                         </form>
                         <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
@@ -21,23 +21,34 @@
                 <img @click="marker" src="../../images/marker.svg">
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
-        </div>
+        </div>    
         <div class="bg-image1">
             <div class="text-center">
-                <img class="logo" src="../../images/logo.svg">
+                <a href="Home.vue"><img class="logo" src="../../images/logo.svg"></a>        
             </div>
-            <div class="text-center mt-lg-4">
-                <div class="d-inline-block me-lg-5" style="padding-bottom: 8rem;">
-                    <img src="../../images/left_guard.svg">
+            <div class="divReturn">
+                <button class="d-inline return buttonClose" @click="$router.push('/home')">Volver</button>
+                <h1 class="text-2 title-profile" style="margin-right: 150px">Clasificación</h1>
+            </div>
+            <div class="text-center mx-auto" style="width: 90%; margin-top: 2rem; height: 453px;">                
+                <div class="table-responsive d-inline-block">
+                    <table class="table" style="width: 550px;">
+                    <thead>
+                        <tr>                    
+                            <th class="text-center text-2 fs-2 px-3">Jugador</th>
+                            <th class="text-center text-2 fs-2 px-3">Victorias totales</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr v-for="item in rankingPlayer">
+                        <td class="text-center"><label class="text-2 fs-4 fw-bold color_b">{{ item.alias }}</label></td>
+                        <td class="text-center"><label class="text-2 fs-4 fw-bold color_b">{{ item.games }}</label></td>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
-                <div class="d-inline-block align-middle text-center mt-lg-3 pb-lg-5 mx-lg-5">
-                    <button class="button_jugar d-block mx-auto mt-lg-5" @click="$router.push('/games')">Jugar</button>
-                    <button class="button_menu d-block mx-auto mt-lg-5 mb -lg-4" @click="$router.push('/profile')">Perfil</button>
-                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/friends')">Amigos</button>
-                    <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/ranking')">Clasificación</button>
-                </div>
-                <div class="d-inline-block ms-lg-5">
-                    <img src="../../images/right_guard.svg">
+                <div class="d-inline-block">
+                    <img class="chanciller" src="../../images/canciller.svg">
                 </div>
             </div>
         </div>
@@ -55,7 +66,8 @@ export default {
             arrayRequests: [],
             requestAlias: "",
             requestId: "",
-            solicitud: ""
+            solicitud: "",
+            rankingPlayer: []
         }
     },
     created() {
@@ -78,15 +90,24 @@ export default {
                     console.error(error);
                 });
         });
+        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.post('/api/topwinners', {
+            })
+                .then(response => {
+                    this.rankingPlayer = response.data;                
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        });
     },
-    methods: {
+    methods: {        
         acceptInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('api/acceptRequestInvitation', {
                     solicitud: requestId
                 })
                     .then(response => {
-                        console.log(response)
                         location.reload();
                     })
                     .catch(function (error) {
@@ -124,13 +145,7 @@ export default {
                     });
             })
         },
-        listInvitations(){
-            this.$axios.post('/api/listInvitations', {
-                idReceptor: window.Laravel.user.idUser
-            }).then(response => {
-                console.log(response);
-            });
-        }
+
     }
 }
 </script>

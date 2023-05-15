@@ -3,11 +3,11 @@
         <div class="marker">
             <div id="markerContent" class="markerContent" >
                 <div class="text-center">
-                    <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+                    <a class="text-2 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
                 <div class="requestFriend" v-if="requestAlias !== ''">
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
-                        <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                        <label class="text-2 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                         </form>
@@ -18,13 +18,13 @@
                 </div>
             </div>
             <div class="markerLabel">
-                <img @click="marker" src="../../images/marker.png">
+                <img @click="marker" src="../../images/marker.svg">
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="/"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.svg"></a>
             </div>
             <div class="w-100 float-left d-flex">
                 <div class="w-50 float-left">
@@ -83,6 +83,21 @@ export default {
         }
     },
     mounted() {
+        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.post('/api/requestFriend', {
+            }).then(response => {
+                console.log(response)
+                this.arrayRequests = response.data;
+                this.contador = response.data.length;
+
+                response.data.forEach(res =>{
+                    this.requestAlias = res.alias;
+                    this.requestId = res.id;
+                });
+            }).catch(function (error) {
+                console.error(error);
+            });
+        });
         this.getGamesList();
         let echo = new Echo({
             broadcaster: 'pusher',

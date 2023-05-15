@@ -10,8 +10,8 @@
                 </div>
                 <div class="modal-body pb-3">
                     <div class="text-center px-3">
-                        <div class="text-1 fs-4 mx-lg-4 d-inline" v-for="item in friends">
-                            <label class="text-1 mt-lg-1 ms-lg-5 pb-4">{{item.friend_id}}</label>
+                        <div class="text-2 fs-4 mx-lg-4 d-inline" v-for="item in friends">
+                            <label class="text-2 mt-lg-1 ms-lg-5 pb-4">{{item.friend_id}}</label>
                             <button type="button" class="mx-lg-3 close-modal invite-add" @click="inviteGame(item.friend_id)">+</button>
                         </div>
                         <div>
@@ -31,11 +31,11 @@
     <div class="marker">
         <div id="markerContent" class="markerContent" >
             <div class="text-center">
-                <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+                <a class="text-2 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
             </div>
             <div class="requestFriend" v-if="requestAlias !== ''">
                 <div class="text-center my-lg-3" v-for="item in arrayRequests">
-                    <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                    <label class="text-2 fs-5">Solicitud Amistad de {{item.alias}}</label>
                     <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
                         <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                     </form>
@@ -46,13 +46,13 @@
             </div>
         </div>
         <div class="markerLabel">
-            <img @click="marker" src="../../images/marker.png">
+            <img @click="marker" src="../../images/marker.svg">
             <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
         </div>
     </div>
     <div class="bg-image1">
         <div class="text-center">
-            <a href="/"><img class="logo" src="../../images/logo.png"></a>
+            <a href="/"><img class="logo" src="../../images/logo.svg"></a>
         </div>
         <div class="w-100 float-left d-flex">
             <div class="w-50 float-left">
@@ -67,11 +67,11 @@
                 <img class="ps-5 ms-2" src="../../images/baron_background.webp" alt="Imagen decorativa Barón">
             </div>
             <div v-if="this.game" class="w-50 mt-2 pt-3">
-                <h2 class="text-1 mb-4 display-6">Jugadores</h2>
+                <h2 class="text-2 mb-4 display-6">Jugadores</h2>
                 <div class="parent-container">
                     <div v-for="user in users" class="py-1 child-container">
-                        <p class="text-1 lead my-0 pe-1">{{ user.alias }}</p>
-                        <img v-if="this.game.idHost == user.idUser" class=" icon-host" src="../../images/crown_host.png" alt="Icono corona, al ser anfitrión" title="Jugador Anfitrión">
+                        <p class="text-2 lead my-0 pe-1">{{ user.alias }}</p>
+                        <img v-if="this.game.idHost == user.idUser" class=" icon-host" src="../../images/crown_host.svg" alt="Icono corona, al ser anfitrión" title="Jugador Anfitrión">
                     </div>
                 </div>
                 <button v-if="this.game && this.game.idHost == this.idUser && this.users.length > 1" class="mt-5 button-long" @click="prepareGame(this.idGame)">Empezar partida</button>
@@ -133,6 +133,21 @@ export default {
                 console.log(data)
                 window.location.href = "/games/play/"+data.idGame;
             });
+        this.$axios.get('/sanctum/csrf-cookie').then(response => {
+            this.$axios.post('/api/requestFriend', {
+            }).then(response => {
+                console.log(response)
+                this.arrayRequests = response.data;
+                this.contador = response.data.length;
+
+                response.data.forEach(res =>{
+                    this.requestAlias = res.alias;
+                    this.requestId = res.id;
+                });
+            }).catch(function (error) {
+                console.error(error);
+            });
+        });
     },
     beforeUnmount(){
         this.echo.leave('join.game.'+this.game.idGame);
