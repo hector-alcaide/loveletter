@@ -31,7 +31,7 @@
             </div>
             <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 3.3rem;">
                 <div class="d-inline">
-                    <img class="guardia" style="padding-top: 3rem;" src="../../images/prince.png">
+                    <img class="guardia" style="padding-top: 3rem;" src="../../images/prince1.png">
                 </div>
                 <div class="myFriends d-inline">
                     <div class="d-block text-center">
