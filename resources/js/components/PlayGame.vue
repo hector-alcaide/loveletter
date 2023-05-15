@@ -69,10 +69,10 @@
                         </div>
                         <div v-if="players[2].activePlayer === true">
                             <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                             <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                         </div>
                     </div>
@@ -422,15 +422,15 @@ export default {
                     this.hand = this.game.players[this.idUser].hand;
 
                     if(this.game.deck.length >= 15){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_5.svg";
+                        this.deckRouteImg = "/images/mallet_5.svg";
                     }else if(this.game.deck.length < 15 && this.game.deck.length >= 12){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_4.svg";
+                        this.deckRouteImg = "/images/mallet_4.svg";
                     }else if(this.game.deck.length < 12 && this.game.deck.length >= 8){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_3.svg";
+                        this.deckRouteImg = "/images/mallet_3.svg";
                     }else if(this.game.deck.length < 8 && this.game.deck.length >= 4){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.svg";
+                        this.deckRouteImg = "/images/mallet_2.svg";
                     }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.svg";
+                        this.deckRouteImg = "/images/mallet_1.svg";
                     }
 
                     //Posicionar a los jugadores en sus posiciones
@@ -464,15 +464,15 @@ export default {
                     }
 
                     this.cardsToGuess = [
-                        {level: '0', title: 'Espía', image: 'http://[::1]:5173/resources/images/cards/card0.jpg'},
-                        {level: '2', title: 'Sacerdote', image: 'http://[::1]:5173/resources/images/cards/card2.jpg'},
-                        {level: '3', title: 'Barón', image: 'http://[::1]:5173/resources/images/cards/card3.jpg'},
-                        {level: '4', title: 'Doncella', image: 'http://[::1]:5173/resources/images/cards/card4.jpg'},
-                        {level: '5', title: 'Príncipe', image: 'http://[::1]:5173/resources/images/cards/card5.jpg'},
-                        {level: '6', title: 'Canciller', image: 'http://[::1]:5173/resources/images/cards/card6.jpg'},
-                        {level: '7', title: 'Rey', image: 'http://[::1]:5173/resources/images/cards/card7.jpg'},
-                        {level: '8', title: 'Condesa', image: 'http://[::1]:5173/resources/images/cards/card8.jpg'},
-                        {level: '9', title: 'Princesa', image: 'http://[::1]:5173/resources/images/cards/card9.jpg'},
+                        {level: '0', title: 'Espía', image: '/images/cards/card0.jpg'},
+                        {level: '2', title: 'Sacerdote', image: '/images/cards/card2.jpg'},
+                        {level: '3', title: 'Barón', image: '/images/cards/card3.jpg'},
+                        {level: '4', title: 'Doncella', image: '/images/cards/card4.jpg'},
+                        {level: '5', title: 'Príncipe', image: '/images/cards/card5.jpg'},
+                        {level: '6', title: 'Canciller', image: '/images/cards/card6.jpg'},
+                        {level: '7', title: 'Rey', image: '/images/cards/card7.jpg'},
+                        {level: '8', title: 'Condesa', image: '/images/cards/card8.jpg'},
+                        {level: '9', title: 'Princesa', image: '/images/cards/card9.jpg'},
                     ];
 
                     this.loadingData = false;
@@ -497,7 +497,7 @@ export default {
             let count = 0;
             this.game.thrownCards.forEach(res =>{
                 div.innerHTML +=
-                    `<img class="carta${random[count]}" src="http://[::1]:5173/resources/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
+                    `<img class="carta${random[count]}" src="/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
                 count++;
                 if(count == 5){
                     count = 0;
