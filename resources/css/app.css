@@ -85,24 +85,24 @@
     box-shadow: none;
 }
 .shield_yes{
-    background-image: url("../images/shield_yes_1.png");
+    background-image: url("../images/shield_yes_1.svg");
     background-repeat: no-repeat;
     width: 35px;
     height: 45px;
     cursor: pointer;
 }
 .shield_yes:hover{
-    background-image: url("../images/shield_yes_2.png");
+    background-image: url("../images/shield_yes_2.svg");
 }
 .shield_no{
-    background-image: url("../images/shield_no_1.png");
+    background-image: url("../images/shield_no_1.svg");
     background-repeat: no-repeat;
     width: 35px;
     height: 45px;
     cursor: pointer;
 }
 .shield_no:hover{
-    background-image: url("../images/shield_no_2.png");
+    background-image: url("../images/shield_no_2.svg");
 }
 .markerLabel{
     position: relative;
@@ -121,7 +121,7 @@
 
 /**backgrounds**/
 .bg-image1{
-    background-image: url("../images/parchment3.png");
+    background-image: url("../images/parchment.svg");
     background-repeat: no-repeat;
     width: 100%;
     height: 640px;
@@ -166,7 +166,7 @@
     height: 50px;
     background: none;
     border: none;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 1.5rem;
 }
 
@@ -195,7 +195,7 @@
     height: 47px;
     background: none;
     border: none;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 1.5rem;
 }
 
@@ -221,7 +221,7 @@
 }
 
 .fondo{
-    background-image: url('../images/parchment.png');
+    background-image: url('../images/parchment.svg');
 }
 
 .logo{
@@ -232,7 +232,7 @@
 /* buttons */
 button{
     background-color: #AD4955;
-    font-family: vinque;
+    font-family: blackchancery;
     border-radius: 15px;
     border: 2px solid #e3c99e;
     color: white;
@@ -244,14 +244,14 @@ button:hover, button:focus{
 }
 .button_jugar{
     width: 175px;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 3rem;
 }
 .button_menu{
     width: 145px;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -259,10 +259,10 @@ button:hover, button:focus{
     background-color: #5e2235;
 }
 .button-long{
-    width: 170px;
+    width: 200px;
     padding-top: 7px;
     padding-bottom: 7px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 /* FORMS */
@@ -274,16 +274,11 @@ button:hover, button:focus{
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;
 }
 
-/*HOME*/
-.guardia{
-    width: 200px;
-}
-
 /*AMIGOS*/
 .return{
     margin-left: 8rem;
     width: 125px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     padding-top: 7px;
     padding-bottom: 7px;
 }
@@ -296,8 +291,8 @@ button:hover, button:focus{
 }
 .styleInput{
     width: 200px;
-    height: 47px;
-    font-family: vinque;
+    height: 44px;
+    font-family: blackchancery;
     font-size: 1.5rem;
     background: transparent;
     border-top: none;
@@ -327,7 +322,7 @@ button:hover, button:focus{
 }
 /*Board*/
 .board{
-    background-image: url(../images/woodBackground4.jpg);
+    background-image: url(../images/woodBackground.webp);
     background-repeat: no-repeat;
     width: 1366px;
     height: 768px;
@@ -342,13 +337,13 @@ button:hover, button:focus{
     top: 20px;
     /* left: 20px; */
     width: 1005px;
-    background-image: url(../images/board.png);
+    background-image: url(../images/board.svg);
     background-repeat: no-repeat;
     height: 620px;
     display: inline-block;
 }
 .container-frame{
-    background-image: url(../images/frame.png);
+    background-image: url(../images/frame.svg);
     background-repeat: no-repeat;
     width: 250px;
     height: 580px;
@@ -380,12 +375,40 @@ button:hover, button:focus{
     margin-left: 126px;
     margin-right: 175px;
 }
+.div-player-3 > div > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-3 > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
 .div-player-2{
     position: absolute;
     left: 440px;
     width: 100px;
     height: 190px;
     top: 1px;
+}
+.div-player-2 > div > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-2 > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-player-4{
     transform: rotate(37deg);
@@ -397,6 +420,20 @@ button:hover, button:focus{
     height: 190px;
     margin-left: 175px;
 }
+.div-player-4 > div > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-4 > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
 .container-cards-row-1{
     height: 250px;
 }
@@ -404,6 +441,17 @@ button:hover, button:focus{
     position: absolute;
     margin-left: 315px;
     /* margin-right: 150px; */
+}
+.thrown-cards > div > button{
+    transform: translate(10%, 100%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.thrown-cards > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .discard-card{
     position: absolute;
@@ -440,15 +488,43 @@ button:hover, button:focus{
     transform: rotate(36deg);
     margin-left: 145px;
 }
+.div-player-5 > div > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-5 > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
 .div-player-1{
     position: absolute;
-    top: 380px;
+    top: 400px;
     /* left: 250px;
     width: 505px; */
     left: 208px;
     width: 590px;
     /* margin-left: 80px; */
     /* padding-bottom: 95px; */
+}
+.div-player-1 > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-1 > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-player-1 > div{
     display: block;
@@ -470,6 +546,20 @@ button:hover, button:focus{
     left: 760px;
     width: 100px;
     height: 190px;
+}
+.div-player-6 > div > button{
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.div-player-6 > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
 }
 .div-extras-down{
     width: 100px;
@@ -542,9 +632,6 @@ button:hover, button:focus{
 }
 .div-king{
     float: right;
-}
-.div-king > img{
-    width: 280px;
 }
 
 /*PANTALLA DE CARGA*/
@@ -669,7 +756,7 @@ button:hover, button:focus{
     margin-left: 50px;
     top: 175px;
     text-align: center;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 4.5rem;
     color: black;
     text-shadow: 1px 1px #301a1a, -1px -1px #eeeeee;
@@ -692,6 +779,40 @@ button:hover, button:focus{
 .cursor-pointer{
     cursor: pointer;
 }
+
+/* TABLAS */
+
+tbody {
+    display:block;
+    max-height:310px;
+    overflow-y:auto;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+thead {
+    width: calc( 100% - 1em )
+} 
+thead, tbody tr {
+    display:table;
+    table-layout:fixed;
+}
+.table-responsive{
+    width: 50%;
+    float: left;
+    margin-left: 90px;
+}
+.chanciller{
+    padding-bottom: 7rem;
+    float: right;
+    margin-right: 100px;
+    width: 220px;
+}
+
+/* INVITACIONES */
+
 .lead{
     font-size: 1.5rem;
 }

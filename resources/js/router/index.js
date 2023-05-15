@@ -8,7 +8,7 @@ import CreateGame from '../components/CreateGame.vue';
 import JoinGame from '../components/JoinGame.vue';
 import PlayGame from '../components/PlayGame.vue';
 import Friends from '../components/Friends.vue';
-import Board from '../components/Board.vue';
+import Ranking from '../components/Ranking.vue';
 import Profile from '../components/Profile.vue';
 
 export const routes = [
@@ -71,9 +71,9 @@ export const routes = [
         },
     },
     {
-        name: 'board',
-        path: '/board',
-        component: Board,
+        name: 'ranking',
+        path: '/ranking',
+        component: Ranking,
         meta:{
             requiresAuth: true
         },

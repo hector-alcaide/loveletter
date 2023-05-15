@@ -17,15 +17,19 @@ class PrivateActionUser implements ShouldBroadcast
     public $idGame;
     public $idPlayer;
     public $message;
+    public $newRound;
+    public $spy;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($idGame,$idPlayer, $message)
+    public function __construct($idGame,$idPlayer, $message, $newRound = false, $spy = false)
     {
         $this->idGame = $idGame;
         $this->idPlayer = $idPlayer;
         $this->message = $message;
+        $this->newRound = $newRound;
+        $this->spy = $spy;
     }
 
     public function broadcastWith()
@@ -33,7 +37,9 @@ class PrivateActionUser implements ShouldBroadcast
         return [
             'idGame' => $this->idGame,
             'idPlayer' => $this->idPlayer,
-            'message' => $this->message
+            'message' => $this->message,
+            'newRound' => $this->newRound,
+            'spy' => $this->spy
         ];
     }
 
@@ -45,7 +51,7 @@ class PrivateActionUser implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('play.game.'.$this->idGame.'player'.$this->idPlayer),
+            new PresenceChannel('play.game.'.$this->idGame.'.player.'.$this->idPlayer),
         ];
     }
 }

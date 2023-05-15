@@ -10,7 +10,39 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class friends extends Controller
-{
+{  
+    public function searchNewFriend(Request $request){
+        $id = Auth::id();
+        if($request->idUser == $id){
+            $message = 0;
+            return $message;
+        }
+        $sql = 'SELECT friend.id FROM friend 
+                JOIN users f ON (f.idUser = friend.idUser1)
+                JOIN users b ON (b.idUser = friend.idUser2)
+                WHERE (idUser1 = '.$id.' AND b.idUser = '.$request->idUser.' OR idUser2 = '.$id.' AND f.idUser = '.$request->idUser.')
+                AND estado = "aceptado"';
+        $result = DB::select($sql);
+
+        if(sizeof($result)){
+            $message = 1;
+            return $message;
+        }
+        $sql = 'SELECT friend.id FROM friend 
+                JOIN users f ON (f.idUser = friend.idUser1)
+                JOIN users b ON (b.idUser = friend.idUser2)
+                WHERE (idUser1 = '.$id.' AND b.idUser = '.$request->idUser.' OR idUser2 = '.$id.' AND f.idUser = '.$request->idUser.')
+                AND estado = "solicitado"';
+        $result = DB::select($sql);
+
+        if(sizeof($result)){
+            $message = 2;
+            return $message;
+        }
+        $result = User::where('idUser', $request->idUser)->get();
+        return json_encode($result);
+    }
+
     public function addFriend(Request $request){
 
         try{

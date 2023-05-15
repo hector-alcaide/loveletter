@@ -75,7 +75,9 @@ class games extends Controller
             'roundNum' => null,
             'turnPlayerNum' => 1,
             'idsPlayersByTurnNum' => $idsPlayersByTurnNum,
-            'thrownCards' => []
+            'thrownCards' => [],
+            'numMaxWins' => $gameObj->numMaxWins,
+            'passRound' => 0
         ];
 
         $game = $this->newRound($game);
@@ -153,6 +155,9 @@ class games extends Controller
             $game['players'][$player['idPlayer']]['hand'] = [
                 array_shift($deck)
             ];
+            $game['players'][$player['idPlayer']]['activePlayer'] = true;
+            $game['players'][$player['idPlayer']]['spy'] = false;
+            $game['players'][$player['idPlayer']]['maid'] = false;
         }
 
         $game['deck'] = $deck;
@@ -194,6 +199,7 @@ class games extends Controller
         $players = $game['players'];
         $idPlayer = $request->idPlayer;
         $thrown_card = $request->idCard;
+        $game['passRound'] = 0;
 
         $player_card = reset($players[$idPlayer]['hand']);
         $rival_card = !empty($request->idRival) ? reset($players[$request->idRival]['hand']) : '';
@@ -211,7 +217,7 @@ class games extends Controller
             case 'Guardia':
                 if($request->levelCardToGuess == $game['deckReference'][$rival_card]['level']){
                     $player_to_remove = $request->idRival;
-                    $discarded_card = $players[$player_to_remove]['hand'];
+                    $discarded_card = intval($players[$player_to_remove]['hand']);
 
                     $message_result = ' adivinada, jugador eliminado.';
                 }else{
@@ -241,7 +247,7 @@ class games extends Controller
                 if($player_card_level == $rival_card_level){
                     $message_result = 'Empate, el nivel de las cartas es el mismo.';
                 }else{
-                    $discarded_card = $players[$player_to_remove]['hand'];
+                    $discarded_card = intval($players[$player_to_remove]['hand']);                    
                     $message_result = $players[$player_to_remove]['alias'].' ha sido eliminado.';
                 }
 
@@ -259,7 +265,7 @@ class games extends Controller
                     $player_to_remove = $request->idRival;
                     $message_result = $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
-                    $discarded_card = $players[$request->idRival]['hand'];
+                    $discarded_card = intval($players[$request->idRival]['hand']);
                     $players[$request->idRival]['hand'] = [
                         array_shift($game['deck'])
                     ];
@@ -320,13 +326,63 @@ class games extends Controller
             $game = $this->skipTurn($game);
         }
 
+        $game['players'] = $players;
+
+        $totalActivePlayer = 0;
+        $idActivePlayer = 0;
+        foreach ($players as $player) {
+            if($player['activePlayer']){
+                $totalActivePlayer++;
+                $idActivePlayer = $player['idPlayer'];
+            }
+        }
+        $checkManySpy = 0;
+        $idSpyPlayer = 0;
+        foreach ($players as $player) {
+            if($player['spy']){
+                $checkManySpy++;
+                $idSpyPlayer = $player['idPlayer'];
+            }
+        }
+        $checkSpy = false;
+        if($checkManySpy == 1){
+            $checkSpy = true;
+        }
+
+        if($totalActivePlayer == 1){
+            $game['passRound'] = 1;
+        }
+
         $gameObj = Game::find($game['idGame']);
         $gameObj->update(['game' => $game]);
 
-        if(!empty($request->idRival) && isset($privateMessage)){
-            broadcast(new PrivateActionUser($game['idGame'], $request->idRival, $privateMessage));
+        broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn, false));
+
+        if($totalActivePlayer == 1){
+            $game['passRound'] = 1;
+            $privateMessage = "Has ganado";
+            if($checkSpy == false){
+                broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
+            }else{
+                broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true, $idSpyPlayer));
+            }
         }
-        broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn));
+
+       if(sizeof($game['deck']) == 0){
+           $arrayCardsLevel = [];
+           foreach ($players as $key => $player) {
+               $arrayCardsLevel[$key] = $player['hand'][0];
+           }
+           rsort($arrayCardsLevel);
+           foreach ($players as $player) {
+               if($player['hand'][0] = $arrayCardsLevel[0]){
+                   $winPlayerFinalCards = $player['idPlayer'];
+               }
+           }
+           $privateMessage = "Has ganado";
+           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));          
+
+       }
 
         $response=[
             'status' => $status,
@@ -382,9 +438,6 @@ class games extends Controller
 
         $game = $this->skipTurn($game);
 
-        $gameObj = Game::find($game['idGame']);
-        $gameObj->update(['game' => $game]);
-
         $message = $game['players'][$request->idPlayer]['alias'].' ha descartado la carta '. $game['deckReference'][$request->idCard]['title'] .' al estar todos los jugadores protegidos';
 
         broadcast(new PublicActionUser($game['idGame'], $message, true));
@@ -397,4 +450,47 @@ class games extends Controller
         return $response;
     }
 
+    public function updateRound(Request $request){
+        $game = $request->game;
+        $message = "Nueva Ronda";
+
+        if($request->idSpy != false){
+            $game['players'][$request->idSpy]['roundWins'] = $game['players'][$request->idSpy]['roundWins'] + 1;
+        }
+
+        $game['players'][$request->idPlayer]['roundWins'] = $game['players'][$request->idPlayer]['roundWins'] + 1;
+
+        $game = $this->newRound($game);
+
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
+
+
+        broadcast(new PublicActionUser($game['idGame'], $message, true, true));
+
+        $response = [
+            'status' => 'success',
+
+            'message' => $message,
+        ];
+
+        return $response;
+    }
+
+
+    public function endGame(Request $request){
+        $result = Game::where('idGame', $request->idGame)
+            ->update([
+                'idWinner' => $request->idPlayer,
+                'started' => 2
+            ]);
+
+            $response = [
+                'status' => 'success',
+                'winner' => $request->idPlayer
+            ];
+    
+            return $response;
+    }
 }
