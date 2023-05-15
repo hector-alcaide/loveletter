@@ -20,6 +20,10 @@
     font-family: 'blackchancery';
 }
 
+.title-page{
+    font-family: blackchancery;
+    font-size: 4.5rem;
+}
 /**background principal**/
 /*body{
     background-color: #6b2d35;
@@ -81,24 +85,24 @@
     box-shadow: none;
 }
 .shield_yes{
-    background-image: url("../images/shield_yes_1.png");
+    background-image: url("../images/shield_yes_1.svg");
     background-repeat: no-repeat;
     width: 35px;
     height: 45px;
     cursor: pointer;
 }
 .shield_yes:hover{
-    background-image: url("../images/shield_yes_2.png");
+    background-image: url("../images/shield_yes_2.svg");
 }
 .shield_no{
-    background-image: url("../images/shield_no_1.png");
+    background-image: url("../images/shield_no_1.svg");
     background-repeat: no-repeat;
     width: 35px;
     height: 45px;
     cursor: pointer;
 }
 .shield_no:hover{
-    background-image: url("../images/shield_no_2.png");
+    background-image: url("../images/shield_no_2.svg");
 }
 .markerLabel{
     position: relative;
@@ -117,9 +121,10 @@
 
 /**backgrounds**/
 .bg-image1{
-    background-image: url("../images/parchment.png");
+    background-image: url("../images/parchment.svg");
     background-repeat: no-repeat;
     width: 100%;
+    height: 640px;
 }
 
 .bg-color1{
@@ -161,7 +166,7 @@
     height: 50px;
     background: none;
     border: none;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 1.5rem;
 }
 
@@ -190,7 +195,7 @@
     height: 47px;
     background: none;
     border: none;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 1.5rem;
 }
 
@@ -216,7 +221,7 @@
 }
 
 .fondo{
-    background-image: url('../images/parchment.png');
+    background-image: url('../images/parchment.svg');
 }
 
 .logo{
@@ -227,7 +232,7 @@
 /* buttons */
 button{
     background-color: #AD4955;
-    font-family: vinque;
+    font-family: blackchancery;
     border-radius: 15px;
     border: 2px solid #e3c99e;
     color: white;
@@ -239,19 +244,25 @@ button:hover, button:focus{
 }
 .button_jugar{
     width: 175px;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 3rem;
 }
 .button_menu{
     width: 145px;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 .button_secondary{
     background-color: #5e2235;
+}
+.button-long{
+    width: 200px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 1.5rem;
 }
 
 /* FORMS */
@@ -263,26 +274,25 @@ button:hover, button:focus{
     box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 4px;
 }
 
-/*HOME*/
-.guardia{
-    width: 200px;
-}
-
 /*AMIGOS*/
 .return{
     margin-left: 8rem;
     width: 125px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     padding-top: 7px;
     padding-bottom: 7px;
 }
 .titleFriend{
-    font-size: 2.2rem;
+    display: inline-block;
+    float: right;
+    margin-right: 210px;
+    font-size: 4.5rem;
+    font-family: blackchancery;
 }
 .styleInput{
     width: 200px;
-    height: 47px;
-    font-family: vinque;
+    height: 44px;
+    font-family: blackchancery;
     font-size: 1.5rem;
     background: transparent;
     border-top: none;
@@ -302,10 +312,6 @@ button:hover, button:focus{
     padding-top: 9px;
     padding-bottom: 9px;
 }
-.divReturn{
-    /* width: 100%;
-    margin-bottom: 6rem; */
-}
 .myFriends{
     width: 65%;
     float: right;
@@ -314,18 +320,9 @@ button:hover, button:focus{
 .searchFriend{
     margin-top: 3rem;
 }
-.buttonClose{
-    /* background-color: #5e2235;
-    font-family: vinque;
-    border-radius: 15px;
-    border: 2px solid #e3c99e;
-    color: white;
-    box-shadow: rgb(7 1 1 / 40%) 0px 0px 10px 8px; */
-}
-
 /*Board*/
 .board{
-    background-image: url(../images/woodBackground4.jpg);
+    background-image: url(../images/woodBackground.webp);
     background-repeat: no-repeat;
     width: 1366px;
     height: 768px;
@@ -340,13 +337,13 @@ button:hover, button:focus{
     top: 20px;
     /* left: 20px; */
     width: 1005px;
-    background-image: url(../images/board.png);
+    background-image: url(../images/board.svg);
     background-repeat: no-repeat;
     height: 620px;
     display: inline-block;
 }
 .container-frame{
-    background-image: url(../images/frame.png);
+    background-image: url(../images/frame.svg);
     background-repeat: no-repeat;
     width: 250px;
     height: 580px;
@@ -378,7 +375,7 @@ button:hover, button:focus{
     margin-left: 126px;
     margin-right: 175px;
 }
-.div-player-3 > button{
+.div-player-3 > div > button{
     position: absolute;
     top: 55%;
     left: 50%;
@@ -388,7 +385,7 @@ button:hover, button:focus{
     color: #AD4955;
     background-color: #e3c99e;
 }
-.div-player-3 > button:hover{
+.div-player-3 > div > button:hover{
     color: #e3c99e;
     background-color: #AD4955;
 }
@@ -399,7 +396,7 @@ button:hover, button:focus{
     height: 190px;
     top: 1px;
 }
-.div-player-2 > button{
+.div-player-2 > div > button{
     position: absolute;
     top: 55%;
     left: 50%;
@@ -409,7 +406,7 @@ button:hover, button:focus{
     color: #AD4955;
     background-color: #e3c99e;
 }
-.div-player-2 > button:hover{
+.div-player-2 > div > button:hover{
     color: #e3c99e;
     background-color: #AD4955;
 }
@@ -423,7 +420,7 @@ button:hover, button:focus{
     height: 190px;
     margin-left: 175px;
 }
-.div-player-4 > button{
+.div-player-4 > div > button{
     position: absolute;
     top: 55%;
     left: 50%;
@@ -433,7 +430,7 @@ button:hover, button:focus{
     color: #AD4955;
     background-color: #e3c99e;
 }
-.div-player-4 > button:hover{
+.div-player-4 > div > button:hover{
     color: #e3c99e;
     background-color: #AD4955;
 }
@@ -444,6 +441,23 @@ button:hover, button:focus{
     position: absolute;
     margin-left: 315px;
     /* margin-right: 150px; */
+}
+.thrown-cards > div > button{
+    transform: translate(10%, 100%);
+    padding-top: 3px;
+    padding-bottom: 4px;
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.thrown-cards > div > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+}
+.discard-card{
+    position: absolute;
+    margin-left: 300px;
+    margin-top: 160px;
+    z-index: 100;
 }
 .mallet-cards{
     position: absolute;
@@ -474,7 +488,7 @@ button:hover, button:focus{
     transform: rotate(36deg);
     margin-left: 145px;
 }
-.div-player-5 > button{
+.div-player-5 > div > button{
     position: absolute;
     top: 55%;
     left: 50%;
@@ -484,7 +498,7 @@ button:hover, button:focus{
     color: #AD4955;
     background-color: #e3c99e;
 }
-.div-player-5 > button:hover{
+.div-player-5 > div > button:hover{
     color: #e3c99e;
     background-color: #AD4955;
 }
@@ -533,7 +547,7 @@ button:hover, button:focus{
     width: 100px;
     height: 190px;
 }
-.div-player-6 > button{
+.div-player-6 > div > button{
     position: absolute;
     top: 55%;
     left: 50%;
@@ -543,7 +557,7 @@ button:hover, button:focus{
     color: #AD4955;
     background-color: #e3c99e;
 }
-.div-player-6 > button:hover{
+.div-player-6 > div > button:hover{
     color: #e3c99e;
     background-color: #AD4955;
 }
@@ -613,13 +627,11 @@ button:hover, button:focus{
     display: inline-block;
     float: right;
     margin-right: 250px;
-    font-size: 2.9rem;
+    font-size: 4.5rem;
+    font-family: blackchancery;
 }
 .div-king{
     float: right;
-}
-.div-king > img{
-    width: 280px;
 }
 
 /*PANTALLA DE CARGA*/
@@ -744,7 +756,7 @@ button:hover, button:focus{
     margin-left: 50px;
     top: 175px;
     text-align: center;
-    font-family: vinque;
+    font-family: blackchancery;
     font-size: 4.5rem;
     color: black;
     text-shadow: 1px 1px #301a1a, -1px -1px #eeeeee;
@@ -785,11 +797,7 @@ thead {
 } 
 thead, tbody tr {
     display:table;
-    /* width: 800px; */
     table-layout:fixed;
-}
-thead {
-    /*width: calc( 800px - 1em )*/
 }
 .table-responsive{
     width: 50%;
@@ -801,4 +809,47 @@ thead {
     float: right;
     margin-right: 100px;
     width: 220px;
+}
+
+/* INVITACIONES */
+
+.lead{
+    font-size: 1.5rem;
+}
+.icon-host{
+    width: 25px;
+    height: 25px;
+}
+
+.parent-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-left: 80px;
+    padding-right: 80px;
+}
+
+.child-container {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.invite{
+    padding: 0px;
+    background-color: unset;
+    box-shadow: none;
+    border-radius: 0px;
+    border: none;
+    width: 45px;
+    height: 45px;
+    background-image: url("../images/invite_icon.svg");
+}
+.invite:hover, .invite:focus{
+    box-shadow: none;
+    background-image: url("../images/invite_icon_hover.svg");
+}
+
+.invite-add{
+    width: 45px;
 }

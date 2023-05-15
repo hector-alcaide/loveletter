@@ -9,7 +9,7 @@
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
                         <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                         </form>
                         <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
@@ -18,17 +18,17 @@
                 </div>
             </div>
             <div class="markerLabel">
-                <img @click="marker" src="../../images/marker.png">
+                <img @click="marker" src="../../images/marker.svg">
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
-        </div>    
+        </div>
         <div class="bg-image1">
             <div class="text-center">
-                <img class="logo" src="../../images/logo.png">
+                <img class="logo" src="../../images/logo.svg">
             </div>
             <div class="text-center mt-lg-4">
                 <div class="d-inline-block me-lg-5" style="padding-bottom: 8rem;">
-                    <img class="guardia" src="../../images/left_guard.png">
+                    <img src="../../images/left_guard.svg">
                 </div>
                 <div class="d-inline-block align-middle text-center mt-lg-3 pb-lg-5 mx-lg-5">
                     <button class="button_jugar d-block mx-auto mt-lg-5" @click="$router.push('/games')">Jugar</button>
@@ -37,7 +37,7 @@
                     <button class="button_menu d-block mx-auto my-lg-4" @click="$router.push('/ranking')">Ranking</button>
                 </div>
                 <div class="d-inline-block ms-lg-5">
-                    <img class="guardia" src="../../images/right_guard.png">
+                    <img src="../../images/right_guard.svg">
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@ export default {
                 });
         });
     },
-    methods: {        
+    methods: {
         acceptInvitation(requestId){
             this.$axios.get('/sanctum/csrf-cookie').then(response => {
                 this.$axios.post('api/acceptRequestInvitation', {

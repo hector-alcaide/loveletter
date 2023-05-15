@@ -3,13 +3,13 @@
         <div class="marker" >
             <div id="markerContent" class="markerContent" >
                 <div class="text-center">
-                    <a class="text-1 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
+                    <a class="text-2 fs-3 mt-lg-2 mb-lg-4 logout" @click="logout">Logout</a>
                 </div>
                 <div class="requestFriend" v-if="requestAlias !== ''">
                     <div class="text-center my-lg-3" v-for="item in arrayRequests">
-                        <label class="text-1 fs-5">Solicitud Amistad de {{item.alias}}</label>
+                        <label class="text-2 fs-5">Solicitud Amistad de {{item.alias}}</label>
                         <form class="d-inline mx-1" @submit.prevent="acceptInvitation(item.id)">
-                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>                            
+                            <button class="shield d-inline mx-4" type="submit"><div class="shield_yes mt-lg-1"></div></button>
                         </form>
                         <form class="d-inline mx-1" @submit.prevent="rejectInvitation(item.id)">
                             <button class="shield d-inline mx-4" type="submit"><div class="shield_no mt-lg-1"></div></button>
@@ -18,52 +18,50 @@
                 </div>
             </div>
             <div class="markerLabel">
-                <img @click="marker" src="../../images/marker.png">
+                <img @click="marker" src="../../images/marker.svg">
                 <label v-if="contador > 0" @click="marker" class="text-2 fs-2">{{contador}}</label>
             </div>
         </div>
         <div class="bg-image1">
             <div class="text-center">
-                <a href="Home.vue"><img class="logo" src="../../images/logo.png"></a>
+                <a href="/"><img class="logo" src="../../images/logo.svg"></a>
             </div>
-            <div class="divReturn">
-                <button class="d-block return buttonClose" @click="$router.push('/home')">Volver</button>
+            <div class="divReturn pb-2">
+                <button class="d-inline return button_secondary" @click="$router.push('/home')">Volver</button>
+                <h1 class="text-2 titleFriend">Mis amigos</h1>
             </div>
             <div class="mx-auto mt-lg-5" style="width: 80%; padding-bottom: 3.3rem;">
                 <div class="d-inline">
-                    <img class="guardia" style="padding-top: 3rem;" src="../../images/prince.png">
+                    <img src="../../images/prince.svg">
                 </div>
                 <div class="myFriends d-inline">
-                    <div class="d-block text-center">
-                        <label class="text-1 titleFriend">Mis Amigos</label>
-                    </div>
-                    <div class="text-1 fs-4 mx-lg-4 d-inline" v-for="item in arrayFriends">
-                        <label class="text-1 mt-lg-1 mx-lg-5">{{item.friend_id}}</label>
+                    <div class="text-2 fs-4 mx-lg-4 d-inline" v-for="item in arrayFriends">
+                        <label class="text-2 mt-lg-1 mx-lg-5">{{item.friend_id}}</label>
                     </div>
                     <div v-if="!arrayFriends.length">
-                        <label class="text-1 my-lg-3 mx-lg-5"></label>
+                        <label class="text-2 my-lg-3 mx-lg-5"></label>
                     </div>
                     <div class="text-center searchFriend">
                         <form @submit.prevent="searchFriend()">
                             <div>
-                                <label class="text-1 fs-2 mt-lg-4">Buscar Amigos</label>
+                                <label class="text-2 fs-1 mt-lg-4">Buscar Amigos</label>
                             </div>
                             <div>
-                                <label class="text-1 fs-4 my-lg-3 me-lg-4">Introduce Alias: </label>
+                                <label class="text-2 fs-4 my-lg-3 me-lg-4">Introduce Alias: </label>
                                 <input class="styleInput mx-lg-3" type="text" id="alias" v-model="alias">
                                 <button type="submit" class="return mx-lg-4">Buscar</button>
                             </div>
                         </form>
                     </div>
                     <div class="text-center mt-lg-4" v-if="userFriend !== '' && requestSend == 0 ">
-                        <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">{{userFriend}}</label>
+                        <label class="d-inline text-2 fs-4 my-lg-3 mx-lg-5">{{userFriend}}</label>
                         <form class="d-inline">
                             <input type="hidden" v-model="idFriend">
                             <button type="submit" class="button_addFriend" @click="addFriend">Solicitar Amistad</button>
                         </form>
                     </div>
                     <div class="text-center mt-lg-4" v-if="requestSend == 1 ">
-                        <label class="d-inline text-1 fs-4 my-lg-3 mx-lg-5">{{ message }}</label>
+                        <label class="d-inline text-2 fs-4 my-lg-3 mx-lg-5">{{ message }}</label>
                     </div>
                 </div>
             </div>

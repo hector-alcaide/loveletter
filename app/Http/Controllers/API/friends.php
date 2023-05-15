@@ -109,20 +109,26 @@ class friends extends Controller
                     AND estado = "aceptado"';
         $result = DB::select($sql);
 
-        /*$sql = 'SELECT
-            CASE
-            WHEN idUser1 != 2 THEN idUser1
-            ELSE idUser2
-            END AS friend_id
-            FROM Friend
-            WHERE
-            (idUser1 = 2 AND idUser2 != 2 OR idUser2 = 2 AND idUser1 != 2)
-            AND estado = 'aceptado"';
-        $result = DB::select($sql);
-
-        $res = User::whereIn("idUser",$result)->get();*/
-
         return $result;
     }
 
+//        public function getFriends(){
+//
+//            $userid = auth()->id();
+//
+//            $friends = Amistad::select(DB::raw(
+//                'CASE
+//                        WHEN idUser1 = ' . $userid . ' THEN idUser2
+//                        WHEN idUser2 = ' . $userid . ' THEN idUser1
+//                      END as idFriend'
+//            ))->where('idUser1', $userid)
+//                ->orWhere('idUser2', $userid)
+//                ->get();
+//
+//            return $friends;
+//        }
+
+    public function inviteFriendGame(Request $request){
+
+    }
 }
