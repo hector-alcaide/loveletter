@@ -283,7 +283,7 @@ export default {
                 broadcaster: 'pusher',
                 key: 'local',
                 cluster: 'mt1',
-                wsHost: '127.0.0.1',
+                wsHost: this.ipHost,
                 wsPort: 6001,
                 forceTLS: false,
                 disableStats: true
@@ -489,6 +489,8 @@ export default {
         },
         playTurn(){
 
+            this.game.players[this.idUser].maid = false;
+
             //Poner las cartas lanzadas
             let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
 
@@ -552,11 +554,20 @@ export default {
                 this.typesCardResolution[cardResolution] = true;
             } else {
                 //comprobar que si todos los jugadores estan protegidos permita descartar carta
-                const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
-                numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+                // const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
+                // numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+
+                let totalPlayerDeath = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === false).length;
+                let totalPlayerProtection = Object.values(this.game.players).filter(({maid}) => maid === true).length;
+                if((totalPlayerDeath + totalPlayerProtection) == (Object.values(this.game.players).length - 1)){
+                    this.allowDiscardCard = true;
+                }else{
+                    this.typesCardResolution[cardResolution] = true;
+                }
             }
         },
         discardCard(idCard){
+            console.log(idCard)
             this.allowDiscardCard = false;
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);

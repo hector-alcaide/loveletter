@@ -373,8 +373,10 @@ class games extends Controller
 
        if(sizeof($game['deck']) == 0){
            $arrayCardsLevel = [];
-           foreach ($players as $key => $player) {
-               $arrayCardsLevel[$key] = $player['hand'][0];
+           $pos = 0;
+           foreach ($players as $player) {
+               $arrayCardsLevel[$pos] = $player['hand'][0];
+               $pos++;
            }
            rsort($arrayCardsLevel);
            foreach ($players as $player) {
@@ -383,8 +385,12 @@ class games extends Controller
                }
            }
            $privateMessage = "Has ganado";
-           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
-
+//           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
+           if($checkSpy == false){
+               broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
+           }else{
+               broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true, $idSpyPlayer));
+           }
        }
 
         $response=[
@@ -420,16 +426,20 @@ class games extends Controller
     }
 
     public function skipTurn($game){
-        if($game['turnPlayerNum'] == count($game['players'])){
-            $game['turnPlayerNum'] = 1;
-        }else{
-            $game['turnPlayerNum']++;
-            foreach ($game['players'] as $p){
-                if($p['playerNum'] === $game['turnPlayerNum'] && $p['activePlayer'] === false){
-                    $game['turnPlayerNum']++;
-                }
-            }
+        $players = $game['players'];
+
+        $idsByTurn = $game['idsPlayersByTurnNum'];
+        $countNumTurn  = $game['turnPlayerNum'];
+
+        for ($i = 1; $i <= count($players); $i++) {
+            $countNumTurn == count($players) ? $countNumTurn = 1 : $countNumTurn++;
+
+            if($players[$idsByTurn[$countNumTurn]]['activePlayer'] === true)
+                break;
         }
+
+        $game['turnPlayerNum'] = $countNumTurn;
+        $game['players'] = $players;
 
         return $game;
     }
@@ -440,6 +450,9 @@ class games extends Controller
         array_push($game['thrownCards'], $request->idCard);
 
         $game = $this->skipTurn($game);
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
 
         $message = $game['players'][$request->idPlayer]['alias'].' ha descartado la carta '. $game['deckReference'][$request->idCard]['title'] .' al estar todos los jugadores protegidos';
 
