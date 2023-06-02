@@ -442,23 +442,20 @@ button:hover, button:focus{
     margin-left: 315px;
     /* margin-right: 150px; */
 }
-.thrown-cards > div > button{
-    transform: translate(10%, 100%);
-    padding-top: 3px;
-    padding-bottom: 4px;
-    color: #AD4955;
-    background-color: #e3c99e;
-}
-.thrown-cards > div > button:hover{
-    color: #e3c99e;
-    background-color: #AD4955;
-}
 .discard-card{
     position: absolute;
-    margin-left: 300px;
+    margin-left: 325px;
     margin-top: 160px;
     z-index: 100;
 }
+/* .discard-card > button{
+    color: #AD4955;
+    background-color: #e3c99e;
+}
+.discard-card > button:hover{
+    color: #e3c99e;
+    background-color: #AD4955;
+} */
 .mallet-cards{
     position: absolute;
     left: 600px;
@@ -504,7 +501,7 @@ button:hover, button:focus{
 }
 .div-player-1{
     position: absolute;
-    top: 400px;
+    top: 394px;
     /* left: 250px;
     width: 505px; */
     left: 208px;

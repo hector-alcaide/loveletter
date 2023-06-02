@@ -223,7 +223,7 @@ export default {
             }).then(response => {
                 console.log(response);
                 if (status == 1){
-                    window.location.href = "/games/join/1";
+                    window.location.href = "/games/join/" + idGame;
                 }else{
                     this.listInvitations();
                 }

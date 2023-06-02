@@ -69,10 +69,10 @@
                         </div>
                         <div v-if="players[2].activePlayer === true">
                             <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                             <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                         </div>
                     </div>
@@ -126,9 +126,9 @@
                     </div>
                     <div class="discard-card" v-if="allowDiscardCard">
                         <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
-                            Descartar carta
+                            Descartar
                         </button>
-                    </div>
+                    </div>                   
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
                         <img id="deck" v-else :src="deckRouteImg" style="width: 90px">
@@ -487,7 +487,7 @@ export default {
             let array_pos = this.users.map(item => item.idUser).indexOf(idUser);
             this.users.splice(array_pos, 1);
         },
-        playTurn(){
+        playTurn(){            
 
             //Poner las cartas lanzadas
             let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
@@ -518,7 +518,7 @@ export default {
                 this.showTitleMessage('Turno finalizado');
             }else if(this.game.passRound == 2){
                 this.showTitleMessage('Partida finalizada');
-            }
+            } 
 
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
 
@@ -552,8 +552,16 @@ export default {
                 this.typesCardResolution[cardResolution] = true;
             } else {
                 //comprobar que si todos los jugadores estan protegidos permita descartar carta
-                const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
-                numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+                // const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
+                // numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+
+                let totalPlayerDeath = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === false).length;
+                let totalPlayerProtection = Object.values(this.game.players).filter(({maid}) => maid === true).length;
+                if((totalPlayerDeath + totalPlayerProtection) == (Object.values(this.game.players).length - 1)){
+                    this.allowDiscardCard = true;
+                }else{
+                    this.typesCardResolution[cardResolution] = true;
+                }
             }
         },
         discardCard(idCard){
@@ -588,6 +596,47 @@ export default {
                 levelCardToGuess: levelCardToGuess,
             }).then(response => {
                 console.log(response)
+
+                //this.game = JSON.parse(response.data.game);
+                // console.log("muertos");
+                //Comprobar si sólo queda un jugador vivo
+                // let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
+                // console.log(totalActivePlayer);
+                // console.log(this.game.players);
+
+                // if(totalActivePlayer == 1){
+                //     let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
+                //     this.winRound(winPlayer);
+                // }
+
+                //Cuando no hay más cartas posicionar a los jugadores por sus cartas
+                // console.log("mazo");
+                // console.log(this.game.players[this.idUser].hand);
+                // if(this.game.deck.length == 0){
+                //     console.log("No hay más cartas");
+                //     let arrayCardsLevel = [];
+                //     console.log(this.game.players);
+
+                //     Object.values(this.game.players).forEach(function callback(value, index) {
+                //         arrayCardsLevel[index] = parseInt(value.hand[0]);
+                //     });
+                //     arrayCardsLevel.sort(function (a, b){
+                //         return (b - a)
+                //     });
+                //     if(this.game.deckReference[arrayCardsLevel[0]] == this.game.deckReference[arrayCardsLevel[1]]){
+                //         //Hay dos ganadores
+                //         let winPlayerFinalCards1 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         let winPlayerFinalCards2 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[1]);
+                //         this.winRound(winPlayerFinalCards1,winPlayerFinalCards2);
+                //     }else{
+                //         let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         this.winRound(winPlayerFinalCards);
+                //     }
+                // }
+
+                // let playedCardWinner = this.game.deckReference[arrayCardsLevel[0]];
+                // console.log(playedCardWinner.level);
+
 
                 //priest
                 if(this.game.deckReference[idCard].level == 2){
@@ -683,7 +732,7 @@ export default {
         //
         // },
         newRound(spy){
-            this.$axios.post('/api/updateround', {
+            this.$axios.post('/api/updateround', {                
                 game: this.game,
                 idPlayer: this.idUser,
                 idSpy: spy
@@ -692,7 +741,7 @@ export default {
             });
         },
         endGame(playerWinner){
-            this.$axios.post('/api/endgame', {
+            this.$axios.post('/api/endgame', {      
                 idGame: this.game.idGame,
                 idPlayer: playerWinner
             }).then(response => {
@@ -706,8 +755,8 @@ export default {
                     // console.log("Entra en leave");
                     // this.echo.leave('play.game.'+this.idGame);
                     // this.echo.leave('play.game.'+this.idGame+'.player.'+this.idUser);
-                    // this.$router.go('/');
-
+                    // this.$router.go('/');                    
+                    
                 }
             });
         },
