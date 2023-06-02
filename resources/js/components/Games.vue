@@ -138,7 +138,7 @@ export default {
             broadcaster: 'pusher',
             key: 'local',
             cluster: 'mt1',
-            wsHost: '127.0.0.1',
+            wsHost: this.ipHost,
             wsPort: 6001,
             forceTLS: false,
             disableStats: true

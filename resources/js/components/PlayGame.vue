@@ -209,21 +209,29 @@
                 <button class="mx-lg-3 end_board" @click="$router.push('/home')">X</button>
             </div>
             <div class="container-frame">
-                <div>
-                    <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
-                </div>
-                <div>
-                    <label class="text-2 fs-4">Última jugada:</label>
-                    <label class="text-2">{{ message }}</label>
-                </div>
-                <div>
-                    <label class="text-2 d-block fs-4">Puntos:</label>
-                    <div v-for="item in game.players">
-                        <label class="text-2 d-block fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                <div class="container-frame-up">
+                    <div class="mt-3">
+                        <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
+                    </div>                    
+                    <div class="mt-4">
+                        <label class="text-2 fs-4">Jugada anterior:</label>
+                        <label class="text-2">{{ previous_message }}</label>
+                    </div>
+                    <div class="mt-4">
+                        <label class="text-2 fs-4">Última jugada:</label>
+                        <label class="text-2">{{ message }}</label>
                     </div>
                 </div>
                 <div>
-                    <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                    <div class="container-frame-points">
+                        <label class="text-2 d-block fs-4">Puntos:</label>
+                        <div class="d-inline-block" v-for="item in game.players" style="width: 100px;">
+                            <label class="text-2 fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -248,6 +256,7 @@ export default {
             // cardOnPlayer: false,
             playedCard: null,
             message: "",
+            previous_message: "",
             turn: "",
             typesCardResolution : {
                 'direct': 'default',
@@ -283,7 +292,7 @@ export default {
                 broadcaster: 'pusher',
                 key: 'local',
                 cluster: 'mt1',
-                wsHost: '127.0.0.1',
+                wsHost: this.ipHost,
                 wsPort: 6001,
                 forceTLS: false,
                 disableStats: true
@@ -337,6 +346,7 @@ export default {
                             }
 
                             // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                            this.previous_message = this.message;
                             this.message = data.message;
 
                             if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -365,6 +375,7 @@ export default {
                     this.assignGameData().then(() => {
 
                         // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                        this.previous_message = this.message;
                         this.message = data.message;
 
                         if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -422,15 +433,15 @@ export default {
                     this.hand = this.game.players[this.idUser].hand;
 
                     if(this.game.deck.length >= 15){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_5.svg";
+                        this.deckRouteImg = "/images/mallet_5.svg";
                     }else if(this.game.deck.length < 15 && this.game.deck.length >= 12){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_4.svg";
+                        this.deckRouteImg = "/images/mallet_4.svg";
                     }else if(this.game.deck.length < 12 && this.game.deck.length >= 8){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_3.svg";
+                        this.deckRouteImg = "/images/mallet_3.svg";
                     }else if(this.game.deck.length < 8 && this.game.deck.length >= 4){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.svg";
+                        this.deckRouteImg = "/images/mallet_2.svg";
                     }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.svg";
+                        this.deckRouteImg = "/images/mallet_1.svg";
                     }
 
                     //Posicionar a los jugadores en sus posiciones
@@ -464,15 +475,15 @@ export default {
                     }
 
                     this.cardsToGuess = [
-                        {level: '0', title: 'Espía', image: 'http://[::1]:5173/resources/images/cards/card0.jpg'},
-                        {level: '2', title: 'Sacerdote', image: 'http://[::1]:5173/resources/images/cards/card2.jpg'},
-                        {level: '3', title: 'Barón', image: 'http://[::1]:5173/resources/images/cards/card3.jpg'},
-                        {level: '4', title: 'Doncella', image: 'http://[::1]:5173/resources/images/cards/card4.jpg'},
-                        {level: '5', title: 'Príncipe', image: 'http://[::1]:5173/resources/images/cards/card5.jpg'},
-                        {level: '6', title: 'Canciller', image: 'http://[::1]:5173/resources/images/cards/card6.jpg'},
-                        {level: '7', title: 'Rey', image: 'http://[::1]:5173/resources/images/cards/card7.jpg'},
-                        {level: '8', title: 'Condesa', image: 'http://[::1]:5173/resources/images/cards/card8.jpg'},
-                        {level: '9', title: 'Princesa', image: 'http://[::1]:5173/resources/images/cards/card9.jpg'},
+                        {level: '0', title: 'Espía', image: '/images/cards/card0.jpg'},
+                        {level: '2', title: 'Sacerdote', image: '/images/cards/card2.jpg'},
+                        {level: '3', title: 'Barón', image: '/images/cards/card3.jpg'},
+                        {level: '4', title: 'Doncella', image: '/images/cards/card4.jpg'},
+                        {level: '5', title: 'Príncipe', image: '/images/cards/card5.jpg'},
+                        {level: '6', title: 'Canciller', image: '/images/cards/card6.jpg'},
+                        {level: '7', title: 'Rey', image: '/images/cards/card7.jpg'},
+                        {level: '8', title: 'Condesa', image: '/images/cards/card8.jpg'},
+                        {level: '9', title: 'Princesa', image: '/images/cards/card9.jpg'},
                     ];
 
                     this.loadingData = false;
@@ -489,6 +500,8 @@ export default {
         },
         playTurn(){            
 
+            this.game.players[this.idUser].maid = false;
+
             //Poner las cartas lanzadas
             let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
 
@@ -497,7 +510,7 @@ export default {
             let count = 0;
             this.game.thrownCards.forEach(res =>{
                 div.innerHTML +=
-                    `<img class="carta${random[count]}" src="http://[::1]:5173/resources/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
+                    `<img class="carta${random[count]}" src="/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
                 count++;
                 if(count == 5){
                     count = 0;
@@ -565,6 +578,7 @@ export default {
             }
         },
         discardCard(idCard){
+            console.log(idCard)
             this.allowDiscardCard = false;
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
