@@ -69,10 +69,10 @@
                         </div>
                         <div v-if="players[2].activePlayer === true">
                             <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                             <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
-                                Escoger {{ players[2].alias }}
+                                Escoger
                             </button>
                         </div>
                     </div>
@@ -126,9 +126,9 @@
                     </div>
                     <div class="discard-card" v-if="allowDiscardCard">
                         <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
-                            Descartar carta
+                            Descartar
                         </button>
-                    </div>
+                    </div>                   
                     <div class="mallet-cards">
                         <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
                         <img id="deck" v-else :src="deckRouteImg" style="width: 90px">
@@ -209,21 +209,29 @@
                 <button class="mx-lg-3 end_board" @click="$router.push('/home')">X</button>
             </div>
             <div class="container-frame">
-                <div>
-                    <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
-                </div>
-                <div>
-                    <label class="text-2 fs-4">Última jugada:</label>
-                    <label class="text-2">{{ message }}</label>
-                </div>
-                <div>
-                    <label class="text-2 d-block fs-4">Puntos:</label>
-                    <div v-for="item in game.players">
-                        <label class="text-2 d-block fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                <div class="container-frame-up">
+                    <div class="mt-3">
+                        <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
+                    </div>                    
+                    <div class="mt-4">
+                        <label class="text-2 fs-4">Jugada anterior:</label>
+                        <label class="text-2">{{ previous_message }}</label>
+                    </div>
+                    <div class="mt-4">
+                        <label class="text-2 fs-4">Última jugada:</label>
+                        <label class="text-2">{{ message }}</label>
                     </div>
                 </div>
                 <div>
-                    <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                    <div class="container-frame-points">
+                        <label class="text-2 d-block fs-4">Puntos:</label>
+                        <div class="d-inline-block" v-for="item in game.players" style="width: 100px;">
+                            <label class="text-2 fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -248,6 +256,7 @@ export default {
             // cardOnPlayer: false,
             playedCard: null,
             message: "",
+            previous_message: "",
             turn: "",
             typesCardResolution : {
                 'direct': 'default',
@@ -283,7 +292,7 @@ export default {
                 broadcaster: 'pusher',
                 key: 'local',
                 cluster: 'mt1',
-                wsHost: '127.0.0.1',
+                wsHost: this.ipHost,
                 wsPort: 6001,
                 forceTLS: false,
                 disableStats: true
@@ -337,6 +346,7 @@ export default {
                             }
 
                             // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                            this.previous_message = this.message;
                             this.message = data.message;
 
                             if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -365,6 +375,7 @@ export default {
                     this.assignGameData().then(() => {
 
                         // data.changeTurn === false && this.playedCard.level == 6 ? this.chooseCardToKeep = true : this.playTurn();
+                        this.previous_message = this.message;
                         this.message = data.message;
 
                         if (this.playedCard && this.playedCard.level == 6 && data.changeTurn === false){
@@ -422,15 +433,15 @@ export default {
                     this.hand = this.game.players[this.idUser].hand;
 
                     if(this.game.deck.length >= 15){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_5.svg";
+                        this.deckRouteImg = "/images/mallet_5.svg";
                     }else if(this.game.deck.length < 15 && this.game.deck.length >= 12){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_4.svg";
+                        this.deckRouteImg = "/images/mallet_4.svg";
                     }else if(this.game.deck.length < 12 && this.game.deck.length >= 8){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_3.svg";
+                        this.deckRouteImg = "/images/mallet_3.svg";
                     }else if(this.game.deck.length < 8 && this.game.deck.length >= 4){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_2.svg";
+                        this.deckRouteImg = "/images/mallet_2.svg";
                     }else if(this.game.deck.length < 4 && this.game.deck.length >= 1){
-                        this.deckRouteImg = "http://[::1]:5173/resources/images/mallet_1.svg";
+                        this.deckRouteImg = "/images/mallet_1.svg";
                     }
 
                     //Posicionar a los jugadores en sus posiciones
@@ -464,15 +475,15 @@ export default {
                     }
 
                     this.cardsToGuess = [
-                        {level: '0', title: 'Espía', image: 'http://[::1]:5173/resources/images/cards/card0.jpg'},
-                        {level: '2', title: 'Sacerdote', image: 'http://[::1]:5173/resources/images/cards/card2.jpg'},
-                        {level: '3', title: 'Barón', image: 'http://[::1]:5173/resources/images/cards/card3.jpg'},
-                        {level: '4', title: 'Doncella', image: 'http://[::1]:5173/resources/images/cards/card4.jpg'},
-                        {level: '5', title: 'Príncipe', image: 'http://[::1]:5173/resources/images/cards/card5.jpg'},
-                        {level: '6', title: 'Canciller', image: 'http://[::1]:5173/resources/images/cards/card6.jpg'},
-                        {level: '7', title: 'Rey', image: 'http://[::1]:5173/resources/images/cards/card7.jpg'},
-                        {level: '8', title: 'Condesa', image: 'http://[::1]:5173/resources/images/cards/card8.jpg'},
-                        {level: '9', title: 'Princesa', image: 'http://[::1]:5173/resources/images/cards/card9.jpg'},
+                        {level: '0', title: 'Espía', image: '/images/cards/card0.jpg'},
+                        {level: '2', title: 'Sacerdote', image: '/images/cards/card2.jpg'},
+                        {level: '3', title: 'Barón', image: '/images/cards/card3.jpg'},
+                        {level: '4', title: 'Doncella', image: '/images/cards/card4.jpg'},
+                        {level: '5', title: 'Príncipe', image: '/images/cards/card5.jpg'},
+                        {level: '6', title: 'Canciller', image: '/images/cards/card6.jpg'},
+                        {level: '7', title: 'Rey', image: '/images/cards/card7.jpg'},
+                        {level: '8', title: 'Condesa', image: '/images/cards/card8.jpg'},
+                        {level: '9', title: 'Princesa', image: '/images/cards/card9.jpg'},
                     ];
 
                     this.loadingData = false;
@@ -487,7 +498,9 @@ export default {
             let array_pos = this.users.map(item => item.idUser).indexOf(idUser);
             this.users.splice(array_pos, 1);
         },
-        playTurn(){
+        playTurn(){            
+
+            this.game.players[this.idUser].maid = false;
 
             //Poner las cartas lanzadas
             let random = Array.from({length: 5}, () => Math.floor(Math.random() * 5));
@@ -497,7 +510,7 @@ export default {
             let count = 0;
             this.game.thrownCards.forEach(res =>{
                 div.innerHTML +=
-                    `<img class="carta${random[count]}" src="http://[::1]:5173/resources/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
+                    `<img class="carta${random[count]}" src="/images/cards/card${this.game.deckReference[res].level}.jpg" style="width: 105px">`;
                 count++;
                 if(count == 5){
                     count = 0;
@@ -518,7 +531,7 @@ export default {
                 this.showTitleMessage('Turno finalizado');
             }else if(this.game.passRound == 2){
                 this.showTitleMessage('Partida finalizada');
-            }
+            } 
 
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
 
@@ -552,11 +565,20 @@ export default {
                 this.typesCardResolution[cardResolution] = true;
             } else {
                 //comprobar que si todos los jugadores estan protegidos permita descartar carta
-                const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
-                numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+                // const numProtectedPlayers = Object.values(this.game.players).filter(p => p.maid).length;
+                // numProtectedPlayers === Object.values(this.game.players).length - 1 ? this.allowDiscardCard = true : this.typesCardResolution[cardResolution] = true;
+
+                let totalPlayerDeath = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === false).length;
+                let totalPlayerProtection = Object.values(this.game.players).filter(({maid}) => maid === true).length;
+                if((totalPlayerDeath + totalPlayerProtection) == (Object.values(this.game.players).length - 1)){
+                    this.allowDiscardCard = true;
+                }else{
+                    this.typesCardResolution[cardResolution] = true;
+                }
             }
         },
         discardCard(idCard){
+            console.log(idCard)
             this.allowDiscardCard = false;
 
             const arrayHand = Object.values(this.game.players[this.idUser].hand);
@@ -588,6 +610,47 @@ export default {
                 levelCardToGuess: levelCardToGuess,
             }).then(response => {
                 console.log(response)
+
+                //this.game = JSON.parse(response.data.game);
+                // console.log("muertos");
+                //Comprobar si sólo queda un jugador vivo
+                // let totalActivePlayer = Object.values(this.game.players).filter(({activePlayer}) => activePlayer === true).length;
+                // console.log(totalActivePlayer);
+                // console.log(this.game.players);
+
+                // if(totalActivePlayer == 1){
+                //     let winPlayer = Object.values(this.game.players).find(({activePlayer}) => activePlayer === true);
+                //     this.winRound(winPlayer);
+                // }
+
+                //Cuando no hay más cartas posicionar a los jugadores por sus cartas
+                // console.log("mazo");
+                // console.log(this.game.players[this.idUser].hand);
+                // if(this.game.deck.length == 0){
+                //     console.log("No hay más cartas");
+                //     let arrayCardsLevel = [];
+                //     console.log(this.game.players);
+
+                //     Object.values(this.game.players).forEach(function callback(value, index) {
+                //         arrayCardsLevel[index] = parseInt(value.hand[0]);
+                //     });
+                //     arrayCardsLevel.sort(function (a, b){
+                //         return (b - a)
+                //     });
+                //     if(this.game.deckReference[arrayCardsLevel[0]] == this.game.deckReference[arrayCardsLevel[1]]){
+                //         //Hay dos ganadores
+                //         let winPlayerFinalCards1 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         let winPlayerFinalCards2 = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[1]);
+                //         this.winRound(winPlayerFinalCards1,winPlayerFinalCards2);
+                //     }else{
+                //         let winPlayerFinalCards = Object.values(this.game.players).find(({hand}) => hand[0] === arrayCardsLevel[0]);
+                //         this.winRound(winPlayerFinalCards);
+                //     }
+                // }
+
+                // let playedCardWinner = this.game.deckReference[arrayCardsLevel[0]];
+                // console.log(playedCardWinner.level);
+
 
                 //priest
                 if(this.game.deckReference[idCard].level == 2){
@@ -683,7 +746,7 @@ export default {
         //
         // },
         newRound(spy){
-            this.$axios.post('/api/updateround', {
+            this.$axios.post('/api/updateround', {                
                 game: this.game,
                 idPlayer: this.idUser,
                 idSpy: spy
@@ -692,7 +755,7 @@ export default {
             });
         },
         endGame(playerWinner){
-            this.$axios.post('/api/endgame', {
+            this.$axios.post('/api/endgame', {      
                 idGame: this.game.idGame,
                 idPlayer: playerWinner
             }).then(response => {
@@ -706,8 +769,8 @@ export default {
                     // console.log("Entra en leave");
                     // this.echo.leave('play.game.'+this.idGame);
                     // this.echo.leave('play.game.'+this.idGame+'.player.'+this.idUser);
-                    // this.$router.go('/');
-
+                    // this.$router.go('/');                    
+                    
                 }
             });
         },

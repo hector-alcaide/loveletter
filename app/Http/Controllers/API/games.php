@@ -122,27 +122,27 @@ class games extends Controller
 
         //array de cards, deck por defecto ordenado por level, donde idCard es la key
         $cards = [
-            1 => new Card(1, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-            2 => new Card(2, 0, 'Espía', 'http://[::1]:5173/resources/images/cards/card0.jpg'),
-            3 => new Card(3, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            4 => new Card(4, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            5 => new Card(5, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            6 => new Card(6, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            7 => new Card(7, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            8 => new Card(8, 1, 'Guardia', 'http://[::1]:5173/resources/images/cards/card1.jpg'),
-            9 => new Card(9, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
-            10 => new Card(10, 2, 'Sacerdote', 'http://[::1]:5173/resources/images/cards/card2.jpg'),
-            11 => new Card(11, 3, 'Barón', 'http://[::1]:5173/resources/images/cards/card3.jpg'),
-            12 => new Card(12, 3, 'Barón', 'http://[::1]:5173/resources/images/cards/card3.jpg'),
-            13 => new Card(13, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
-            14 => new Card(14, 4, 'Doncella', 'http://[::1]:5173/resources/images/cards/card4.jpg'),
-            15 => new Card(15, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
-            16 => new Card(16, 5, 'Príncipe', 'http://[::1]:5173/resources/images/cards/card5.jpg'),
-            17 => new Card(17, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
-            18 => new Card(18, 6, 'Canciller', 'http://[::1]:5173/resources/images/cards/card6.jpg'),
-            19 => new Card(19, 7, 'Rey', 'http://[::1]:5173/resources/images/cards/card7.jpg'),
-            20 => new Card(20, 8, 'Condesa', 'http://[::1]:5173/resources/images/cards/card8.jpg'),
-            21 => new Card(21, 9, 'Princesa', 'http://[::1]:5173/resources/images/cards/card9.jpg'),
+            1 => new Card(1, 0, 'Espía', '/images/cards/card0.jpg'),
+            2 => new Card(2, 0, 'Espía', '/images/cards/card0.jpg'),
+            3 => new Card(3, 1, 'Guardia', '/images/cards/card1.jpg'),
+            4 => new Card(4, 1, 'Guardia', '/images/cards/card1.jpg'),
+            5 => new Card(5, 1, 'Guardia', '/images/cards/card1.jpg'),
+            6 => new Card(6, 1, 'Guardia', '/images/cards/card1.jpg'),
+            7 => new Card(7, 1, 'Guardia', '/images/cards/card1.jpg'),
+            8 => new Card(8, 1, 'Guardia', '/images/cards/card1.jpg'),
+            9 => new Card(9, 2, 'Sacerdote', '/images/cards/card2.jpg'),
+            10 => new Card(10, 2, 'Sacerdote', '/images/cards/card2.jpg'),
+            11 => new Card(11, 3, 'Barón', '/images/cards/card3.jpg'),
+            12 => new Card(12, 3, 'Barón', '/images/cards/card3.jpg'),
+            13 => new Card(13, 4, 'Doncella', '/images/cards/card4.jpg'),
+            14 => new Card(14, 4, 'Doncella', '/images/cards/card4.jpg'),
+            15 => new Card(15, 5, 'Príncipe', '/images/cards/card5.jpg'),
+            16 => new Card(16, 5, 'Príncipe', '/images/cards/card5.jpg'),
+            17 => new Card(17, 6, 'Canciller', '/images/cards/card6.jpg'),
+            18 => new Card(18, 6, 'Canciller', '/images/cards/card6.jpg'),
+            19 => new Card(19, 7, 'Rey', '/images/cards/card7.jpg'),
+            20 => new Card(20, 8, 'Condesa', '/images/cards/card8.jpg'),
+            21 => new Card(21, 9, 'Princesa', '/images/cards/card9.jpg'),
         ];
 
         return $cards;
@@ -235,7 +235,7 @@ class games extends Controller
             case 'Sacerdote':
 
                 $status = 'success';
-                $message = $players[$idPlayer]['alias'] . ' ha jugado el Sacerdote.';
+                $message = $players[$idPlayer]['alias'] . ' ha jugado el Sacerdote contra ' . $players[$request->idRival]['alias'] . '.';
                 break;
             case 'Barón':
                 $player_card_level = $game['deckReference'][$player_card]['level'];
@@ -329,8 +329,6 @@ class games extends Controller
             $game = $this->skipTurn($game);
         }
 
-        $game['players'] = $players;
-
         $totalActivePlayer = 0;
         $idActivePlayer = 0;
         foreach ($players as $player) {
@@ -362,7 +360,7 @@ class games extends Controller
         broadcast(new PublicActionUser($game['idGame'], $message, $changeTurn, false));
 
         if($totalActivePlayer == 1){
-            $game['passRound'] = 1;
+            //$game['passRound'] = 1;
             $privateMessage = "Has ganado";
             if($checkSpy == false){
                 broadcast(new PrivateActionUser($game['idGame'], $idActivePlayer, $privateMessage, true));
@@ -372,19 +370,29 @@ class games extends Controller
         }
 
        if(sizeof($game['deck']) == 0){
-           $arrayCardsLevel = [];
-           foreach ($players as $key => $player) {
-               $arrayCardsLevel[$key] = $player['hand'][0];
-           }
-           rsort($arrayCardsLevel);
-           foreach ($players as $player) {
-               if($player['hand'][0] = $arrayCardsLevel[0]){
-                   $winPlayerFinalCards = $player['idPlayer'];
-               }
-           }
-           $privateMessage = "Has ganado";
-           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
-
+            $arrayCardsLevel = [];
+            $pos = 0;
+            foreach ($players as $player) {
+                if($player['activePlayer']){
+                    $arrayCardsLevel[$pos] = $player['hand'][0];
+                    $pos++;
+                }                
+            }
+            rsort($arrayCardsLevel);
+            foreach ($players as $player) {
+                if($player['activePlayer']){
+                    if($player['hand'][0] == $arrayCardsLevel[0]){
+                        $winPlayerFinalCards = $player['idPlayer'];
+                    }
+                }                
+            }
+            $privateMessage = "¡¡¡Has ganado!!!";
+    //           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
+            if($checkSpy == false){
+                broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
+            }else{
+                broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true, $idSpyPlayer));
+            }
        }
 
         $response=[
@@ -419,17 +427,56 @@ class games extends Controller
         return $response;
     }
 
+    // public function skipTurn($game){        
+    //     $check = false;
+    //     if($game['turnPlayerNum'] == count($game['players'])){
+    //         foreach ($game['players'] as $player) {
+    //             if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
+    //                 $game['turnPlayerNum'] = $player['playerNum'];
+    //                 break;
+    //             }else{
+    //                 $game['turnPlayerNum']++;
+    //             }
+    //         }
+    //     }else{
+    //         $game['turnPlayerNum']++;
+    //         foreach ($game['players'] as $player) {                
+    //             if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
+    //                 $game['turnPlayerNum'] = $player['playerNum'];
+    //                 $check = true;
+    //                 break;
+    //             }else{
+    //                 $game['turnPlayerNum']++;
+    //             }
+    //         }
+    //         if($check == false){
+    //             $game['turnPlayerNum'] = 1;
+    //             foreach ($game['players'] as $player) {                
+    //                 if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
+    //                     $game['turnPlayerNum'] = $player['playerNum'];
+    //                     break;
+    //                 }else{
+    //                     $game['turnPlayerNum']++;
+    //                 }
+    //             }
+    //         }
+    //     }        
+    // }
     public function skipTurn($game){
-        if($game['turnPlayerNum'] == count($game['players'])){
-            $game['turnPlayerNum'] = 1;
-        }else{
-            $game['turnPlayerNum']++;
-            foreach ($game['players'] as $p){
-                if($p['playerNum'] === $game['turnPlayerNum'] && $p['activePlayer'] === false){
-                    $game['turnPlayerNum']++;
-                }
-            }
+        $players = $game['players'];
+
+        $idsByTurn = $game['idsPlayersByTurnNum'];
+        $countNumTurn  = $game['turnPlayerNum'];
+
+        for ($i = 1; $i <= count($players); $i++) {
+            $countNumTurn == count($players) ? $countNumTurn = 1 : $countNumTurn++;
+
+            if($players[$idsByTurn[$countNumTurn]]['activePlayer'] === true)
+                break;
         }
+
+        $game['turnPlayerNum'] = $countNumTurn;
+        $game['players'] = $players;
 
         return $game;
     }
@@ -440,6 +487,9 @@ class games extends Controller
         array_push($game['thrownCards'], $request->idCard);
 
         $game = $this->skipTurn($game);
+
+        $gameObj = Game::find($game['idGame']);
+        $gameObj->update(['game' => $game]);
 
         $message = $game['players'][$request->idPlayer]['alias'].' ha descartado la carta '. $game['deckReference'][$request->idCard]['title'] .' al estar todos los jugadores protegidos';
 

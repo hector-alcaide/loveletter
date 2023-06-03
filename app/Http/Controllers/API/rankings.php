@@ -24,7 +24,7 @@ class rankings extends Controller
 
         $sql = 'SELECT users.alias, count(games.idWinner) AS games FROM games 
                 JOIN users ON (users.idUser = games.idWinner)
-                WHERE games.started = 2 GROUP BY users.alias ORDER by count(games.idWinner) desc limit 10';
+                WHERE games.started = 2 GROUP BY users.alias ORDER by count(games.idWinner) desc limit 50';
         $result = DB::select($sql);
 
         return $result;
