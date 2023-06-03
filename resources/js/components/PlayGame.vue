@@ -1,5 +1,5 @@
 <template>
-    <div class="board">
+    <div class="board" :style="this.game.players[this.idUser].activePlayer === false ? { 'opacity': '0.7' } : ''">
         <div v-if="loadingData" class="pantalla-carga">
             <span><p>Cargando...</p></span>
         </div>
