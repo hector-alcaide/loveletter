@@ -370,25 +370,29 @@ class games extends Controller
         }
 
        if(sizeof($game['deck']) == 0){
-           $arrayCardsLevel = [];
-           $pos = 0;
-           foreach ($players as $player) {
-               $arrayCardsLevel[$pos] = $player['hand'][0];
-               $pos++;
-           }
-           rsort($arrayCardsLevel);
-           foreach ($players as $player) {
-               if($player['hand'][0] = $arrayCardsLevel[0]){
-                   $winPlayerFinalCards = $player['idPlayer'];
-               }
-           }
-           $privateMessage = "Has ganado";
-//           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
-           if($checkSpy == false){
-               broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
-           }else{
-               broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true, $idSpyPlayer));
-           }
+            $arrayCardsLevel = [];
+            $pos = 0;
+            foreach ($players as $player) {
+                if($player['activePlayer']){
+                    $arrayCardsLevel[$pos] = $player['hand'][0];
+                    $pos++;
+                }                
+            }
+            rsort($arrayCardsLevel);
+            foreach ($players as $player) {
+                if($player['activePlayer']){
+                    if($player['hand'][0] == $arrayCardsLevel[0]){
+                        $winPlayerFinalCards = $player['idPlayer'];
+                    }
+                }                
+            }
+            $privateMessage = "¡¡¡Has ganado!!!";
+    //           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
+            if($checkSpy == false){
+                broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
+            }else{
+                broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true, $idSpyPlayer));
+            }
        }
 
         $response=[
