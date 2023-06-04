@@ -24,8 +24,8 @@
             </div>
         </div>
     </div>
-    <div v-if="this.loadingData" class="pantalla-carga">
-        <span><p>Cargando...</p></span>
+    <div v-if="loadingData" class="pantalla-carga d-flex justify-content-center align-items-center">
+        <div class="spinner"></div>
     </div>
     <div class="container">
     <div class="marker">
@@ -59,7 +59,7 @@
                 <button class="return button_secondary" @click="$router.push('/games')">Volver</button>
             </div>
             <div class="w-50 float-left ps-5">
-                <h1 class="ps-5 ms-2 title-page">Partida {{this.game.idGame}} <button class="invite" type="button" data-bs-toggle="modal" data-bs-target="#modalFriends" title="Invitar amigos a la partida"></button> </h1>
+                <h1 class="ps-5 ms-2 title-page" v-if="this.game">Partida {{this.game.idGame}} <button class="invite" type="button" data-bs-toggle="modal" data-bs-target="#modalFriends" title="Invitar amigos a la partida"></button> </h1>
             </div>
         </div>
         <div class="mx-auto mt-lg-1 text-center w-75 float-left d-flex">
