@@ -1,7 +1,7 @@
 <template>
-    <div class="board" :style="this.game.players[this.idUser].activePlayer === false ? { 'opacity': '0.7' } : ''">
-        <div v-if="loadingData" class="pantalla-carga">
-            <span><p>Cargando...</p></span>
+    <div class="board" :style="this.game && this.game.players[this.idUser].activePlayer === false ? { 'opacity': '0.7' } : ''">
+        <div v-if="loadingData" class="pantalla-carga d-flex justify-content-center align-items-center">
+            <div class="spinner"></div>
         </div>
         <div v-if="game">
             <div class="modal fade" id="showRivalCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showRivalCard" aria-hidden="true">
@@ -128,11 +128,10 @@
                         <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
                             Descartar
                         </button>
-                    </div>                   
+                    </div>
                     <div class="mallet-cards">
-                        <img v-if="allowSteal" @click="stealCard()" class="deck-steal" :src="deckRouteImg" style="width: 90px">
-                        <img id="deck" v-else :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4" id="deck-length" @click="stealCard()">{{ game.deck.length }}</label>
+                        <img id="deck" @click="allowSteal ? stealCard() : null" :class="{'deck-steal': allowSteal}" :src="deckRouteImg" style="width: 90px">
+                        <label class="text-1 fs-4" id="deck-length" @click="allowSteal ? stealCard() : null">{{ game.deck.length }}</label>
                     </div>
                 </div>
             <div class="container-cards-row-3">
@@ -212,7 +211,7 @@
                 <div class="container-frame-up">
                     <div class="mt-3">
                         <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
-                    </div>                    
+                    </div>
                     <div class="mt-4">
                         <label class="text-2 fs-4">Jugada anterior:</label>
                         <label class="text-2">{{ previous_message }}</label>
@@ -411,6 +410,21 @@ export default {
                     this.newRound(data.spy);
                 }
             });
+
+        const deck = document.getElementById('deck');
+        const deck_length = document.getElementById('deck-length');
+
+        deck_length.addEventListener("mouseover", () => {
+            if(this.allowSteal === true){
+                deck.classList.add('deck-steal-hover');
+                deck_length.classList.add('test');
+            }
+        });
+        deck_length.addEventListener("mouseout", () => {
+            deck.classList.remove('deck-steal-hover');
+            deck_length.classList.remove('test');
+        });
+
         });
     },
     beforeUnmount(){
@@ -498,7 +512,7 @@ export default {
             let array_pos = this.users.map(item => item.idUser).indexOf(idUser);
             this.users.splice(array_pos, 1);
         },
-        playTurn(){            
+        playTurn(){
 
             this.game.players[this.idUser].maid = false;
 
@@ -531,12 +545,12 @@ export default {
                 this.showTitleMessage('Turno finalizado');
             }else if(this.game.passRound == 2){
                 this.showTitleMessage('Partida finalizada');
-            } 
+            }
 
             this.allowSteal = playerTurn != playerNum || this.allowPlayCard === true ? false : true;
 
-            const deck_length = document.getElementById('deck-length');
-            this.allowSteal === true ? deck_length.classList.add('cursor-pointer') : deck_length.classList.remove('cursor-pointer');
+            // const deck_length = document.getElementById('deck-length');
+            // this.allowSteal === true ? deck_length.classList.add('cursor-pointer') : deck_length.classList.remove('cursor-pointer');
         },
         stealCard(){
             this.allowSteal = false;
@@ -746,7 +760,7 @@ export default {
         //
         // },
         newRound(spy){
-            this.$axios.post('/api/updateround', {                
+            this.$axios.post('/api/updateround', {
                 game: this.game,
                 idPlayer: this.idUser,
                 idSpy: spy
@@ -755,7 +769,7 @@ export default {
             });
         },
         endGame(playerWinner){
-            this.$axios.post('/api/endgame', {      
+            this.$axios.post('/api/endgame', {
                 idGame: this.game.idGame,
                 idPlayer: playerWinner
             }).then(response => {
@@ -769,8 +783,8 @@ export default {
                     // console.log("Entra en leave");
                     // this.echo.leave('play.game.'+this.idGame);
                     // this.echo.leave('play.game.'+this.idGame+'.player.'+this.idUser);
-                    // this.$router.go('/');                    
-                    
+                    // this.$router.go('/');
+
                 }
             });
         },

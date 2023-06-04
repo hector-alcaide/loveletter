@@ -470,6 +470,12 @@ button:hover, button:focus{
     border: wheat solid 3px;
     cursor: pointer;
 }
+.deck-steal-hover{
+    border: wheat solid 3px;
+}
+.test{
+    cursor: pointer;
+}
 .mallet-cards > label{
     position: absolute;
     top: 50%;
@@ -649,9 +655,25 @@ button:hover, button:focus{
     z-index: 99999999;
 }
 
-.pantalla-carga span{
-    color: white;
-    font-size: 40px;
+.spinner {
+    margin-left: auto;
+    margin-right: auto;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border-left-color: #AD4955;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .container-cards > div > div > img{
