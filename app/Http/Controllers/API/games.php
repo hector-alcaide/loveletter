@@ -221,7 +221,7 @@ class games extends Controller
             case 'Guardia':
                 if($request->levelCardToGuess == $game['deckReference'][$rival_card]['level']){
                     $player_to_remove = $request->idRival;
-                    $discarded_card = intval($players[$player_to_remove]['hand']);
+                    $discarded_card = $players[$player_to_remove]['hand'][0];
 
                     $message_result = ' adivinada, jugador eliminado.';
                 }else{
@@ -251,7 +251,7 @@ class games extends Controller
                 if($player_card_level == $rival_card_level){
                     $message_result = 'Empate, el nivel de las cartas es el mismo.';
                 }else{
-                    $discarded_card = intval($players[$player_to_remove]['hand']);
+                    $discarded_card = $players[$player_to_remove]['hand'][0];
                     $message_result = $players[$player_to_remove]['alias'].' ha sido eliminado.';
                 }
 
@@ -266,10 +266,11 @@ class games extends Controller
             case 'Príncipe':
 
                 if($game['deckReference'][$rival_card]['level'] == 9){
+                    $discarded_card = $players[$request->idRival]['hand'][0];
                     $player_to_remove = $request->idRival;
                     $message_result = $players[$request->idRival]['alias'] .' ha sido eliminado al descartar la Princesa.';
                 }else{
-                    $discarded_card = intval($players[$request->idRival]['hand']);
+                    $discarded_card = $players[$request->idRival]['hand'][0];
                     $players[$request->idRival]['hand'] = [
                         array_shift($game['deck'])
                     ];
