@@ -321,6 +321,15 @@ button:hover, button:focus{
     margin-top: 3rem;
 }
 /*Board*/
+.board-container{
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    width: 1366px;
+    height: 100vh;
+
+}
 .board{
     background-image: url(../images/woodBackground.webp);
     background-repeat: no-repeat;
@@ -328,6 +337,12 @@ button:hover, button:focus{
     height: 768px;
     max-width: 1370px;
     max-height: 770px;
+}
+@media (min-width: 1367px) {
+    .board {
+        border-radius: 10px;
+        box-shadow: inset 0 0 10px 8px #301a1a;
+    }
 }
 .container-cards{
     /*max-width: 1360px;*/
@@ -630,6 +645,9 @@ button:hover, button:focus{
     position: absolute;
     transform: rotate(-7deg);
 }
+.dark_card{
+    filter: brightness(0.8);
+}
 
 /* PERFIL */
 .title-profile{
@@ -709,6 +727,12 @@ button:hover, button:focus{
 .board_buttons > button{
     width: 35px;
     border-radius: 12px;
+}
+@media (min-width: 1367px) {
+    .board_buttons{
+        top: 178px;
+        left: 1430px;
+    }
 }
 .end_board{
     padding-right: 10px;

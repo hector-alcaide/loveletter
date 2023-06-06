@@ -1,235 +1,237 @@
 <template>
-    <div class="board" :style="this.game && this.game.players[this.idUser].activePlayer === false ? { 'opacity': '0.7' } : ''">
-        <div v-if="loadingData" class="pantalla-carga d-flex justify-content-center align-items-center">
-            <div class="spinner"></div>
-        </div>
-        <div v-if="game">
-            <div class="modal fade" id="showRivalCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showRivalCard" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header border-0 pe-1">
-                            <div class="modal-div-title">
-                                <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta de {{priestResponseObj.rival.alias}}</h2>
-                            </div>
-                            <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
-                        </div>
-                        <div class="modal-body pb-3">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-2 mx-2 mb-3 d-flex justify-content-center">
-                                    <img class="rival-card" v-if="priestResponseObj.cardRival" :src="priestResponseObj.cardRival.image" :alt="priestResponseObj.cardRival.title">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 pb-3 pt-1">
-                        </div>
-                    </div>
-                </div>
+    <div class="board-container">
+        <div class="board" :style="this.game && this.game.players[this.idUser].activePlayer === false ? { 'opacity': '0.7' } : ''">
+            <div v-if="loadingData" class="pantalla-carga d-flex justify-content-center align-items-center">
+                <div class="spinner"></div>
             </div>
-            <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header border-0 pe-1">
-                            <div class="modal-div-title">
-                                <h2 class="modal-title" id="staticBackdropLabel">Escoge una carta</h2>
+            <div v-if="game">
+                <div class="modal fade" id="showRivalCard" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showRivalCard" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pe-1">
+                                <div class="modal-div-title">
+                                    <h2 class="modal-title" id="staticBackdropLabel" v-if="priestResponseObj.rival">Carta de {{priestResponseObj.rival.alias}}</h2>
+                                </div>
+                                <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
                             </div>
-                            <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
-                        </div>
-                        <form @submit.prevent="guessCard()">
                             <div class="modal-body pb-3">
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-2 mx-2 mb-3 d-flex justify-content-center" v-for="card in cardsToGuess">
-                                        <img class="card-guess" :src="card.image" :alt="card.title" @click="selectCardToGuess(card.level, $event)">
+                                    <div class="col-2 mx-2 mb-3 d-flex justify-content-center">
+                                        <img class="rival-card" v-if="priestResponseObj.cardRival" :src="priestResponseObj.cardRival.image" :alt="priestResponseObj.cardRival.title">
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer border-0 pb-4 pt-1">
-                                <button class="mx-auto mb-2 modal-button">
+                            <div class="modal-footer border-0 pb-3 pt-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="showCardsToGuess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="showCardsToGuess" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pe-1">
+                                <div class="modal-div-title">
+                                    <h2 class="modal-title" id="staticBackdropLabel">Escoge una carta</h2>
+                                </div>
+                                <button type="button" class="mx-lg-3 close-modal" data-bs-dismiss="modal" aria-label="Close">X</button>
+                            </div>
+                            <form @submit.prevent="guessCard()">
+                                <div class="modal-body pb-3">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-2 mx-2 mb-3 d-flex justify-content-center" v-for="card in cardsToGuess">
+                                            <img class="card-guess" :src="card.image" :alt="card.title" @click="selectCardToGuess(card.level, $event)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0 pb-4 pt-1">
+                                    <button class="mx-auto mb-2 modal-button">
+                                        Escoger
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-cards">
+                    <div class="container-cards-row-1">
+                        <h2 id="title-play" class="message-title-play fade">{{ titleMessage }}</h2>
+                        <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
+                            <div>
+                                <label class="text-2">{{players[2].alias}}</label>
+                            </div>
+                            <img v-if="players[2].activePlayer" id="card3-down" class="" src="../../images/back_card.webp" @click="rotateCard">
+                            <div class="div-extras-down">
+                                <div id="protection-3" v-if="players[2].maid === true">
+                                    <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
+                                </div>
+                                <div id="spy-3" v-if="players[2].spy === true">
+                                    <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
+                                </div>
+                            </div>
+                            <div v-if="players[2].activePlayer === true">
+                                <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
+                                    Escoger
+                                </button>
+                                <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
                                     Escoger
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="container-cards">
-                <div class="container-cards-row-1">
-                    <h2 id="title-play" class="message-title-play fade">{{ titleMessage }}</h2>
-                    <div v-if="players[2]" id="div-player-3" class="div-player-3 text-center">
-                        <div>
-                            <label class="text-2">{{players[2].alias}}</label>
                         </div>
-                        <img v-if="players[2].activePlayer" id="card3-down" class="" src="../../images/back_card.webp" @click="rotateCard">
-                        <div class="div-extras-down">
-                            <div id="protection-3" v-if="players[2].maid === true">
+                        <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
+                            <div>
+                                <label class="text-2">{{players[1].alias}}</label>
+                            </div>
+                            <img v-if="players[1].activePlayer == true" src="../../images/back_card.webp">
+                            <div class="div-extras-down">
+                                <div id="protection-2" v-if="players[1].maid === true">
+                                    <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
+                                </div>
+                                <div id="spy-2" v-if="players[1].spy === true">
+                                    <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
+                                </div>
+                            </div>
+                            <div v-if="players[1].activePlayer === true">
+                                <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
+                                    Escoger
+                                </button>
+                                <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
+                                    Escoger
+                                </button>
+                            </div>
+                        </div>
+                        <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
+                            <div>
+                                <label class="text-2">{{players[3].alias}}</label>
+                            </div>
+                            <img v-if="players[3].activePlayer" src="../../images/back_card.webp">
+                            <div class="div-extras-down">
+                                <div id="protection-4" v-if="players[3].maid === true">
+                                    <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
+                                </div>
+                                <div id="spy-4" v-if="players[3].spy === true">
+                                    <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
+                                </div>
+                            </div>
+                            <div v-if="players[3].activePlayer === true">
+                                <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
+                                    Escoger
+                                </button>
+                                <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[3].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[3].idPlayer">
+                                    Escoger
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-cards-row-2">
+                        <div id="thrownCards" class="thrown-cards">
+                        </div>
+                        <div class="discard-card" v-if="allowDiscardCard">
+                            <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
+                                Descartar
+                            </button>
+                        </div>
+                        <div class="mallet-cards">
+                            <img id="deck" @click="allowSteal ? stealCard() : null" :class="{'deck-steal': allowSteal}" :src="deckRouteImg" style="width: 90px">
+                            <label class="text-1 fs-4" id="deck-length" @click="allowSteal ? stealCard() : null">{{ game.deck.length }}</label>
+                        </div>
+                    </div>
+                <div class="container-cards-row-3">
+                    <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
+                        <div class="div-extras-up">
+                            <div id="protection-5" v-if="players[4].maid === true">
                                 <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
-                            <div id="spy-3" v-if="players[2].spy === true">
+                            <div id="spy-5" v-if="players[4].spy === true">
                                 <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
-                        <div v-if="players[2].activePlayer === true">
-                            <button class="mx-auto" v-if="players[2].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[2].idPlayer, setFalseOnTypeRes: true})">
+                        <img v-if="players[4].activePlayer == true" src="../../images/back_card.webp">
+                        <div :style="players[4].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[4].alias}}</label>
+                        </div>
+                        <div v-if="players[4].activePlayer === true">
+                            <button class="mx-auto" v-if="players[4].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
                                 Escoger
                             </button>
-                            <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[2].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[2].idPlayer">
+                            <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[4].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[4].idPlayer">
                                 Escoger
                             </button>
                         </div>
                     </div>
-                    <div v-if="players[1]" id="div-player-2" class="div-player-2 text-center">
+                    <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
                         <div>
-                            <label class="text-2">{{players[1].alias}}</label>
-                        </div>
-                        <img v-if="players[1].activePlayer == true" src="../../images/back_card.webp">
-                        <div class="div-extras-down">
-                            <div id="protection-2" v-if="players[1].maid === true">
+                            <div id="protection-1" v-if="players[0].maid === true">
                                 <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
-                            <div id="spy-2" v-if="players[1].spy === true">
+                            <div id="spy-1" v-if="players[0].spy === true">
                                 <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
-                        <div v-if="players[1].activePlayer === true">
-                            <button class="mx-auto" v-if="players[1].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[1].idPlayer, setFalseOnTypeRes: true})">
-                                Escoger
-                            </button>
-                            <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[1].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[1].idPlayer">
-                                Escoger
-                            </button>
+                        <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
+                            <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep && (!forceThrowCountess)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                            <img class="mx-2 myCards-play" v-else-if="allowPlayCard && !chooseCardToKeep && (forceThrowCountess && game.deckReference[idCard].level == 8)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
+                            <img class="mx-2 dark_card" v-else-if="!allowPlayCard && !chooseCardToKeep || (forceThrowCountess && game.deckReference[idCard].level != 8)" :src="game.deckReference[idCard].image">
+                            <img class="mx-2 myCards-play" v-if="chooseCardToKeep" :src="game.deckReference[idCard].image" @click="resolveChancellor({idCard: idCard})">
+                        </span>
+                        <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[0].alias}}</label>
                         </div>
+                        <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[0].idPlayer, setFalseOnTypeRes: true})">
+                            Escoger
+                        </button>
                     </div>
-                    <div v-if="players[3]" id="div-player-4" class="div-player-4 text-center">
-                        <div>
-                            <label class="text-2">{{players[3].alias}}</label>
-                        </div>
-                        <img v-if="players[3].activePlayer" src="../../images/back_card.webp">
-                        <div class="div-extras-down">
-                            <div id="protection-4" v-if="players[3].maid === true">
+                    <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
+                        <div class="div-extras-up">
+                            <div id="protection-6" v-if="players[5].maid === true">
                                 <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
                             </div>
-                            <div id="spy-4" v-if="players[3].spy === true">
+                            <div id="spy-6" v-if="players[5].spy === true">
                                 <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
                             </div>
                         </div>
-                        <div v-if="players[3].activePlayer === true">
-                            <button class="mx-auto" v-if="players[3].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[3].idPlayer, setFalseOnTypeRes: true})">
+                        <img v-if="players[5].activePlayer == true" src="../../images/back_card.webp">
+                        <div :style="players[5].activePlayer === false ? { 'margin-top': '135px' } : ''">
+                            <label class="text-2">{{players[5].alias}}</label>
+                        </div>
+                        <div v-if="players[5].activePlayer === true">
+                            <button class="mx-auto" v-if="players[5].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
                                 Escoger
                             </button>
-                            <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[3].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[3].idPlayer">
+                            <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[5].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[5].idPlayer">
                                 Escoger
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="container-cards-row-2">
-                    <div id="thrownCards" class="thrown-cards">
-                    </div>
-                    <div class="discard-card" v-if="allowDiscardCard">
-                        <button class="mx-auto py-2" @click="discardCard(playedCard.idCard)">
-                            Descartar
-                        </button>
-                    </div>
-                    <div class="mallet-cards">
-                        <img id="deck" @click="allowSteal ? stealCard() : null" :class="{'deck-steal': allowSteal}" :src="deckRouteImg" style="width: 90px">
-                        <label class="text-1 fs-4" id="deck-length" @click="allowSteal ? stealCard() : null">{{ game.deck.length }}</label>
-                    </div>
-                </div>
-            <div class="container-cards-row-3">
-                <div v-if="players[4]" id="div-player-5" class="div-player-5 text-center">
-                    <div class="div-extras-up">
-                        <div id="protection-5" v-if="players[4].maid === true">
-                            <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
-                        </div>
-                        <div id="spy-5" v-if="players[4].spy === true">
-                            <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
-                        </div>
-                    </div>
-                    <img v-if="players[4].activePlayer == true" src="../../images/back_card.webp">
-                    <div :style="players[4].activePlayer === false ? { 'margin-top': '135px' } : ''">
-                        <label class="text-2">{{players[4].alias}}</label>
-                    </div>
-                    <div v-if="players[4].activePlayer === true">
-                        <button class="mx-auto" v-if="players[4].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[4].idPlayer, setFalseOnTypeRes: true})">
-                            Escoger
-                        </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[4].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[4].idPlayer">
-                            Escoger
-                        </button>
-                    </div>
-                </div>
-                <div v-if="players[0]" id="div-player-1" class="div-player-1 text-center">
-                    <div>
-                        <div id="protection-1" v-if="players[0].maid === true">
-                            <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
-                        </div>
-                        <div id="spy-1" v-if="players[0].spy === true">
-                            <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
-                        </div>
-                    </div>
-                    <span v-for="idCard in hand" v-if="players[0].activePlayer == true" class="myCards" style="height: 250px;">
-                        <img class="mx-2 myCards-play" v-if="allowPlayCard && !chooseCardToKeep && (!forceThrowCountess)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
-                        <img class="mx-2 myCards-play" v-else-if="allowPlayCard && !chooseCardToKeep && (forceThrowCountess && game.deckReference[idCard].level == 8)" :src="game.deckReference[idCard].image" @click="checkTypeCardResolve(idCard)">
-                        <img class="mx-2" v-else-if="!allowPlayCard && !chooseCardToKeep || (forceThrowCountess && game.deckReference[idCard].level != 8)" :src="game.deckReference[idCard].image">
-                        <img class="mx-2 myCards-play" v-if="chooseCardToKeep" :src="game.deckReference[idCard].image" @click="resolveChancellor({idCard: idCard})">
-                    </span>
-                    <div :style="players[0].activePlayer === false ? { 'margin-top': '135px' } : ''">
-                        <label class="text-2">{{players[0].alias}}</label>
-                    </div>
-                    <button class="mx-auto" v-if="typesCardResolution['onPlayer']" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[0].idPlayer, setFalseOnTypeRes: true})">
-                        Escoger
-                    </button>
-                </div>
-                <div v-if="players[5]" id="div-player-6" class="div-player-6 text-center">
-                    <div class="div-extras-up">
-                        <div id="protection-6" v-if="players[5].maid === true">
-                            <img class="" src="../../images/protection.svg" alt="Imagen protección" title="Este jugador está protegido">
-                        </div>
-                        <div id="spy-6" v-if="players[5].spy === true">
-                            <img class="" src="../../images/spy.svg" alt="Icono espía" title="Este jugador tiene el espía">
-                        </div>
-                    </div>
-                    <img v-if="players[5].activePlayer == true" src="../../images/back_card.webp">
-                    <div :style="players[5].activePlayer === false ? { 'margin-top': '135px' } : ''">
-                        <label class="text-2">{{players[5].alias}}</label>
-                    </div>
-                    <div v-if="players[5].activePlayer === true">
-                        <button class="mx-auto" v-if="players[5].maid === false && (typesCardResolution['onRival'] || typesCardResolution['onPlayer'])" @click="resolvePlayedCard({idCard: playedCard.idCard, idRival: players[5].idPlayer, setFalseOnTypeRes: true})">
-                            Escoger
-                        </button>
-                        <button class="mx-auto" type="button" data-bs-toggle="modal" data-bs-target="#showCardsToGuess" v-if="players[5].maid === false && typesCardResolution['onRivalOnCard']" @click="this.idRival_GuessCard = players[5].idPlayer">
-                            Escoger
-                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-            <div class="board_buttons">
-                <button class="mx-lg-3" onclick="window.open('https://www.baobablibros.es/archivos/love-letter-reglas-del-juego.pdf')">?</button>
-                <button class="mx-lg-3 end_board" @click="$router.push('/home')">X</button>
-            </div>
-            <div class="container-frame">
-                <div class="container-frame-up">
-                    <div class="mt-3">
-                        <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-2 fs-4">Jugada anterior:</label>
-                        <label class="text-2">{{ previous_message }}</label>
-                    </div>
-                    <div class="mt-4">
-                        <label class="text-2 fs-4">Última jugada:</label>
-                        <label class="text-2">{{ message }}</label>
-                    </div>
+                <div class="board_buttons">
+                    <button class="mx-lg-3" onclick="window.open('https://www.baobablibros.es/archivos/love-letter-reglas-del-juego.pdf')">?</button>
+                    <button class="mx-lg-3 end_board" @click="$router.push('/home')">X</button>
                 </div>
-                <div>
-                    <div class="container-frame-points">
-                        <label class="text-2 d-block fs-4">Puntos:</label>
-                        <div class="d-inline-block" v-for="item in game.players" style="width: 100px;">
-                            <label class="text-2 fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                <div class="container-frame">
+                    <div class="container-frame-up">
+                        <div class="mt-3">
+                            <label class="text-2 fs-4 mt-lg-3">Turno de {{ turn }}</label>
+                        </div>
+                        <div class="mt-4">
+                            <label class="text-2 fs-4">Jugada anterior:</label>
+                            <label class="text-2">{{ previous_message }}</label>
+                        </div>
+                        <div class="mt-4">
+                            <label class="text-2 fs-4">Última jugada:</label>
+                            <label class="text-2">{{ message }}</label>
                         </div>
                     </div>
                     <div>
-                        <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                        <div class="container-frame-points">
+                            <label class="text-2 d-block fs-4">Puntos:</label>
+                            <div class="d-inline-block" v-for="item in game.players" style="width: 100px;">
+                                <label class="text-2 fs-5">{{item.alias}}: {{ item.roundWins }}</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-2 fs-4">Puntos para victoria: {{ this.game.numMaxWins }}</label>
+                        </div>
                     </div>
                 </div>
             </div>
