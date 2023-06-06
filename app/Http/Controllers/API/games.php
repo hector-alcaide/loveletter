@@ -376,7 +376,7 @@ class games extends Controller
                 if($player['activePlayer']){
                     $arrayCardsLevel[$pos] = $player['hand'][0];
                     $pos++;
-                }                
+                }
             }
             rsort($arrayCardsLevel);
             foreach ($players as $player) {
@@ -384,7 +384,7 @@ class games extends Controller
                     if($player['hand'][0] == $arrayCardsLevel[0]){
                         $winPlayerFinalCards = $player['idPlayer'];
                     }
-                }                
+                }
             }
             $privateMessage = "¡¡¡Has ganado!!!";
     //           broadcast(new PrivateActionUser($game['idGame'], $winPlayerFinalCards, $privateMessage, true));
@@ -427,41 +427,6 @@ class games extends Controller
         return $response;
     }
 
-    // public function skipTurn($game){        
-    //     $check = false;
-    //     if($game['turnPlayerNum'] == count($game['players'])){
-    //         foreach ($game['players'] as $player) {
-    //             if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
-    //                 $game['turnPlayerNum'] = $player['playerNum'];
-    //                 break;
-    //             }else{
-    //                 $game['turnPlayerNum']++;
-    //             }
-    //         }
-    //     }else{
-    //         $game['turnPlayerNum']++;
-    //         foreach ($game['players'] as $player) {                
-    //             if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
-    //                 $game['turnPlayerNum'] = $player['playerNum'];
-    //                 $check = true;
-    //                 break;
-    //             }else{
-    //                 $game['turnPlayerNum']++;
-    //             }
-    //         }
-    //         if($check == false){
-    //             $game['turnPlayerNum'] = 1;
-    //             foreach ($game['players'] as $player) {                
-    //                 if($player['playerNum'] === $game['turnPlayerNum'] && $player['activePlayer'] === true){
-    //                     $game['turnPlayerNum'] = $player['playerNum'];
-    //                     break;
-    //                 }else{
-    //                     $game['turnPlayerNum']++;
-    //                 }
-    //             }
-    //         }
-    //     }        
-    // }
     public function skipTurn($game){
         $players = $game['players'];
 

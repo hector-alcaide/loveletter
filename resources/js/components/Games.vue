@@ -17,7 +17,7 @@
                                 <button type="button" class="mx-lg-3 fs-5 button_secondary" @click="updateInvitation(inv.idInvitation, inv.idGame, 0)">Rechazar</button>
                             </div>
                         </div>
-                        <div v-if="invitations.length == 0">
+                        <div v-if="invitations && invitations.length == 0">
                             <label class="text-2 mt-lg-1 pb-2 fs-4">No tienes invitaciones</label>
                         </div>
                     </div>
