@@ -165,6 +165,7 @@ class games extends Controller
 
         $game['deck'] = $deck;
         $game['roundNum']++;
+        $game['thrownCards'] = [];
 
         return $game;
     }
@@ -351,7 +352,7 @@ class games extends Controller
         }
 
         if($totalActivePlayer == 1){
-            $game['passRound'] = 1;
+            $game['passRound'] = 1;            
         }
 
         $gameObj = Game::find($game['idGame']);
